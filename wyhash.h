@@ -29,9 +29,9 @@ inline	unsigned long long	wyhashmix64(unsigned long long	A,	unsigned long long	B
 	#else
 	unsigned long long	hi, lo;
 	A^=0x60bee2bee120fc15ull;	B^=0xa3b195354a39b70dull;
-	unsigned long long	ha=A>> 32,	hb=B>>32,	la=(unsigned int)A,	lb=(unsigned int)B;
-	unsigned long long	rh=ha*hb,	rm_0=ha*lb,	rm_1=hb*la,	rl=la*lb,	t=rl+(rm_0<<32),	carry=t<rl;
-	lo=t+(rm_1<< 32);	carry+=lo< t;	hi=rh+(rm_0>>32)+(rm_1>> 32)+carry;
+	unsigned long long	ha=A>>32,	hb=B>>32,	la=(unsigned int)A,	lb=(unsigned int)B;
+	unsigned long long	rh=ha*hb,	rm0=ha*lb,	rm1=hb*la,	rl=la*lb,	t=rl+(rm0<<32),	c=t<rl;
+	lo=t+(rm1<< 32);	c+=lo< t;	hi=rh+(rm0>>32)+(rm1>> 32)+c;
 	return hi^lo;
 	#endif
 }

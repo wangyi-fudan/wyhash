@@ -24,7 +24,7 @@
 #define wyhash_included
 //the following functions should not be called outside the file
 inline	unsigned long long	wyhashmix64(unsigned long long	A,	unsigned long long	B){	
-#if	defined(__GNUC__) && UINT_MAX != ULONG_MAX
+#ifdef __SIZEOF_INT128__
 	__uint128_t	r=A^0x60bee2bee120fc15ull;	r*=B^0xa3b195354a39b70dull;	return	(r>>64)^r;	
 #else
 	A^=0x60bee2bee120fc15ull;	B^=0xa3b195354a39b70dull;

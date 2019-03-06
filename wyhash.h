@@ -25,9 +25,9 @@
 //the following functions should not be called outside the file
 inline	unsigned long long	wyhashmix64(unsigned long long	A,	unsigned long long	B){	
 #ifdef __SIZEOF_INT128__
-	__uint128_t	r=A^0x60bee2bee120fc15ull;	r*=B^0xa3b195354a39b70dull;	return	(r>>64)^r;	
+	__uint128_t	r=A;	r*=B^0xa3b195354a39b70dull;	return	(r>>64)^r;	
 #else
-	A^=0x60bee2bee120fc15ull;	B^=0xa3b195354a39b70dull;
+	B^=0xa3b195354a39b70dull;
 	unsigned long long	ha=A>>32,	hb=B>>32,	la=(unsigned int)A,	lb=(unsigned int)B,	hi, lo;
 	unsigned long long	rh=ha*hb,	rm0=ha*lb,	rm1=hb*la,	rl=la*lb,	t=rl+(rm0<<32),	c=t<rl;
 	lo=t+(rm1<<32);	c+=lo<t;	hi=rh+(rm0>>32)+(rm1>>32)+c;
@@ -35,7 +35,7 @@ inline	unsigned long long	wyhashmix64(unsigned long long	A,	unsigned long long	B
 #endif
 }
 inline	unsigned int	wyhashmix32(unsigned int	A,	unsigned int	B){	
-	unsigned long long	r=A^0x7b16763u;	r*=B^0xe4f5a905u;	return	(r>>32)^r;	
+	unsigned long long	r=(unsigned long long)A*(unsigned long long)B;	return	(r>>32)^r;	
 }
 inline	unsigned long long	wyhashread64(const	void	*const	ptr){	return	*(unsigned long long*)(ptr);	}
 inline	unsigned long long	wyhashread32(const	void	*const	ptr){	return	*(unsigned int*)(ptr);	}
@@ -44,6 +44,7 @@ inline	unsigned long long	wyhashread08(const	void	*const	ptr){	return	*(unsigned
 //the following function is the general hash function to be called
 inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsigned long long	seed){
 	const	unsigned char	*ptr=(const	unsigned char*)key,	*const	end=ptr+len;
+	seed^=0x60bee2bee120fc15ull;
 	while(ptr+8<=end){	seed=wyhashmix64(seed,	wyhashread64(ptr));	ptr+=8;	}
 	switch(end-ptr){
 	case	1:	seed=wyhashmix64(seed,	wyhashread08(ptr));	break;
@@ -56,12 +57,8 @@ inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsign
 	}
 	return	wyhashmix64(seed,	len);
 }
-//the following function is for 64bit integer hasing, the return value is consistant with the general funciton
-inline	unsigned long long	wyhash64(unsigned long long	key, unsigned long long	seed){	
-	return	wyhashmix64(wyhashmix64(seed,	key),	8);	
-}
-//the following function is for 32bit integer hashing, the return value is NOT consistant with the general funciton
+//the following function is for 32bit integer hashing.
 inline	unsigned int	wyhash32(unsigned int	key, unsigned int	seed){	
-	return	wyhashmix32(wyhashmix32(seed,	key),	4);	
+	return	wyhashmix32(wyhashmix32(seed^0x7b16763u,	key^0xe4f5a905u),	0x4a9e6939u);	
 }
 #endif

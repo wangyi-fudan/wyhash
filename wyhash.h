@@ -57,7 +57,7 @@ inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsign
 	case	7:	return	wyhashmix64(wyhashmix64(seed,(wyhashread32(ptr)<<24)|(wyhashread16(ptr+4)<<8)|wyhashread08(ptr+6)),len);
 	}
 }
-//the following function is specialied for very fast 32bit integer hashing.
+//the following function is specialized for very fast 32bit integer hashing.
 inline	unsigned int	wyhash32(unsigned int	key, unsigned int	seed){
 	return	wyhashmix32(wyhashmix32(seed^0x7b16763u,	key^0xe4f5a905u),	0x4a9e6939u);	
 }

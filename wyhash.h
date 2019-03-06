@@ -42,16 +42,16 @@ inline	unsigned long long	wyhashread08(const	void	*const	ptr){	return	*(unsigned
 inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsigned long long	seed){
 	const	unsigned char	*ptr=(const	unsigned char*)key,	*const	end=ptr+len;
 	seed^=0x60bee2bee120fc15ull;
-	while(ptr+8<=end){	seed=wyhashmix64(seed,	wyhashread64(ptr));	ptr+=8;	}
+	while(ptr+8<=end){	seed=wyhashmix64(seed,wyhashread64(ptr));	ptr+=8;	}
 	switch(end-ptr){
-	case	0:	return	wyhashmix64(seed,	len);
-	case	1:	return	wyhashmix64(wyhashmix64(seed,	wyhashread08(ptr)),len);
-	case	2:	return	wyhashmix64(wyhashmix64(seed,	wyhashread16(ptr)),len);
-	case	3:	return	wyhashmix64(wyhashmix64(seed,	(wyhashread16(ptr)<<8)|wyhashread08(ptr+2)),len);
-	case	4:	return	wyhashmix64(wyhashmix64(seed,	wyhashread32(ptr)),len);
-	case	5:	return	wyhashmix64(wyhashmix64(seed,	(wyhashread32(ptr)<<8)|wyhashread08(ptr+4)),len);
-	case	6:	return	wyhashmix64(wyhashmix64(seed,	(wyhashread32(ptr)<<16)|wyhashread16(ptr+4)),len);
-	case	7:	return	wyhashmix64(wyhashmix64(seed,	(wyhashread32(ptr)<<24)|(wyhashread16(ptr+4)<<8)|wyhashread08(ptr+6)),len);
+	case	0:	return	wyhashmix64(seed,len);
+	case	1:	return	wyhashmix64(wyhashmix64(seed,wyhashread08(ptr)),len);
+	case	2:	return	wyhashmix64(wyhashmix64(seed,wyhashread16(ptr)),len);
+	case	3:	return	wyhashmix64(wyhashmix64(seed,(wyhashread16(ptr)<<8)|wyhashread08(ptr+2)),len);
+	case	4:	return	wyhashmix64(wyhashmix64(seed,wyhashread32(ptr)),len);
+	case	5:	return	wyhashmix64(wyhashmix64(seed,(wyhashread32(ptr)<<8)|wyhashread08(ptr+4)),len);
+	case	6:	return	wyhashmix64(wyhashmix64(seed,(wyhashread32(ptr)<<16)|wyhashread16(ptr+4)),len);
+	case	7:	return	wyhashmix64(wyhashmix64(seed,(wyhashread32(ptr)<<24)|(wyhashread16(ptr+4)<<8)|wyhashread08(ptr+6)),len);
 	}
 }
 #endif

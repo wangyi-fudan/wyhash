@@ -31,7 +31,7 @@ inline	unsigned long long	wyhashmix64(unsigned long long	A,	unsigned long long	B
 	A^=0x60bee2bee120fc15ull;	B^=0xa3b195354a39b70dull;
 	unsigned long long	ha=A>>32,	hb=B>>32,	la=(unsigned int)A,	lb=(unsigned int)B;
 	unsigned long long	rh=ha*hb,	rm0=ha*lb,	rm1=hb*la,	rl=la*lb,	t=rl+(rm0<<32),	c=t<rl;
-	lo=t+(rm1<< 32);	c+=lo< t;	hi=rh+(rm0>>32)+(rm1>> 32)+c;
+	lo=t+(rm1<<32);	c+=lo<t;	hi=rh+(rm0>>32)+(rm1>>32)+c;
 	return hi^lo;
 	#endif
 }

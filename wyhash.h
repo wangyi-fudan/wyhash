@@ -34,13 +34,13 @@ inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsign
 	const	unsigned char	*ptr=(const	unsigned char*)key,	*const	end=ptr+len;
 	while(ptr+8<=end){	seed=wyhashmix64(seed,	wyhashread64(ptr));	ptr+=8;	}
 	switch(end-ptr){
-		case	1:	seed=wyhashmix64(seed,	wyhashread08(ptr));	break;
-		case	2:	seed=wyhashmix64(seed,	wyhashread16(ptr));	break;
-		case	3:	seed=wyhashmix64(seed,	(wyhashread16(ptr)<<8)|wyhashread08(ptr+2));	break;
-		case	4:	seed=wyhashmix64(seed,	wyhashread32(ptr));	break;
-		case	5:	seed=wyhashmix64(seed,	(wyhashread32(ptr)<<8)|wyhashread08(ptr+4));	break;
-		case	6:	seed=wyhashmix64(seed,	(wyhashread32(ptr)<<16)|wyhashread16(ptr+4));	break;
-		case	7:	seed=wyhashmix64(seed,	(wyhashread32(ptr)<<24)|(wyhashread16(ptr+4)<<8)|wyhashread08(ptr+6));	break;
+	case	1:	seed=wyhashmix64(seed,	wyhashread08(ptr));	break;
+	case	2:	seed=wyhashmix64(seed,	wyhashread16(ptr));	break;
+	case	3:	seed=wyhashmix64(seed,	(wyhashread16(ptr)<<8)|wyhashread08(ptr+2));	break;
+	case	4:	seed=wyhashmix64(seed,	wyhashread32(ptr));	break;
+	case	5:	seed=wyhashmix64(seed,	(wyhashread32(ptr)<<8)|wyhashread08(ptr+4));	break;
+	case	6:	seed=wyhashmix64(seed,	(wyhashread32(ptr)<<16)|wyhashread16(ptr+4));	break;
+	case	7:	seed=wyhashmix64(seed,	(wyhashread32(ptr)<<24)|(wyhashread16(ptr+4)<<8)|wyhashread08(ptr+6));	break;
 	}
 	return	wyhashmix64(seed,	len);
 }
@@ -49,4 +49,3 @@ inline	unsigned long long	wyhash64(unsigned long long	key, unsigned long long	se
 //the following function is for 32bit integer hashing, the return value is NOT consistant with the general funciton
 inline	unsigned int	wyhash32(unsigned int	key, unsigned int	seed){	return	wyhashmix32(wyhashmix32(seed,	key),	4);	}
 #endif
-

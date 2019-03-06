@@ -24,7 +24,16 @@
 #define wyhash_included
 //the following functions should not be called outside the file
 inline	unsigned long long	wyhashmix64(unsigned long long	A,	unsigned long long	B){	
+	#if	defined(__GNUC__) && UINT_MAX != ULONG_MAX
 	__uint128_t	r=A^0x60bee2bee120fc15ull;	r*=B^0xa3b195354a39b70dull;	return	(r>>64)^r;	
+	#else
+	unsigned long long	hi, lo;
+	A^=0x60bee2bee120fc15ull;	B^=0xa3b195354a39b70dull;
+	unsigned long long	ha=A>> 32,	hb=B>>32,	la=(unsigned int)A,	lb=(unsigned int)B;
+	unsigned long long	rh=ha*hb,	rm_0=ha*lb,	rm_1=hb*la,	rl=la*lb,	t=rl+(rm_0<<32),	carry=t<rl;
+	lo=t+(rm_1<< 32);	carry+=lo< t;	hi=rh+(rm_0>>32)+(rm_1>> 32)+carry;
+	return hi^lo;
+	#endif
 }
 inline	unsigned int	wyhashmix32(unsigned int	A,	unsigned int	B){	
 	unsigned long long	r=A^0x7b16763u;	r*=B^0xe4f5a905u;	return	(r>>32)^r;	

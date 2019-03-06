@@ -23,7 +23,7 @@
 #ifndef __wyhash__
 #define __wyhash__
 #include	<stdint.h>
-//the following functions is should not be called outside the file
+//the following functions should not be called outside the file
 inline	uint64_t	wyhashmix64(uint64_t	A,	uint64_t	B){	__uint128_t	r=A^0x60bee2bee120fc15ull;	r*=B^0xa3b195354a39b70dull;	return	(r>>64)^r;	}
 inline	unsigned	wyhashmix32(unsigned	A,	unsigned	B){	uint64_t	r=A^0x7b16763u;	r*=B^0xe4f5a905u;	return	(r>>32)^r;	}
 inline	uint64_t	wyhashread64(const	void	*const	ptr){	return	*(uint64_t*)(ptr);	}

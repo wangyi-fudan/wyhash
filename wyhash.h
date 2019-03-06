@@ -41,8 +41,7 @@ inline	unsigned long long	wyhashread08(const	void	*const	ptr){	return	*(unsigned
 //the following function is the general hash function to be called
 inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsigned long long	seed){
 	const	unsigned char	*ptr=(const	unsigned char*)key,	*const	end=ptr+len;
-	seed^=0x60bee2bee120fc15ull;
-	while(ptr+8<=end){	seed=wyhashmix64(seed,wyhashread64(ptr));	ptr+=8;	}
+	for(seed^=0x60bee2bee120fc15ull;	ptr+8<=end;	ptr+=8)	seed=wyhashmix64(seed,wyhashread64(ptr));
 	switch(end-ptr){
 	case	0:	return	wyhashmix64(seed,len);
 	case	1:	return	wyhashmix64(wyhashmix64(seed,wyhashread08(ptr)),len);

@@ -22,13 +22,17 @@
 */
 #ifndef wyhash_included
 #define wyhash_included
+const	unsigned long long	wyhashp0=0x60bee2bee120fc15ull;
+const	unsigned long long	wyhashp1=0xa3b195354a39b70dull;
+const	unsigned long long	wyhashp2=0x1b03738712fad5c9ull;
+const	unsigned long long	wyhashp3=0xd985068bc5439bd7ull;
+const	unsigned long long	wyhashp4=0x897f236fb004a8e7ull;
 //the following functions should not be called outside the file
 inline	unsigned long long	wyhashmix64(unsigned long long	A,	unsigned long long	B){	
 #ifdef __SIZEOF_INT128__
-	__uint128_t	r=A;	r*=B^0xa3b195354a39b70dull;	return	(r>>64)^r;	
+	__uint128_t	r=A;	r*=B^wyhashp0;	return	(r>>64)^r;	
 #else
-	// compromised for compatibility
-	B^=0xa3b195354a39b70dull;
+	B^=wyhashp0;
 	unsigned long long	ha=A>>32,	hb=B>>32,	la=(unsigned int)A,	lb=(unsigned int)B,	hi, lo;
 	unsigned long long	rh=ha*hb,	rm0=ha*lb,	rm1=hb*la,	rl=la*lb,	t=rl+(rm0<<32),	c=t<rl;
 	lo=t+(rm1<<32);	c+=lo<t;	hi=rh+(rm0>>32)+(rm1>>32)+c;
@@ -45,7 +49,25 @@ inline	unsigned long long	wyhashread08(const	void	*const	ptr){	return	*(unsigned
 //the following function is the general hash function to be called
 inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsigned long long	seed){
 	const	unsigned char	*ptr=(const	unsigned char*)key,	*const	end=ptr+len;
-	for(seed^=0x60bee2bee120fc15ull;	ptr+8<=end;	ptr+=8)	seed=wyhashmix64(seed,wyhashread64(ptr));
+	for(seed^=wyhashp1;	ptr+32<=end;	ptr+=32)
+		seed=wyhashmix64(seed,wyhashread64(ptr))
+		^wyhashmix64(seed^wyhashp2,wyhashread64(ptr+8))
+		^wyhashmix64(seed^wyhashp3,wyhashread64(ptr+16))
+		^wyhashmix64(seed^wyhashp4,wyhashread64(ptr+24));
+	switch(end-ptr){
+	case	24 ... 31:	
+		seed=wyhashmix64(seed,wyhashread64(ptr))
+		^wyhashmix64(seed^wyhashp2,wyhashread64(ptr+8))
+		^wyhashmix64(seed^wyhashp3,wyhashread64(ptr+16));	
+		ptr+=24;	break;
+	case	16 ... 23:	
+		seed=wyhashmix64(seed,wyhashread64(ptr))
+		^wyhashmix64(seed^wyhashp2,wyhashread64(ptr+8));	
+		ptr+=16;	break;	
+	case	8 ... 15:	
+		seed=wyhashmix64(seed,wyhashread64(ptr));	
+		ptr+=8;	break;	
+	}
 	switch(end-ptr){
 	case	1:	return	wyhashmix64(wyhashmix64(seed,wyhashread08(ptr)),len);
 	case	2:	return	wyhashmix64(wyhashmix64(seed,wyhashread16(ptr)),len);

@@ -20,7 +20,7 @@ inline	unsigned long long	wyhashread16(const	void	*const	ptr){	return	*(unsigned
 inline	unsigned long long	wyhashread08(const	void	*const	ptr){	return	*(unsigned char*)(ptr);	}
 inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsigned long long	seed){
 	const	unsigned char	*ptr=(const	unsigned char*)key,	*const	end=ptr+len;
-	for(;ptr+8<end;	ptr+=8)	seed=wyhashmix(seed^wyhashp0,wyhashread64(ptr));
+	while(ptr+8<end){	seed=wyhashmix(seed^wyhashp0,wyhashread64(ptr));	ptr+=8;	}
 	switch(len&7){
 	case	0:	return	wyhashmix(wyhashmix(seed^wyhashp0,wyhashread64(ptr)),len);
 	case	1:	return	wyhashmix(wyhashmix(seed^wyhashp0,wyhashread08(ptr)),len);
@@ -30,7 +30,6 @@ inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsign
 	case	5:	return	wyhashmix(wyhashmix(seed^wyhashp0,(wyhashread32(ptr)<<8)|wyhashread08(ptr+4)),len);
 	case	6:	return	wyhashmix(wyhashmix(seed^wyhashp0,(wyhashread32(ptr)<<16)|wyhashread16(ptr+4)),len);
 	case	7:	return	wyhashmix(wyhashmix(seed^wyhashp0,(wyhashread32(ptr)<<24)|(wyhashread16(ptr+4)<<8)|wyhashread08(ptr+6)),len);
-	default:	return	0;
 	}
 }
 #endif

@@ -144,8 +144,16 @@ inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsign
 	}
 	return	wyhashmix(seed,	len);
 }
-inline	unsigned int	wyhashmix32(unsigned int	A,	unsigned int	B){	unsigned long long	r=(unsigned long long)A*(unsigned long long)B;	return	(r>>32)^r;	}
-inline	unsigned int	wyhash32(unsigned int	A, unsigned int	B){	return	wyhashmix32(wyhashmix32(A^0x7b16763u,	B^0xe4f5a905u),	0x4a9e6939u);	}
-inline	unsigned long long	wyrngmix(unsigned long long	A,	unsigned long long	B){	__uint128_t	r=A;	r*=B;	return	(r>>64)^r;	}	
-inline	unsigned long long	wyrng(unsigned long long *seed){	*seed+=p0;	return	wyrngmix(wyrngmix(*seed,	p1),	p2);	}
+inline	unsigned int	wyhashmix32(unsigned int	A,	unsigned int	B){	
+	unsigned long long	r=(unsigned long long)A*(unsigned long long)B;	return	(r>>32)^r;	
+}
+inline	unsigned int	wyhash32(unsigned int	A, unsigned int	B){	
+	return	wyhashmix32(wyhashmix32(A^0x7b16763u,	B^0xe4f5a905u),	0x4a9e6939u);	
+}
+inline	unsigned long long	wyrngmix(unsigned long long	A,	unsigned long long	B){	
+	__uint128_t	r=A;	r*=B;	return	(r>>64)^r;	
+}	
+inline	unsigned long long	wyrng(unsigned long long *seed){	
+	*seed+=p0;	return	wyrngmix(wyrngmix(*seed,	p1),	p2);	
+}
 #endif

@@ -151,7 +151,14 @@ inline	unsigned int	wyhash32(unsigned int	A, unsigned int	B){
 	return	wyhashmix32(wyhashmix32(A^0x7b16763u,	B^0xe4f5a905u),	0x4a9e6939u);	
 }
 inline	unsigned long long	wyrngmix(unsigned long long	A,	unsigned long long	B){	
+#ifdef __SIZEOF_INT128__
 	__uint128_t	r=A;	r*=B;	return	(r>>64)^r;	
+#else
+	unsigned long long	ha=A>>32,	hb=B>>32,	la=(unsigned int)A,	lb=(unsigned int)B,	hi, lo;
+	unsigned long long	rh=ha*hb,	rm0=ha*lb,	rm1=hb*la,	rl=la*lb,	t=rl+(rm0<<32),	c=t<rl;
+	lo=t+(rm1<<32);	c+=lo<t;	hi=rh+(rm0>>32)+(rm1>>32)+c;
+	return hi^lo;
+#endif
 }	
 inline	unsigned long long	wyrng(unsigned long long *seed){	
 	*seed+=wyhashp0;	return	wyrngmix(wyrngmix(*seed,	wyhashp1),	wyhashp2);

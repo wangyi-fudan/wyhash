@@ -1,6 +1,13 @@
 //Author: Wang Yi <godspeed_china@yeah.net>
 #ifndef wyhash_included
 #define wyhash_included
+#ifndef UNLIKELY
+#if defined(__GNUC__) || defined(__INTEL_COMPILER)
+#define UNLIKELY(x) (__builtin_expect(!!(x), 0))
+#else
+#define UNLIKELY(x) (x)
+#endif
+#endif
 const	unsigned long long	wyhashp0=0x60bee2bee120fc15ull;
 const	unsigned long long	wyhashp1=0xa3b195354a39b70dull;
 const	unsigned long long	wyhashp2=0x1b03738712fad5c9ull;
@@ -23,7 +30,7 @@ inline	unsigned long long	wyhashread16(const	void	*const	ptr){	return	*(unsigned
 inline	unsigned long long	wyhashread08(const	void	*const	ptr){	return	*(unsigned char*)(ptr);	}
 inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsigned long long	seed){
 	const	unsigned char	*ptr=(const	unsigned char*)key,	*const	end=ptr+len;
-	for(;	__builtin_expect(ptr+32<end,0);	ptr+=32)
+	for(;UNLIKELY(ptr+32<end);	ptr+=32)
 		seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))
 		^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))
 		^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))

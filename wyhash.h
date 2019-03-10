@@ -154,6 +154,6 @@ inline	unsigned long long	wyrngmix(unsigned long long	A,	unsigned long long	B){
 	__uint128_t	r=A;	r*=B;	return	(r>>64)^r;	
 }	
 inline	unsigned long long	wyrng(unsigned long long *seed){	
-	*seed+=p0;	return	wyrngmix(wyrngmix(*seed,	p1),	p2);	
+	*seed+=wyhashp0;	return	wyrngmix(wyrngmix(*seed,	wyhashp1),	wyhashp2);
 }
 #endif

@@ -32,7 +32,7 @@ inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsign
 	const	unsigned char	*ptr=(const	unsigned char*)key;	unsigned long long i;
 	for(i=0;	UNLIKELY(i+32<len);	i+=32,	ptr+=32)	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))^wyhashmix(seed^wyhashp4,wyhashread64(ptr+24));
 	switch(len&31){
-	case	0:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))^wyhashmix(seed^wyhashp4,wyhashread64(ptr+24));	break;
+	case	0:	if(len)	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))^wyhashmix(seed^wyhashp4,wyhashread64(ptr+24));	break;
 	case	1:	seed=wyhashmix(seed^wyhashp1,wyhashread08(ptr));	break;	
 	case	2:	seed=wyhashmix(seed^wyhashp1,wyhashread16(ptr));	break;
 	case	3:	seed=wyhashmix(seed^wyhashp1,(wyhashread16(ptr)<<8)|wyhashread08(ptr+2));	break;

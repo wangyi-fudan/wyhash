@@ -2,11 +2,11 @@
 #ifndef wyhash_included
 #define wyhash_included
 #ifndef UNLIKELY
-#if defined(__GNUC__) || defined(__INTEL_COMPILER)
-#define UNLIKELY(x) (__builtin_expect(!!(x), 0))
-#else
-#define UNLIKELY(x) (x)
-#endif
+	#if defined(__GNUC__) || defined(__INTEL_COMPILER)
+		#define UNLIKELY(x) (__builtin_expect(!!(x), 0))
+	#else
+		#define UNLIKELY(x) (x)
+	#endif
 #endif
 const	unsigned long long	wyhashp0=0x60bee2bee120fc15ull;
 const	unsigned long long	wyhashp1=0xa3b195354a39b70dull;

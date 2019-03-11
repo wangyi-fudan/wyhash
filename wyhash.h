@@ -30,7 +30,7 @@ inline	unsigned long long	wyhashread16(const	void	*const	ptr){	return	*(unsigned
 inline	unsigned long long	wyhashread08(const	void	*const	ptr){	return	*(unsigned char*)(ptr);	}
 inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsigned long long	seed){
 	const	unsigned char	*ptr=(const	unsigned char*)key,	*const	end=ptr+len;
-	for(;UNLIKELY(ptr+32<end);	ptr+=32)
+	for(;	UNLIKELY(ptr+32<end);	ptr+=32)
 		seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))
 		^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))
 		^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))
@@ -149,7 +149,6 @@ inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsign
 		^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))
 		^wyhashmix(seed^wyhashp4,(wyhashread32(ptr+24)<<24)|(wyhashread16(ptr+24+4)<<8)|wyhashread08(ptr+24+6)),len);
 	}
-	return	wyhashmix(seed,	len);
 }
 inline	unsigned int	wyhashmix32(unsigned int	A,	unsigned int	B){	
 	unsigned long long	r=(unsigned long long)A*(unsigned long long)B;	return	(r>>32)^r;	

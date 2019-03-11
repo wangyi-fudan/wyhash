@@ -30,125 +30,42 @@ inline	unsigned long long	wyhashread16(const	void	*const	ptr){	return	*(unsigned
 inline	unsigned long long	wyhashread08(const	void	*const	ptr){	return	*(unsigned char*)(ptr);	}
 inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsigned long long	seed){
 	const	unsigned char	*ptr=(const	unsigned char*)key,	*const	end=ptr+len;
-	for(;	UNLIKELY(ptr+32<end);	ptr+=32)
-		seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))
-		^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))
-		^wyhashmix(seed^wyhashp4,wyhashread64(ptr+24));
+	for(;	UNLIKELY(ptr+32<end);	ptr+=32)	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))^wyhashmix(seed^wyhashp4,wyhashread64(ptr+24));
 	switch(len&31){
-	case	0:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))
-		^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))
-		^wyhashmix(seed^wyhashp4,wyhashread64(ptr+24)),len);
-	case	1:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread08(ptr)),len);	
-	case	2:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread16(ptr)),len);
-	case	3:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,(wyhashread16(ptr)<<8)|wyhashread08(ptr+2)),len);
-	case	4:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread32(ptr)),len);
-	case	5:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,(wyhashread32(ptr)<<8)|wyhashread08(ptr+4)),len);
-	case	6:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,(wyhashread32(ptr)<<16)|wyhashread16(ptr+4)),len);
-	case	7:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,(wyhashread32(ptr)<<24)|(wyhashread16(ptr+4)<<8)|wyhashread08(ptr+6)),len);
-	case	8:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr)),len);
-	case	9:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,wyhashread08(ptr+8)),len);	
-	case	10:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,wyhashread16(ptr+8)),len);
-	case	11:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,(wyhashread16(ptr+8)<<8)|wyhashread08(ptr+8+2)),len);
-	case	12:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,wyhashread32(ptr+8)),len);
-	case	13:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,(wyhashread32(ptr+8)<<8)|wyhashread08(ptr+8+4)),len);
-	case	14:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,(wyhashread32(ptr+8)<<16)|wyhashread16(ptr+8+4)),len);
-	case	15:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,(wyhashread32(ptr+8)<<24)|(wyhashread16(ptr+8+4)<<8)|wyhashread08(ptr+8+6)),len);
-	case	16:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8)),len);
-	case	17:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))
-		^wyhashmix(seed^wyhashp3,wyhashread08(ptr+16)),len);	
-	case	18:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))
-		^wyhashmix(seed^wyhashp3,wyhashread16(ptr+16)),len);
-	case	19:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))
-		^wyhashmix(seed^wyhashp3,(wyhashread16(ptr+16)<<8)|wyhashread08(ptr+16+2)),len);
-	case	20:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))
-		^wyhashmix(seed^wyhashp3,wyhashread32(ptr+16)),len);
-	case	21:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))
-		^wyhashmix(seed^wyhashp3,(wyhashread32(ptr+16)<<8)|wyhashread08(ptr+16+4)),len);
-	case	22:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))
-		^wyhashmix(seed^wyhashp3,(wyhashread32(ptr+16)<<16)|wyhashread16(ptr+16+4)),len);
-	case	23:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))
-		^wyhashmix(seed^wyhashp3,(wyhashread32(ptr+16)<<24)|(wyhashread16(ptr+16+4)<<8)|wyhashread08(ptr+16+6)),len);
-	case	24:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))
-		^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16)),len);
-	case	25:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))
-		^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))
-		^wyhashmix(seed^wyhashp4,wyhashread08(ptr+24)),len);	
-	case	26:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))
-		^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))
-		^wyhashmix(seed^wyhashp4,wyhashread16(ptr+24)),len);
-	case	27:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))
-		^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))
-		^wyhashmix(seed^wyhashp4,(wyhashread16(ptr+24)<<8)|wyhashread08(ptr+24+2)),len);
-	case	28:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))
-		^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))
-		^wyhashmix(seed^wyhashp4,wyhashread32(ptr+24)),len);
-	case	29:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))
-		^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))
-		^wyhashmix(seed^wyhashp4,(wyhashread32(ptr+24)<<8)|wyhashread08(ptr+24+4)),len);
-	case	30:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))
-		^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))
-		^wyhashmix(seed^wyhashp4,(wyhashread32(ptr+24)<<16)|wyhashread16(ptr+24+4)),len);
-	case	31:	return	wyhashmix(
-		wyhashmix(seed^wyhashp1,wyhashread64(ptr))
-		^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))
-		^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))
-		^wyhashmix(seed^wyhashp4,(wyhashread32(ptr+24)<<24)|(wyhashread16(ptr+24+4)<<8)|wyhashread08(ptr+24+6)),len);
+	case	0:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))^wyhashmix(seed^wyhashp4,wyhashread64(ptr+24));	break;
+	case	1:	seed=wyhashmix(seed^wyhashp1,wyhashread08(ptr));	break;	
+	case	2:	seed=wyhashmix(seed^wyhashp1,wyhashread16(ptr));	break;
+	case	3:	seed=wyhashmix(seed^wyhashp1,(wyhashread16(ptr)<<8)|wyhashread08(ptr+2));	break;
+	case	4:	seed=wyhashmix(seed^wyhashp1,wyhashread32(ptr));	break;
+	case	5:	seed=wyhashmix(seed^wyhashp1,(wyhashread32(ptr)<<8)|wyhashread08(ptr+4));	break;
+	case	6:	seed=wyhashmix(seed^wyhashp1,(wyhashread32(ptr)<<16)|wyhashread16(ptr+4));	break;
+	case	7:	seed=wyhashmix(seed^wyhashp1,(wyhashread32(ptr)<<24)|(wyhashread16(ptr+4)<<8)|wyhashread08(ptr+6));	break;
+	case	8:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr));	break;
+	case	9:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread08(ptr+8));	break;	
+	case	10:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread16(ptr+8));	break;
+	case	11:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,(wyhashread16(ptr+8)<<8)|wyhashread08(ptr+8+2));	break;
+	case	12:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread32(ptr+8));	break;
+	case	13:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,(wyhashread32(ptr+8)<<8)|wyhashread08(ptr+8+4));	break;
+	case	14:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,(wyhashread32(ptr+8)<<16)|wyhashread16(ptr+8+4));	break;
+	case	15:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,(wyhashread32(ptr+8)<<24)|(wyhashread16(ptr+8+4)<<8)|wyhashread08(ptr+8+6));	break;
+	case	16:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8));	break;
+	case	17:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,wyhashread08(ptr+16));	break;	
+	case	18:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,wyhashread16(ptr+16));	break;
+	case	19:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,(wyhashread16(ptr+16)<<8)|wyhashread08(ptr+16+2));	break;
+	case	20:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,wyhashread32(ptr+16));	break;
+	case	21:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,(wyhashread32(ptr+16)<<8)|wyhashread08(ptr+16+4));	break;
+	case	22:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,(wyhashread32(ptr+16)<<16)|wyhashread16(ptr+16+4));	break;
+	case	23:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,(wyhashread32(ptr+16)<<24)|(wyhashread16(ptr+16+4)<<8)|wyhashread08(ptr+16+6));	break;
+	case	24:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16));	break;
+	case	25:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))^wyhashmix(seed^wyhashp4,wyhashread08(ptr+24));	break;	
+	case	26:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))^wyhashmix(seed^wyhashp4,wyhashread16(ptr+24));	break;
+	case	27:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))^wyhashmix(seed^wyhashp4,(wyhashread16(ptr+24)<<8)|wyhashread08(ptr+24+2));	break;
+	case	28:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))^wyhashmix(seed^wyhashp4,wyhashread32(ptr+24));	break;
+	case	29:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))^wyhashmix(seed^wyhashp4,(wyhashread32(ptr+24)<<8)|wyhashread08(ptr+24+4));	break;
+	case	30:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))^wyhashmix(seed^wyhashp4,(wyhashread32(ptr+24)<<16)|wyhashread16(ptr+24+4));	break;
+	case	31:	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))^wyhashmix(seed^wyhashp4,(wyhashread32(ptr+24)<<24)|(wyhashread16(ptr+24+4)<<8)|wyhashread08(ptr+24+6));	break;
 	}
+	return	wyhashmix(seed,	len);
 }
 inline	unsigned int	wyhashmix32(unsigned int	A,	unsigned int	B){	
 	unsigned long long	r=(unsigned long long)A*(unsigned long long)B;	return	(r>>32)^r;	

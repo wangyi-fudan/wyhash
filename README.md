@@ -53,5 +53,5 @@ https://github.com/lemire/testingRNG
 | pcg64 | 1.12 |
 | xorshift1024star | 1.24 |
 | xorshift1024plus | 0.88 |
-| wyrng | 0.74 |
+| *wyrng* | *0.74* |
 

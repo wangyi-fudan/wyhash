@@ -1,6 +1,7 @@
 //Author: Wang Yi <godspeed_china@yeah.net>
 #ifndef wyhash_included
 #define wyhash_included
+#define wyhash_version	20190312
 #ifndef UNLIKELY
 	#if defined(__GNUC__) || defined(__INTEL_COMPILER)
 		#define UNLIKELY(x) (__builtin_expect(!!(x), 0))
@@ -31,6 +32,8 @@ inline	unsigned long long	wyhashread64(const	void	*const	ptr){	return	*(unsigned
 inline	unsigned long long	wyhashread32(const	void	*const	ptr){	return	*(unsigned int*)(ptr);	}
 inline	unsigned long long	wyhashread16(const	void	*const	ptr){	return	*(unsigned short*)(ptr);	}
 inline	unsigned long long	wyhashread08(const	void	*const	ptr){	return	*(unsigned char*)(ptr);	}
+
+//the wyhash hash function
 inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsigned long long	seed){
 	const	unsigned char	*ptr=(const	unsigned char*)key;	unsigned long long i;
 	for(i=0;	UNLIKELY(i+32<len);	i+=32,	ptr+=32)	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))^wyhashmix(seed^wyhashp4,wyhashread64(ptr+24));
@@ -70,13 +73,28 @@ inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsign
 	}
 	return	wyhashmix(seed,	len);
 }
-inline	unsigned int	wyhash32(unsigned int	A, unsigned int	B){
-	return	wyhashmix32(wyhashmix32(A^0x7b16763u,	B^0xe4f5a905u),	0x4a9e6939u);
-}
-inline	unsigned long long	wyhash64(unsigned long long	A, unsigned long long	B){
-	return	wyhashmix64(wyhashmix64(A^wyhashp0,	B^wyhashp1),	wyhashp2);
-}
-inline	unsigned long long	wyrng(unsigned long long *seed){
-	*seed+=wyhashp0;	return	wyhashmix64(wyhashmix64(*seed,	wyhashp1),	wyhashp2);
-}
+
+//32 bit integer hash function
+inline	unsigned int	wyhash32(unsigned int	A, unsigned int	B){	return	wyhashmix32(wyhashmix32(A^0x7b16763u,	B^0xe4f5a905u),	0x4a9e6939u);	}
+
+//64 bit integer hash function
+inline	unsigned long long	wyhash64(unsigned long long	A, unsigned long long	B){	return	wyhashmix64(wyhashmix64(A^wyhashp0,	B^wyhashp1),	wyhashp2);	}
+
+//PRNG structure
+struct	wyrng{	unsigned long long	seed,	bits,	curr;	};
+
+//get 64bit random number
+inline	unsigned long long	wyrng_u64(wyrng	*rng){	rng->seed+=wyhashp0;	return	wyhashmix64(wyhashmix64(rng->seed,	wyhashp1),	wyhashp2);	}
+
+//get K bits (faster than wyrng_u64)
+inline	unsigned long long	wyrng_bit(wyrng	*rng,	unsigned long long	K){	if(UNLIKELY(rng->curr+K>64)){	rng->bits=wyrng_u64(rng);	rng->curr=0;	}	unsigned long long	r=rng->bits&((1ull<<K)-1ull);	rng->bits>>=K;	rng->curr+=K;	return	r;	}
+
+//get float uniform distributed random number on [0,1)
+inline	float	wyrng_u01f(wyrng	*rng){	union	u32{	unsigned	i;	float	f;	}	u;	u.i=(wyrng_u64(rng)&0x7ffffful)|0x3f800000ul;	return	u.f-1.0f;	}
+
+//get double uniform distributed random number on [0,1)
+inline	double	wyrng_u01d(wyrng	*rng){	union	u64{	unsigned long long	i;	double	f;	}	u;	u.i=(wyrng_u64(rng)&0xfffffffffffffull)|0x3ff0000000000000ull;	return	u.f-1.0;	}	
+
+//seeding the PRNG
+inline	void	wyrng_seed(wyrng	*rng,	unsigned long long	seed){	rng->seed=seed;	rng->bits=wyrng_u64(rng);	rng->curr=0;	}
 #endif

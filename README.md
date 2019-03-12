@@ -1,3 +1,18 @@
+As working on machine learning, I desire a dream hash and PRNG. 
+
+The main insight of my hash and PRNG is the following core code (learnt from https://github.com/vnmakarov/mum-hash):
+
+uint64_t	mix(uint64_t	A,	uint64_t	B){
+
+	__uint128_t	r=A^p0;	r*=B^p1;
+	
+	return	(r>>64)^r;
+	
+}
+
+Only two rounds of such mix operation completely randomized the bits.
+
+
 https://github.com/rurban/smhasher
 
 | key/cycles | wyhash | t1ha2_atonce | t1ha1_64le | t1ha0_aes_noavx | speedup |

@@ -84,17 +84,17 @@ inline	unsigned long long	wyhash64(unsigned long long	A, unsigned long long	B){	
 struct	wyrng{	unsigned long long	seed,	bits,	curr;	};
 
 //get 64bit random number
-inline	unsigned long long	wyrng_u64(wyrng	*rng){	rng->seed+=wyhashp0;	return	wyhashmix64(wyhashmix64(rng->seed,	wyhashp1),	wyhashp2);	}
+inline	unsigned long long	wyrng_u64(struct wyrng	*rng){	rng->seed+=wyhashp0;	return	wyhashmix64(wyhashmix64(rng->seed,	wyhashp1),	wyhashp2);	}
 
 //get K bits (faster than wyrng_u64)
-inline	unsigned long long	wyrng_bit(wyrng	*rng,	unsigned long long	K){	if(UNLIKELY(rng->curr+K>64)){	rng->bits=wyrng_u64(rng);	rng->curr=0;	}	unsigned long long	r=rng->bits&((1ull<<K)-1ull);	rng->bits>>=K;	rng->curr+=K;	return	r;	}
+inline	unsigned long long	wyrng_bit(struct wyrng	*rng,	unsigned long long	K){	if(UNLIKELY(rng->curr+K>64)){	rng->bits=wyrng_u64(rng);	rng->curr=0;	}	unsigned long long	r=rng->bits&((1ull<<K)-1ull);	rng->bits>>=K;	rng->curr+=K;	return	r;	}
 
 //get float uniform distributed random number on [0,1)
-inline	float	wyrng_u01f(wyrng	*rng){	union	u32{	unsigned	i;	float	f;	}	u;	u.i=(wyrng_u64(rng)&0x7ffffful)|0x3f800000ul;	return	u.f-1.0f;	}
+inline	float	wyrng_u01f(struct wyrng	*rng){	union	u32{	unsigned	i;	float	f;	}	u;	u.i=(wyrng_u64(rng)&0x7ffffful)|0x3f800000ul;	return	u.f-1.0f;	}
 
 //get double uniform distributed random number on [0,1)
-inline	double	wyrng_u01d(wyrng	*rng){	union	u64{	unsigned long long	i;	double	f;	}	u;	u.i=(wyrng_u64(rng)&0xfffffffffffffull)|0x3ff0000000000000ull;	return	u.f-1.0;	}	
+inline	double	wyrng_u01d(struct wyrng	*rng){	union	u64{	unsigned long long	i;	double	f;	}	u;	u.i=(wyrng_u64(rng)&0xfffffffffffffull)|0x3ff0000000000000ull;	return	u.f-1.0;	}	
 
 //seeding the PRNG
-inline	void	wyrng_seed(wyrng	*rng,	unsigned long long	seed){	rng->seed=seed;	rng->bits=wyrng_u64(rng);	rng->curr=0;	}
+inline	void	wyrng_seed(struct wyrng	*rng,	unsigned long long	seed){	rng->seed=seed;	rng->bits=wyrng_u64(rng);	rng->curr=0;	}
 #endif

@@ -12,8 +12,11 @@ uint64_t	mix(uint64_t	A,	uint64_t	B){
 	
 }
 
-Only two rounds of such mix operation completely randomized the bits.
+Only two rounds of such mix operation completely randomized the bits. Thus my hash function become very simple and fast.
 
+The quality is good for wyhash passing SMHasher, BigCrush, practrand. However, I found a trick to crush t1ha0 and t1ha1 (but t1ha2 survived) by transforming a hash function to a PRNG (PRNG is a hash of time). By forcing t1ha0 and t1ha1 to produce random numbers using their weak seed, practrand crushed them.
+
+The benchmarks are as follow. Please notice that the hash speed benchmarks is not very consistant, though generally speaking wyhash is the fastest one. 
 
 https://github.com/rurban/smhasher
 

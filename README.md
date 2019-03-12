@@ -33,6 +33,7 @@
 | 31 | 5.2337 | 5.2108 | -0.44% |
 
 https://github.com/lemire/testingRNG
+
 | PRNG |  cycles per byte |
 | ---- | ---- |
 | xorshift_k4 | 1.65 |

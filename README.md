@@ -1,4 +1,6 @@
-As working on machine learning, I desire a dream hash and PRNG. t1ha helps me very much, however, I am just too thirsty to perfection ...
+As working on machine learning, I desire a dream hash and PRNG. 
+
+t1ha helps my projects a lot, but I am just too thirsty to speed and simplicity ...
 
 The main insight of my hash and PRNG is the following method (learnt from https://github.com/vnmakarov/mum-hash):
 

@@ -1,6 +1,6 @@
-As working on machine learning, I desire a dream hash and PRNG. 
+As working on machine learning, I desire a dream hash and PRNG. t1ha helps me very much, however, I am just too thirsty to perfection ...
 
-The main insight of my hash and PRNG is the following core code (learnt from https://github.com/vnmakarov/mum-hash):
+The main insight of my hash and PRNG is the following method (learnt from https://github.com/vnmakarov/mum-hash):
 
 uint64_t	mix(uint64_t	A,	uint64_t	B){
 

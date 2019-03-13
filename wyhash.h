@@ -83,8 +83,10 @@ inline	unsigned long long	wyhash64(unsigned long long	A, unsigned long long	B){	
 inline	unsigned long long	wyrng(unsigned long long	*seed){	*seed+=wyhashp0;	return	wyhashmix64(wyhashmix64(*seed,	wyhashp1),	wyhashp2);	}
 
 //get float uniform distributed random number on [0,1)
-inline	float	wyrngu01f(unsigned long long	*seed){	union	u32{	unsigned	i;	float	f;	}	u;	u.i=(wyrng(seed)&0x7ffffful)|0x3f800000ul;	return	u.f-1.0f;	}
+union	wyrngu32{	unsigned	i;	float	f;	};
+inline	float	wyrngu01f(unsigned long long	*seed){	union wyrngu32	u;	u.i=(wyrng(seed)&0x7ffffful)|0x3f800000ul;	return	u.f-1.0f;	}
 
 //get double uniform distributed random number on [0,1)
-inline	double	wyrngu01d(unsigned long long	*seed){	union	u64{	unsigned long long	i;	double	f;	}	u;	u.i=(wyrng(seed)&0xfffffffffffffull)|0x3ff0000000000000ull;	return	u.f-1.0;	}	
+union	wyrngu64{	unsigned long long	i;	double	f;	};
+inline	double	wyrngu01d(unsigned long long	*seed){	union wyrngu64	u;	u.i=(wyrng(seed)&0xfffffffffffffull)|0x3ff0000000000000ull;	return	u.f-1.0;	}	
 #endif

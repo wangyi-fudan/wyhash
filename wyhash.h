@@ -28,18 +28,11 @@ inline	unsigned long long	wyhashmix64(unsigned long long	A,	unsigned long long	B
 #endif
 }
 inline	unsigned long long	wyhashmix(unsigned long long	A,	unsigned long long	B){	return	wyhashmix64(A,B^wyhashp0);	}
-#if defined(__i386__) || defined(__x86_64__) || defined(_M_IX86) || defined(_M_X64)
-inline	unsigned long long	wyhashread64(const	void	*const	ptr){	return	*(unsigned long long*)(ptr);	}
-inline	unsigned long long	wyhashread32(const	void	*const	ptr){	return	*(unsigned int*)(ptr);	}
-inline	unsigned long long	wyhashread16(const	void	*const	ptr){	return	*(unsigned short*)(ptr);	}
-inline	unsigned long long	wyhashread08(const	void	*const	ptr){	return	*(unsigned char*)(ptr);	}
-#else
 #include	<string.h>
 inline	unsigned long long	wyhashread64(const	void	*const	ptr){	unsigned long long v;	memcpy(&v,	ptr,	8);	return	v;	}
 inline	unsigned long long	wyhashread32(const	void	*const	ptr){	unsigned int v;	memcpy(&v,	ptr,	4);	return	v;	}
 inline	unsigned long long	wyhashread16(const	void	*const	ptr){	unsigned short v;	memcpy(&v,	ptr,	2);	return	v;	}
 inline	unsigned long long	wyhashread08(const	void	*const	ptr){	unsigned char v;	memcpy(&v,	ptr,	1);	return	v;	}
-#endif
 
 //the wyhash hash function
 inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsigned long long	seed){

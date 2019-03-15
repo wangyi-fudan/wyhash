@@ -1,4 +1,4 @@
-//Author: Wang Yi <godspeed_china@yeah.net>
+/*Author: Wang Yi <godspeed_china@yeah.net>*/
 #ifndef wyhash_included
 #define wyhash_included
 #define wyhash_version	20190312
@@ -34,7 +34,6 @@ inline	unsigned long long	wyhashread32(const	void	*const	ptr){	unsigned int v;	m
 inline	unsigned long long	wyhashread16(const	void	*const	ptr){	unsigned short v;	memcpy(&v,	ptr,	2);	return	v;	}
 inline	unsigned long long	wyhashread08(const	void	*const	ptr){	unsigned char v;	memcpy(&v,	ptr,	1);	return	v;	}
 
-//the wyhash hash function
 inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsigned long long	seed){
 	const	unsigned char	*ptr=(const	unsigned char*)key;	unsigned long long i;
 	for(i=0;	UNLIKELY(i+32<=len);	i+=32,	ptr+=32)	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))^wyhashmix(seed^wyhashp4,wyhashread64(ptr+24));
@@ -74,20 +73,11 @@ inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsign
 	return	wyhashmix(seed,	len);
 }
 
-//32 bit integer hash function
 inline	unsigned int	wyhash32(unsigned int	A, unsigned int	B){	return	wyhashmix32(wyhashmix32(A^0x7b16763u,	B^0xe4f5a905u),	0x4a9e6939u);	}
-
-//64 bit integer hash function
 inline	unsigned long long	wyhash64(unsigned long long	A, unsigned long long	B){	return	wyhashmix64(wyhashmix64(A^wyhashp0,	B^wyhashp1),	wyhashp2);	}
-
-//get 64bit random number
 inline	unsigned long long	wyrng(unsigned long long	*seed){	*seed+=wyhashp0;	return	wyhashmix64(wyhashmix64(*seed,	wyhashp1),	wyhashp2);	}
-
-//get float uniform distributed random number on [0,1)
 union	wyrngu32{	unsigned	i;	float	f;	};
 inline	float	wyrngu01f(unsigned long long	*seed){	union wyrngu32	u;	u.i=(wyrng(seed)&0x7ffffful)|0x3f800000ul;	return	u.f-1.0f;	}
-
-//get double uniform distributed random number on [0,1)
 union	wyrngu64{	unsigned long long	i;	double	f;	};
 inline	double	wyrngu01d(unsigned long long	*seed){	union wyrngu64	u;	u.i=(wyrng(seed)&0xfffffffffffffull)|0x3ff0000000000000ull;	return	u.f-1.0;	}	
 #endif

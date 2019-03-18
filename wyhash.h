@@ -1,14 +1,7 @@
 /*Author: Wang Yi <godspeed_china@yeah.net>*/
 #ifndef wyhash_included
 #define wyhash_included
-#define wyhash_version	20190312
-#ifndef UNLIKELY
-	#if defined(__GNUC__) || defined(__INTEL_COMPILER)
-		#define UNLIKELY(x) (__builtin_expect(!!(x), 0))
-	#else
-		#define UNLIKELY(x) (x)
-	#endif
-#endif
+#define wyhash_version	20190318
 const	unsigned long long	wyhashp0=0x60bee2bee120fc15ull;
 const	unsigned long long	wyhashp1=0xa3b195354a39b70dull;
 const	unsigned long long	wyhashp2=0x1b03738712fad5c9ull;
@@ -36,7 +29,12 @@ inline	unsigned long long	wyhashread08(const	void	*const	ptr){	unsigned char v;	
 
 inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsigned long long	seed){
 	const	unsigned char	*ptr=(const	unsigned char*)key;	unsigned long long i;
-	for(i=0;	UNLIKELY(i+32<=len);	i+=32,	ptr+=32)	seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))^wyhashmix(seed^wyhashp4,wyhashread64(ptr+24));
+	#if defined(__GNUC__) || defined(__INTEL_COMPILER)
+	for(i=0;	__builtin_expect(i+32<=len,	0);	i+=32,	ptr+=32)	
+	#else
+	for(i=0;	i+32<=len;	i+=32,	ptr+=32)	
+	#endif
+		seed=wyhashmix(seed^wyhashp1,wyhashread64(ptr))^wyhashmix(seed^wyhashp2,wyhashread64(ptr+8))^wyhashmix(seed^wyhashp3,wyhashread64(ptr+16))^wyhashmix(seed^wyhashp4,wyhashread64(ptr+24));
 	switch(len&31){
 	case	1:	seed=wyhashmix(seed^wyhashp1,wyhashread08(ptr));	break;
 	case	2:	seed=wyhashmix(seed^wyhashp1,wyhashread16(ptr));	break;

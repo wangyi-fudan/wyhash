@@ -14,154 +14,102 @@ uint64_t	mix(uint64_t	A,	uint64_t	B){
 
 Only two rounds of such mix operation completely randomized the bits. Thus my hash function become very simple and fast.
 
-The quality is good for wyhash passing SMHasher, BigCrush, practrand. However, I found a trick to crush t1ha0 and t1ha1 (but t1ha2 survived) by transforming a hash function to a PRNG (PRNG is a hash of time). By forcing t1ha0 and t1ha1 to produce random numbers using their weak seed, practrand crushed them.
-
-The benchmarks are as follow. Please notice that the hash speed benchmarks is not very consistant, though generally speaking wyhash is the fastest one. 
+The quality is good for wyhash passing SMHasher, BigCrush, practrand. The speed benchmarks are as follow:
 
 https://github.com/rurban/smhasher
 
-| key/cycles | wyhash | t1ha2_atonce | t1ha1_64le | t1ha0_aes_noavx | speedup |
-| ---- | ---- | ---- | ---- | ---- | ---- |
-| 1-byte | 16.29 | 29.00 | 30.64 | 29.28 | 78% |
-| 2-byte | 16.47 | 29.00 | 30.67 | 29.00 | 76% |
-| 3-byte | 18.00 | 29.00 | 30.65 | 29.00 | 61% |
-| 4-byte | 16.00 | 29.00 | 30.65 | 29.41 | 81% |
-| 5-byte | 18.00 | 29.00 | 30.69 | 29.33 | 61% |
-| 6-byte | 18.00 | 29.00 | 30.71 | 29.28 | 61% |
-| 7-byte | 18.81 | 29.00 | 30.65 | 29.33 | 54% |
-| 8-byte | 24.00 | 29.00 | 30.32 | 29.00 | 21% |
-| 9-byte | 25.00 | 32.00 | 30.00 | 32.00 | 20% |
-| 10-byte | 25.00 | 32.58 | 30.55 | 32.26 | 22% |
-| 11-byte | 25.00 | 32.52 | 30.00 | 32.00 | 20% |
-| 12-byte | 25.23 | 32.40 | 26.99 | 32.70 | 7% |
-| 13-byte | 25.00 | 32.59 | 26.99 | 32.79 | 8% |
-| 14-byte | 25.00 | 32.53 | 26.99 | 32.70 | 8% |
-| 15-byte | 25.14 | 32.41 | 26.99 | 32.73 | 7% |
-| 16-byte | 24.96 | 32.00 | 26.66 | 32.27 | 7% |
-| 17-byte | 26.00 | 36.80 | 34.00 | 36.00 | 31% |
-| 18-byte | 26.00 | 36.78 | 34.00 | 36.00 | 31% |
-| 19-byte | 26.11 | 36.98 | 34.00 | 36.58 | 30% |
-| 20-byte | 26.00 | 37.03 | 34.00 | 37.25 | 31% |
-| 21-byte | 26.00 | 37.07 | 34.11 | 37.21 | 31% |
-| 22-byte | 26.00 | 36.93 | 34.00 | 36.63 | 31% |
-| 23-byte | 26.12 | 36.71 | 34.00 | 36.00 | 30% |
-| 24-byte | 26.00 | 36.34 | 34.00 | 36.00 | 31% |
-| 25-byte | 27.28 | 40.77 | 27.11 | 40.97 | -1% |
-| 26-byte | 27.41 | 40.51 | 27.00 | 40.97 | -1% |
-| 27-byte | 27.00 | 40.54 | 27.00 | 40.99 | 0% |
-| 28-byte | 27.28 | 40.00 | 27.00 | 40.98 | -1% |
-| 29-byte | 27.00 | 40.72 | 27.00 | 40.87 | 0% |
-| 30-byte | 27.00 | 40.56 | 27.00 | 40.96 | 0% |
-| 31-byte | 27.59 | 40.61 | 27.00 | 40.87 | -2% |
+| key/cycles | wyhash | XXH3 | t1ha2_atonce | t1ha1_64le | t1ha0_aes_noavx | speedup |
+| ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| 1-byte | 16.00 | 19.00 | 29.00 | 30.64 | 29.28 | 18.75% |
+| 2-byte | 16.00 | 19.00 | 29.00 | 30.67 | 29.00 | 18.75% |
+| 3-byte | 17.00 | 19.00 | 29.00 | 30.65 | 29.00 | 11.76% |
+| 4-byte | 16.00 | 17.00 | 29.00 | 30.65 | 29.41 | 6.25% |
+| 5-byte | 17.00 | 24.00 | 29.00 | 30.69 | 29.33 | 41.18% |
+| 6-byte | 17.00 | 24.00 | 29.00 | 30.71 | 29.28 | 41.18% |
+| 7-byte | 18.00 | 24.00 | 29.00 | 30.65 | 29.33 | 33.33% |
+| 8-byte | 23.00 | 17.00 | 29.00 | 30.32 | 29.00 | -26.09% |
+| 9-byte | 23.00 | 25.00 | 32.00 | 30.00 | 32.00 | 8.70% |
+| 10-byte | 23.16 | 25.00 | 32.58 | 30.55 | 32.26 | 7.94% |
+| 11-byte | 23.22 | 25.00 | 32.52 | 30.00 | 32.00 | 7.67% |
+| 12-byte | 23.00 | 25.00 | 32.40 | 26.99 | 32.70 | 8.70% |
+| 13-byte | 23.00 | 25.00 | 32.59 | 26.99 | 32.79 | 8.70% |
+| 14-byte | 23.00 | 25.00 | 32.53 | 26.99 | 32.70 | 8.70% |
+| 15-byte | 23.26 | 25.00 | 32.41 | 26.99 | 32.73 | 7.48% |
+| 16-byte | 24.00 | 25.00 | 32.00 | 26.66 | 32.27 | 4.17% |
+| 17-byte | 24.00 | 28.00 | 36.80 | 34.00 | 36.00 | 16.67% |
+| 18-byte | 24.00 | 28.00 | 36.78 | 34.00 | 36.00 | 16.67% |
+| 19-byte | 24.00 | 28.00 | 36.98 | 34.00 | 36.58 | 16.67% |
+| 20-byte | 24.00 | 27.00 | 37.03 | 34.00 | 37.25 | 12.50% |
+| 21-byte | 24.00 | 27.31 | 37.07 | 34.11 | 37.21 | 13.79% |
+| 22-byte | 24.00 | 27.60 | 36.93 | 34.00 | 36.63 | 15.00% |
+| 23-byte | 24.00 | 27.51 | 36.71 | 34.00 | 36.00 | 14.63% |
+| 24-byte | 24.00 | 27.00 | 36.34 | 34.00 | 36.00 | 12.50% |
+| 25-byte | 24.00 | 27.62 | 40.77 | 27.11 | 40.97 | 12.96% |
+| 26-byte | 24.00 | 27.79 | 40.51 | 27.00 | 40.97 | 12.50% |
+| 27-byte | 24.00 | 27.78 | 40.54 | 27.00 | 40.99 | 12.50% |
+| 28-byte | 24.00 | 27.58 | 40.00 | 27.00 | 40.98 | 12.50% |
+| 29-byte | 24.00 | 27.57 | 40.72 | 27.00 | 40.87 | 12.50% |
+| 30-byte | 24.00 | 27.66 | 40.56 | 27.00 | 40.96 | 12.50% |
+| 31-byte | 24.00 | 27.69 | 40.61 | 27.00 | 40.87 | 12.50% |
 
 ----------------------------------------
 https://github.com/leo-yuriev/t1ha
 
-Build by GNU C/C++ compiler 7.3 (self-check passed)
+t1ha2_atonce            :     18.219 cycle/hash,  2.603 cycle/byte,  0.384 byte/cycle,  1.153 GB/s @3.0GHz 
 
-Testing t1ha2_atonce... Ok
+t1ha2_atonce128*        :     34.812 cycle/hash,  4.973 cycle/byte,  0.201 byte/cycle,  0.603 GB/s @3.0GHz 
 
-Testing t1ha2_atonce128... Ok
+t1ha2_stream*           :     80.938 cycle/hash, 11.562 cycle/byte,  0.086 byte/cycle,  0.259 GB/s @3.0GHz 
 
-Testing t1ha2_stream... Ok
+t1ha2_stream128*        :    101.813 cycle/hash, 14.545 cycle/byte,  0.069 byte/cycle,  0.206 GB/s @3.0GHz 
 
-Testing t1ha2_stream128... Ok
+t1ha1_64le              :     19.219 cycle/hash,  2.746 cycle/byte,  0.364 byte/cycle,  1.093 GB/s @3.0GHz 
 
-Testing t1ha1_64le... Ok
+t1ha0                   :     16.109 cycle/hash,  2.301 cycle/byte,  0.435 byte/cycle,  1.304 GB/s @3.0GHz 
 
-Testing t1ha1_64be... Ok
+xxhash32                :     18.922 cycle/hash,  2.703 cycle/byte,  0.370 byte/cycle,  1.110 GB/s @3.0GHz 
 
-Testing t1ha0_32le... Ok
-
-Testing t1ha0_32be... Ok
-
-Testing t1ha0_ia32aes_noavx... Ok
-
-Testing t1ha0_ia32aes_avx... Ok
-
-Testing t1ha0_ia32aes_avx2... Ok
-
-Testing wyhash... Ok
-
-Testing HighwayHash64_portable_cxx... Ok
-
-Testing HighwayHash64_sse41... Ok
-
-Testing HighwayHash64_avx2... Ok
-
-Testing StadtX... Ok
-
-
-
-Preparing to benchmarking...
-
- - running on CPU#6
-
- - use RDPMC_40000001 as clock source for benchmarking
-
- - assume it cheap and stable
-
- - measure granularity and overhead: 54 cycles, 0.0185185 iteration/cycle
-
-
-
-Bench for tiny keys (7 bytes):
-
-t1ha2_atonce            :     17.266 cycle/hash,  2.467 cycle/byte,  0.405 byte/cycle,  1.216 GB/s @3.0GHz 
-
-t1ha2_atonce128*        :     34.781 cycle/hash,  4.969 cycle/byte,  0.201 byte/cycle,  0.604 GB/s @3.0GHz 
-
-t1ha2_stream*           :     80.812 cycle/hash, 11.545 cycle/byte,  0.087 byte/cycle,  0.260 GB/s @3.0GHz 
-
-t1ha2_stream128*        :    101.688 cycle/hash, 14.527 cycle/byte,  0.069 byte/cycle,  0.207 GB/s @3.0GHz 
-
-t1ha1_64le              :     18.266 cycle/hash,  2.609 cycle/byte,  0.383 byte/cycle,  1.150 GB/s @3.0GHz 
-
-t1ha0                   :     15.133 cycle/hash,  2.162 cycle/byte,  0.463 byte/cycle,  1.388 GB/s @3.0GHz 
-
-xxhash32                :     18.677 cycle/hash,  2.668 cycle/byte,  0.375 byte/cycle,  1.124 GB/s @3.0GHz 
-
-xxhash64                :     25.203 cycle/hash,  3.600 cycle/byte,  0.278 byte/cycle,  0.833 GB/s @3.0GHz 
+xxhash64                :     26.219 cycle/hash,  3.746 cycle/byte,  0.267 byte/cycle,  0.801 GB/s @3.0GHz 
 
 StadtX                  :     19.266 cycle/hash,  2.752 cycle/byte,  0.363 byte/cycle,  1.090 GB/s @3.0GHz 
 
-wyhash                  :     15.164 cycle/hash,  2.166 cycle/byte,  0.462 byte/cycle,  1.385 GB/s @3.0GHz 
+wyhash                  :     16.109 cycle/hash,  2.301 cycle/byte,  0.435 byte/cycle,  1.304 GB/s @3.0GHz 
 
-HighwayHash64_portable  :    492.500 cycle/hash, 70.357 cycle/byte,  0.014 byte/cycle,  0.043 GB/s @3.0GHz 
+HighwayHash64_portable  :    493.250 cycle/hash, 70.464 cycle/byte,  0.014 byte/cycle,  0.043 GB/s @3.0GHz 
 
-HighwayHash64_sse41     :     67.875 cycle/hash,  9.696 cycle/byte,  0.103 byte/cycle,  0.309 GB/s @3.0GHz 
+HighwayHash64_sse41     :     68.375 cycle/hash,  9.768 cycle/byte,  0.102 byte/cycle,  0.307 GB/s @3.0GHz 
 
-HighwayHash64_avx2      :     56.844 cycle/hash,  8.121 cycle/byte,  0.123 byte/cycle,  0.369 GB/s @3.0GHz 
+HighwayHash64_avx2      :     56.719 cycle/hash,  8.103 cycle/byte,  0.123 byte/cycle,  0.370 GB/s @3.0GHz 
 
 
 
 Bench for large keys (16384 bytes):
 
-t1ha2_atonce            :   3543.000 cycle/hash,  0.216 cycle/byte,  4.624 byte/cycle, 13.873 GB/s @3.0GHz 
+t1ha2_atonce            :   3547.000 cycle/hash,  0.216 cycle/byte,  4.619 byte/cycle, 13.857 GB/s @3.0GHz 
 
 t1ha2_atonce128*        :   3566.000 cycle/hash,  0.218 cycle/byte,  4.595 byte/cycle, 13.784 GB/s @3.0GHz 
 
-t1ha2_stream*           :   3706.000 cycle/hash,  0.226 cycle/byte,  4.421 byte/cycle, 13.263 GB/s @3.0GHz 
+t1ha2_stream*           :   3709.000 cycle/hash,  0.226 cycle/byte,  4.417 byte/cycle, 13.252 GB/s @3.0GHz 
 
-t1ha2_stream128*        :   3716.000 cycle/hash,  0.227 cycle/byte,  4.409 byte/cycle, 13.227 GB/s @3.0GHz 
+t1ha2_stream128*        :   3721.000 cycle/hash,  0.227 cycle/byte,  4.403 byte/cycle, 13.209 GB/s @3.0GHz 
 
-t1ha1_64le              :   3534.000 cycle/hash,  0.216 cycle/byte,  4.636 byte/cycle, 13.908 GB/s @3.0GHz 
+t1ha1_64le              :   3535.000 cycle/hash,  0.216 cycle/byte,  4.635 byte/cycle, 13.904 GB/s @3.0GHz 
 
-t1ha0                   :   1379.000 cycle/hash,  0.084 cycle/byte, 11.881 byte/cycle, 35.643 GB/s @3.0GHz 
+t1ha0                   :   1373.000 cycle/hash,  0.084 cycle/byte, 11.933 byte/cycle, 35.799 GB/s @3.0GHz 
 
-xxhash32                :   8198.000 cycle/hash,  0.500 cycle/byte,  1.999 byte/cycle,  5.996 GB/s @3.0GHz 
+xxhash32                :   8200.000 cycle/hash,  0.500 cycle/byte,  1.998 byte/cycle,  5.994 GB/s @3.0GHz 
 
-xxhash64                :   4119.000 cycle/hash,  0.251 cycle/byte,  3.978 byte/cycle, 11.933 GB/s @3.0GHz 
+xxhash64                :   4118.000 cycle/hash,  0.251 cycle/byte,  3.979 byte/cycle, 11.936 GB/s @3.0GHz 
 
-StadtX                  :   3628.000 cycle/hash,  0.221 cycle/byte,  4.516 byte/cycle, 13.548 GB/s @3.0GHz 
+StadtX                  :   3668.000 cycle/hash,  0.224 cycle/byte,  4.467 byte/cycle, 13.400 GB/s @3.0GHz 
 
-wyhash                  :   9047.000 cycle/hash,  0.552 cycle/byte,  1.811 byte/cycle,  5.433 GB/s @3.0GHz 
+wyhash                  :   3355.000 cycle/hash,  0.205 cycle/byte,  4.883 byte/cycle, 14.650 GB/s @3.0GHz 
 
-HighwayHash64_portable  :  43949.609 cycle/hash,  2.682 cycle/byte,  0.373 byte/cycle,  1.118 GB/s @3.0GHz 
+HighwayHash64_portable  :  43452.560 cycle/hash,  2.652 cycle/byte,  0.377 byte/cycle,  1.131 GB/s @3.0GHz 
 
-HighwayHash64_sse41     :   6418.000 cycle/hash,  0.392 cycle/byte,  2.553 byte/cycle,  7.658 GB/s @3.0GHz 
+HighwayHash64_sse41     :   6434.000 cycle/hash,  0.393 cycle/byte,  2.546 byte/cycle,  7.639 GB/s @3.0GHz 
 
-HighwayHash64_avx2      :   4524.000 cycle/hash,  0.276 cycle/byte,  3.622 byte/cycle, 10.865 GB/s @3.0GHz 
+HighwayHash64_avx2      :   4539.024 cycle/hash,  0.277 cycle/byte,  3.610 byte/cycle, 10.829 GB/s @3.0GHz 
 
 ----------------------------------------
 

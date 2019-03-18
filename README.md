@@ -115,8 +115,6 @@ HighwayHash64_avx2      :   4539.024 cycle/hash,  0.277 cycle/byte,  3.610 byte/
 
 https://github.com/lemire/testingRNG
 
-Lemire's simplified code missed an inline keyword which makes wyrng slower.
-
 | PRNG |  cycles per byte |
 | ---- | ---- |
 | xorshift_k4 | 1.6 |

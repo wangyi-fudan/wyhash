@@ -19,10 +19,11 @@ inline	unsigned long long	_wymum(unsigned long long	A,	unsigned long long	B){
 #endif
 }
 #include	<string.h>
-inline	unsigned long long	_wyr64(const	void	*const	p){	unsigned long long v;	memcpy(&v,	p,	8);	return	v;	}
-inline	unsigned long long	_wyr32(const	void	*const	p){	unsigned int v;	memcpy(&v,	p,	4);	return	v;	}
-inline	unsigned long long	_wyr16(const	void	*const	p){	unsigned short v;	memcpy(&v,	p,	2);	return	v;	}
-inline	unsigned long long	_wyr08(const	void	*const	p){	unsigned char v;	memcpy(&v,	p,	1);	return	v;	}
+inline	unsigned long long	_wyr08(const	unsigned char	*p){	unsigned char v;	memcpy(&v,	p,	1);	return	v;	}
+inline	unsigned long long	_wyr16(const	unsigned char	*p){	unsigned short v;	memcpy(&v,	p,	2);	return	v;	}
+inline	unsigned long long	_wyr32(const	unsigned char	*p){	unsigned int v;	memcpy(&v,	p,	4);	return	v;	}
+inline	unsigned long long	_wyr64(const	unsigned char	*p){	unsigned long long v;	memcpy(&v,	p,	8);	return	v;	}
+#define __wyr64(p)	((_wyr32(p)<<32)|_wyr32(p+4))
 inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsigned long long	seed){
 	const	unsigned char	*p=(const	unsigned char*)key;	unsigned long long i;
 	for(i=0,	seed^=_wyp0;	i+32<=len;	i+=32,	p+=32)	seed=_wymum(seed,	_wymum(_wyr64(p)^_wyp1,_wyr64(p+8)^_wyp2)+_wymum(_wyr64(p+16)^_wyp3,_wyr64(p+24)^_wyp4));
@@ -34,30 +35,30 @@ inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsign
 	case	5:	seed=_wymum(seed,((_wyr32(p)<<8)|_wyr08(p+4))^_wyp1);	break;
 	case	6:	seed=_wymum(seed,((_wyr32(p)<<16)|_wyr16(p+4))^_wyp1);	break;
 	case	7:	seed=_wymum(seed,((_wyr32(p)<<24)|(_wyr16(p+4)<<8)|_wyr08(p+6))^_wyp1);	break;
-	case	8:	seed=_wymum(seed,((_wyr32(p)<<32)|_wyr32(p+4))^_wyp1);	break;
-	case	9:	seed=_wymum(_wyr64(p)^seed,_wyr08(p+8)^_wyp2);	break;
-	case	10:	seed=_wymum(_wyr64(p)^seed,_wyr16(p+8)^_wyp2);	break;
-	case	11:	seed=_wymum(_wyr64(p)^seed,((_wyr16(p+8)<<8)|_wyr08(p+8+2))^_wyp2);	break;
-	case	12:	seed=_wymum(_wyr64(p)^seed,_wyr32(p+8)^_wyp2);	break;
-	case	13:	seed=_wymum(_wyr64(p)^seed,((_wyr32(p+8)<<8)|_wyr08(p+8+4))^_wyp2);	break;
-	case	14:	seed=_wymum(_wyr64(p)^seed,((_wyr32(p+8)<<16)|_wyr16(p+8+4))^_wyp2);	break;
-	case	15:	seed=_wymum(_wyr64(p)^seed,((_wyr32(p+8)<<24)|(_wyr16(p+8+4)<<8)|_wyr08(p+8+6))^_wyp2);	break;
-	case	16:	seed=_wymum(_wyr64(p)^seed,_wyr64(p+8)^_wyp2);	break;
-	case	17:	seed=_wymum(_wyr64(p)^seed,_wyr64(p+8)^_wyp2)+_wymum(seed,_wyr08(p+16)^_wyp3);	break;
-	case	18:	seed=_wymum(_wyr64(p)^seed,_wyr64(p+8)^_wyp2)+_wymum(seed,_wyr16(p+16)^_wyp3);	break;
-	case	19:	seed=_wymum(_wyr64(p)^seed,_wyr64(p+8)^_wyp2)+_wymum(seed,((_wyr16(p+16)<<8)|_wyr08(p+16+2))^_wyp3);	break;
-	case	20:	seed=_wymum(_wyr64(p)^seed,_wyr64(p+8)^_wyp2)+_wymum(seed,_wyr32(p+16)^_wyp3);	break;
-	case	21:	seed=_wymum(_wyr64(p)^seed,_wyr64(p+8)^_wyp2)+_wymum(seed,((_wyr32(p+16)<<8)|_wyr08(p+16+4))^_wyp3);	break;
-	case	22:	seed=_wymum(_wyr64(p)^seed,_wyr64(p+8)^_wyp2)+_wymum(seed,((_wyr32(p+16)<<16)|_wyr16(p+16+4))^_wyp3);	break;
-	case	23:	seed=_wymum(_wyr64(p)^seed,_wyr64(p+8)^_wyp2)+_wymum(seed,((_wyr32(p+16)<<24)|(_wyr16(p+16+4)<<8)|_wyr08(p+16+6))^_wyp3);	break;
-	case	24:	seed=_wymum(_wyr64(p)^seed,_wyr64(p+8)^_wyp2)+_wymum(seed,_wyr64(p+16)^_wyp3);	break;
-	case	25:	seed=_wymum(_wyr64(p)^seed,_wyr64(p+8)^_wyp2)+_wymum(_wyr64(p+16)^seed,_wyr08(p+24)^_wyp4);	break;
-	case	26:	seed=_wymum(_wyr64(p)^seed,_wyr64(p+8)^_wyp2)+_wymum(_wyr64(p+16)^seed,_wyr16(p+24)^_wyp4);	break;
-	case	27:	seed=_wymum(_wyr64(p)^seed,_wyr64(p+8)^_wyp2)+_wymum(_wyr64(p+16)^seed,((_wyr16(p+24)<<8)|_wyr08(p+24+2))^_wyp4);	break;
-	case	28:	seed=_wymum(_wyr64(p)^seed,_wyr64(p+8)^_wyp2)+_wymum(_wyr64(p+16)^seed,_wyr32(p+24)^_wyp4);	break;
-	case	29:	seed=_wymum(_wyr64(p)^seed,_wyr64(p+8)^_wyp2)+_wymum(_wyr64(p+16)^seed,((_wyr32(p+24)<<8)|_wyr08(p+24+4))^_wyp4);	break;
-	case	30:	seed=_wymum(_wyr64(p)^seed,_wyr64(p+8)^_wyp2)+_wymum(_wyr64(p+16)^seed,((_wyr32(p+24)<<16)|_wyr16(p+24+4))^_wyp4);	break;
-	case	31:	seed=_wymum(_wyr64(p)^seed,_wyr64(p+8)^_wyp2)+_wymum(_wyr64(p+16)^seed,((_wyr32(p+24)<<24)|(_wyr16(p+24+4)<<8)|_wyr08(p+24+6))^_wyp4);	break;
+	case	8:	seed=_wymum(seed,__wyr64(p)^_wyp1);	break;
+	case	9:	seed=_wymum(__wyr64(p)^seed,_wyr08(p+8)^_wyp2);	break;
+	case	10:	seed=_wymum(__wyr64(p)^seed,_wyr16(p+8)^_wyp2);	break;
+	case	11:	seed=_wymum(__wyr64(p)^seed,((_wyr16(p+8)<<8)|_wyr08(p+8+2))^_wyp2);	break;
+	case	12:	seed=_wymum(__wyr64(p)^seed,_wyr32(p+8)^_wyp2);	break;
+	case	13:	seed=_wymum(__wyr64(p)^seed,((_wyr32(p+8)<<8)|_wyr08(p+8+4))^_wyp2);	break;
+	case	14:	seed=_wymum(__wyr64(p)^seed,((_wyr32(p+8)<<16)|_wyr16(p+8+4))^_wyp2);	break;
+	case	15:	seed=_wymum(__wyr64(p)^seed,((_wyr32(p+8)<<24)|(_wyr16(p+8+4)<<8)|_wyr08(p+8+6))^_wyp2);	break;
+	case	16:	seed=_wymum(__wyr64(p)^seed,__wyr64(p+8)^_wyp2);	break;
+	case	17:	seed=_wymum(__wyr64(p)^seed,__wyr64(p+8)^_wyp2)+_wymum(seed,_wyr08(p+16)^_wyp3);	break;
+	case	18:	seed=_wymum(__wyr64(p)^seed,__wyr64(p+8)^_wyp2)+_wymum(seed,_wyr16(p+16)^_wyp3);	break;
+	case	19:	seed=_wymum(__wyr64(p)^seed,__wyr64(p+8)^_wyp2)+_wymum(seed,((_wyr16(p+16)<<8)|_wyr08(p+16+2))^_wyp3);	break;
+	case	20:	seed=_wymum(__wyr64(p)^seed,__wyr64(p+8)^_wyp2)+_wymum(seed,_wyr32(p+16)^_wyp3);	break;
+	case	21:	seed=_wymum(__wyr64(p)^seed,__wyr64(p+8)^_wyp2)+_wymum(seed,((_wyr32(p+16)<<8)|_wyr08(p+16+4))^_wyp3);	break;
+	case	22:	seed=_wymum(__wyr64(p)^seed,__wyr64(p+8)^_wyp2)+_wymum(seed,((_wyr32(p+16)<<16)|_wyr16(p+16+4))^_wyp3);	break;
+	case	23:	seed=_wymum(__wyr64(p)^seed,__wyr64(p+8)^_wyp2)+_wymum(seed,((_wyr32(p+16)<<24)|(_wyr16(p+16+4)<<8)|_wyr08(p+16+6))^_wyp3);	break;
+	case	24:	seed=_wymum(__wyr64(p)^seed,__wyr64(p+8)^_wyp2)+_wymum(seed,__wyr64(p+16)^_wyp3);	break;
+	case	25:	seed=_wymum(__wyr64(p)^seed,__wyr64(p+8)^_wyp2)+_wymum(__wyr64(p+16)^seed,_wyr08(p+24)^_wyp4);	break;
+	case	26:	seed=_wymum(__wyr64(p)^seed,__wyr64(p+8)^_wyp2)+_wymum(__wyr64(p+16)^seed,_wyr16(p+24)^_wyp4);	break;
+	case	27:	seed=_wymum(__wyr64(p)^seed,__wyr64(p+8)^_wyp2)+_wymum(__wyr64(p+16)^seed,((_wyr16(p+24)<<8)|_wyr08(p+24+2))^_wyp4);	break;
+	case	28:	seed=_wymum(__wyr64(p)^seed,__wyr64(p+8)^_wyp2)+_wymum(__wyr64(p+16)^seed,_wyr32(p+24)^_wyp4);	break;
+	case	29:	seed=_wymum(__wyr64(p)^seed,__wyr64(p+8)^_wyp2)+_wymum(__wyr64(p+16)^seed,((_wyr32(p+24)<<8)|_wyr08(p+24+4))^_wyp4);	break;
+	case	30:	seed=_wymum(__wyr64(p)^seed,__wyr64(p+8)^_wyp2)+_wymum(__wyr64(p+16)^seed,((_wyr32(p+24)<<16)|_wyr16(p+24+4))^_wyp4);	break;
+	case	31:	seed=_wymum(__wyr64(p)^seed,__wyr64(p+8)^_wyp2)+_wymum(__wyr64(p+16)^seed,((_wyr32(p+24)<<24)|(_wyr16(p+24+4)<<8)|_wyr08(p+24+6))^_wyp4);	break;
 	}
 	return	_wymum(seed,	len^_wyp5);
 }

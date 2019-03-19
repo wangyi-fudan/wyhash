@@ -4,7 +4,7 @@ t1ha helps my projects a lot, but I am just too thirsty to speed and simplicity 
 
 The main insight of my hash and PRNG is the following method (learnt from https://github.com/vnmakarov/mum-hash):
 
-uint64_t	mix(uint64_t	A,	uint64_t	B){
+uint64_t	mum(uint64_t	A,	uint64_t	B){
 
 	__uint128_t	r=A^p0;	r*=B^p1;
 	
@@ -12,7 +12,7 @@ uint64_t	mix(uint64_t	A,	uint64_t	B){
 	
 }
 
-Only two rounds of such mix operation completely randomized the bits. Thus my hash function become very simple and fast.
+Only two rounds of such mum operation completely randomized the bits. Thus my hash function become very simple and fast.
 
 The quality is good for wyhash passing SMHasher, BigCrush, practrand. The speed benchmarks are as follow:
 

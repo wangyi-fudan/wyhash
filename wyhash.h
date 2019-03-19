@@ -34,7 +34,7 @@ inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsign
 	case	5:	seed=_wymum(seed,((_wyr32(p)<<8)|_wyr08(p+4))^_wyp1);	break;
 	case	6:	seed=_wymum(seed,((_wyr32(p)<<16)|_wyr16(p+4))^_wyp1);	break;
 	case	7:	seed=_wymum(seed,((_wyr32(p)<<24)|(_wyr16(p+4)<<8)|_wyr08(p+6))^_wyp1);	break;
-	case	8:	seed=_wymum(seed,_wyr64(p)^_wyp1);	break;
+	case	8:	seed=_wymum(seed,((_wyr32(p)<<32)|_wyr32(p+4))^_wyp1);	break;
 	case	9:	seed=_wymum(_wyr64(p)^seed,_wyr08(p+8)^_wyp2);	break;
 	case	10:	seed=_wymum(_wyr64(p)^seed,_wyr16(p+8)^_wyp2);	break;
 	case	11:	seed=_wymum(_wyr64(p)^seed,((_wyr16(p+8)<<8)|_wyr08(p+8+2))^_wyp2);	break;

@@ -1,7 +1,7 @@
 /*Author: Wang Yi <godspeed_china@yeah.net>*/
 #ifndef wyhash_included
 #define wyhash_included
-#define wyhash_version	20190319
+#define wyhash_version	20190320
 const	unsigned long long	_wyp0=0x60bee2bee120fc15ull;
 const	unsigned long long	_wyp1=0xa3b195354a39b70dull;
 const	unsigned long long	_wyp2=0x1b03738712fad5c9ull;

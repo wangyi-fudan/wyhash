@@ -2,7 +2,7 @@ As working on machine learning, I desire a dream hash and PRNG. Lemire:[The fast
 
 t1ha helps my projects a lot, but I am just too thirsty to speed and simplicity ...
 
-The main insight of my hash and PRNG is the following method (learnt from https://github.com/vnmakarov/mum-hash):
+The main insight of my hash and PRNG is the following method (inspired by https://github.com/vnmakarov/mum-hash):
 
 uint64_t	mum(uint64_t	A,	uint64_t	B){
 

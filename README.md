@@ -2,7 +2,7 @@
 
 wyhash and wyrng are the ideal hash function and PRNG： solid, fastest and simplest.
 
-wyhash passed SMHasher, wurng passed BigCrush, practrand. The speed benchmarks are as follow:
+wyhash passed SMHasher, wyrng passed BigCrush, practrand. The speed benchmarks are as follow:
 
 https://github.com/rurban/smhasher
 

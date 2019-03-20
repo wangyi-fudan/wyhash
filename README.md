@@ -1,20 +1,8 @@
 ![](https://github.com/wangyi-fudan/wyhash/blob/master/logo.PNG)
 
-I designed a dream hash and PRNG： the fastest and simplest one.
+wyhash and wyrng are the ideal hash function and PRNG： solid, fastest and simplest.
 
-The main insight of my hash and PRNG is the following method (inspired by https://github.com/vnmakarov/mum-hash):
-
-	uint64_t	mum(uint64_t	A,	uint64_t	B){
-
-		__uint128_t	r=A^p0;	r*=B^p1;
-	
-		return	(r>>64)^r;
-	
-	}
-
-Only two rounds of such mum operation completely randomized the bits. Thus my hash function become very simple and fast.
-
-The quality is good for wyhash passing SMHasher, BigCrush, practrand. The speed benchmarks are as follow:
+wyhash passed SMHasher, wurng passed BigCrush, practrand. The speed benchmarks are as follow:
 
 https://github.com/rurban/smhasher
 

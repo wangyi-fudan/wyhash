@@ -1,3 +1,4 @@
+![](https://github.com/wangyi-fudan/wyhash/blob/master/logo.PNG)
 As working on machine learning, I desire a dream hash and PRNG. Lemire:[The fastest conventional random number generator that can pass Big Crush?](https://lemire.me/blog/2019/03/19/the-fastest-conventional-random-number-generator-that-can-pass-big-crush/)
 
 t1ha helps my projects a lot, but I am just too thirsty to speed and simplicity ...

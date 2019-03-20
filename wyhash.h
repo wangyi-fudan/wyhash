@@ -63,6 +63,7 @@ inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsign
 	return	_wymum(seed,	len^_wyp5);
 }
 inline	unsigned long long	wyhash64(unsigned long long	A, unsigned long long	B){	return	_wymum(_wymum(A^_wyp0,	B^_wyp1),	_wyp2);	}
-inline	unsigned long long	wyrng(unsigned long long	*seed){	return	_wymum(_wymum(*seed+=_wyp0,	_wyp1),	_wyp2);	}
+//inline	unsigned long long	wyrng(unsigned long long	*seed){	return	_wymum(_wymum(*seed+=_wyp0,	_wyp1),	_wyp2);	}
+inline	unsigned long long	wyrng(unsigned long long *s){	*s+=_wyp0;	return	_wymum(*s^_wyp1,*s);	}
 inline	double	wyrngu01(unsigned long long	*seed){	unsigned long long	r=(wyrng(seed)&0xfffffffffffffull)|0x3ff0000000000000ull;	return	*((double*)&r)-1.0;		}
 #endif

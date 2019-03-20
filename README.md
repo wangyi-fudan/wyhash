@@ -1,8 +1,6 @@
 ![](https://github.com/wangyi-fudan/wyhash/blob/master/logo.PNG)
 
-As working on machine learning, I desire a dream hash and PRNG. 
-
-t1ha helps my projects a lot, but I am just too thirsty to speed and simplicity ...
+I designed a dream hash and PRNG： the fastest and simplest one.
 
 The main insight of my hash and PRNG is the following method (inspired by https://github.com/vnmakarov/mum-hash):
 

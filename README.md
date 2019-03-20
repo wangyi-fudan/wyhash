@@ -1,18 +1,18 @@
 ![](https://github.com/wangyi-fudan/wyhash/blob/master/logo.PNG)
 
-As working on machine learning, I desire a dream hash and PRNG. Lemire:[The fastest conventional random number generator that can pass Big Crush?](https://lemire.me/blog/2019/03/19/the-fastest-conventional-random-number-generator-that-can-pass-big-crush/)
+As working on machine learning, I desire a dream hash and PRNG. 
 
 t1ha helps my projects a lot, but I am just too thirsty to speed and simplicity ...
 
 The main insight of my hash and PRNG is the following method (inspired by https://github.com/vnmakarov/mum-hash):
 
-uint64_t	mum(uint64_t	A,	uint64_t	B){
+	uint64_t	mum(uint64_t	A,	uint64_t	B){
 
-	__uint128_t	r=A^p0;	r*=B^p1;
+		__uint128_t	r=A^p0;	r*=B^p1;
 	
-	return	(r>>64)^r;
+		return	(r>>64)^r;
 	
-}
+	}
 
 Only two rounds of such mum operation completely randomized the bits. Thus my hash function become very simple and fast.
 
@@ -117,6 +117,8 @@ HighwayHash64_avx2      :   4539.024 cycle/hash,  0.277 cycle/byte,  3.610 byte/
 ----------------------------------------
 
 https://github.com/lemire/testingRNG
+
+Lemire:[The fastest conventional random number generator that can pass Big Crush?](https://lemire.me/blog/2019/03/19/the-fastest-conventional-random-number-generator-that-can-pass-big-crush/)
 
 | PRNG |  cycles per byte |
 | ---- | ---- |

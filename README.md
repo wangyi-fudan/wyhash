@@ -118,23 +118,23 @@ https://github.com/lemire/testingRNG
 
 | PRNG |  cycles per byte |
 | ---- | ---- |
-| xorshift_k4 | 1.6 |
-| xorshift_k5 | 1.67 |
-| mersennetwister | 2.44 |
-| mitchellmoore | 2.94 |
-| widynski | 1.77 |
-| xorshift32 | 1.95 |
-| pcg32 | 1.62 |
-| rand | 4.87 |
-| aesdragontamer | 0.82 |
-| aesctr | 0.81 |
-| lehmer64 | 0.81 |
-| xorshift128plus | 0.8 |
-| xoroshiro128plus | 0.91 |
-| splitmix64 | 0.8 |
-| pcg64 | 1.1 |
-| xorshift1024star | 1.2 |
-| xorshift1024plus | 0.85 |
-| wyhash64 | 0.72 |
+| xorshift_k4 | 1.60 |
+| xorshift_k5 | 1.77 |
+| mersennetwister | 2.41 |
+| mitchellmoore | 3.12 |
+| widynski | 1.88 |
+| xorshift32 | 2.07 |
+| pcg32 | 1.72 |
+| rand | 5.04 |
+| aesdragontamer | 0.71 |
+| aesctr | 0.83 |
+| lehmer64 | 0.86 |
+| xorshift128plus | 0.85 |
+| xoroshiro128plus | 0.96 |
+| splitmix64 | 0.85 |
+| pcg64 | 1.16 |
+| xorshift1024star | 1.28 |
+| xorshift1024plus | 0.91 |
+| wyhash64 | 0.67 |
 
 

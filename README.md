@@ -42,71 +42,11 @@ https://github.com/rurban/smhasher
 | 30-byte | 18.00 | 27.66 | 40.56 | 27.00 | 40.96 | 50.00% |
 | 31-byte | 18.00 | 27.69 | 40.61 | 27.00 | 40.87 | 50.00% |
 
-
 ----------------------------------------
-https://github.com/leo-yuriev/t1ha
-
-t1ha2_atonce            :     18.219 cycle/hash,  2.603 cycle/byte,  0.384 byte/cycle,  1.153 GB/s @3.0GHz 
-
-t1ha2_atonce128*        :     34.812 cycle/hash,  4.973 cycle/byte,  0.201 byte/cycle,  0.603 GB/s @3.0GHz 
-
-t1ha2_stream*           :     80.938 cycle/hash, 11.562 cycle/byte,  0.086 byte/cycle,  0.259 GB/s @3.0GHz 
-
-t1ha2_stream128*        :    101.813 cycle/hash, 14.545 cycle/byte,  0.069 byte/cycle,  0.206 GB/s @3.0GHz 
-
-t1ha1_64le              :     19.219 cycle/hash,  2.746 cycle/byte,  0.364 byte/cycle,  1.093 GB/s @3.0GHz 
-
-t1ha0                   :     16.109 cycle/hash,  2.301 cycle/byte,  0.435 byte/cycle,  1.304 GB/s @3.0GHz 
-
-xxhash32                :     18.922 cycle/hash,  2.703 cycle/byte,  0.370 byte/cycle,  1.110 GB/s @3.0GHz 
-
-xxhash64                :     26.219 cycle/hash,  3.746 cycle/byte,  0.267 byte/cycle,  0.801 GB/s @3.0GHz 
-
-StadtX                  :     19.266 cycle/hash,  2.752 cycle/byte,  0.363 byte/cycle,  1.090 GB/s @3.0GHz 
-
-wyhash                  :     16.109 cycle/hash,  2.301 cycle/byte,  0.435 byte/cycle,  1.304 GB/s @3.0GHz 
-
-HighwayHash64_portable  :    493.250 cycle/hash, 70.464 cycle/byte,  0.014 byte/cycle,  0.043 GB/s @3.0GHz 
-
-HighwayHash64_sse41     :     68.375 cycle/hash,  9.768 cycle/byte,  0.102 byte/cycle,  0.307 GB/s @3.0GHz 
-
-HighwayHash64_avx2      :     56.719 cycle/hash,  8.103 cycle/byte,  0.123 byte/cycle,  0.370 GB/s @3.0GHz 
-
-
-
-Bench for large keys (16384 bytes):
-
-t1ha2_atonce            :   3547.000 cycle/hash,  0.216 cycle/byte,  4.619 byte/cycle, 13.857 GB/s @3.0GHz 
-
-t1ha2_atonce128*        :   3566.000 cycle/hash,  0.218 cycle/byte,  4.595 byte/cycle, 13.784 GB/s @3.0GHz 
-
-t1ha2_stream*           :   3709.000 cycle/hash,  0.226 cycle/byte,  4.417 byte/cycle, 13.252 GB/s @3.0GHz 
-
-t1ha2_stream128*        :   3721.000 cycle/hash,  0.227 cycle/byte,  4.403 byte/cycle, 13.209 GB/s @3.0GHz 
-
-t1ha1_64le              :   3535.000 cycle/hash,  0.216 cycle/byte,  4.635 byte/cycle, 13.904 GB/s @3.0GHz 
-
-t1ha0                   :   1373.000 cycle/hash,  0.084 cycle/byte, 11.933 byte/cycle, 35.799 GB/s @3.0GHz 
-
-xxhash32                :   8200.000 cycle/hash,  0.500 cycle/byte,  1.998 byte/cycle,  5.994 GB/s @3.0GHz 
-
-xxhash64                :   4118.000 cycle/hash,  0.251 cycle/byte,  3.979 byte/cycle, 11.936 GB/s @3.0GHz 
-
-StadtX                  :   3668.000 cycle/hash,  0.224 cycle/byte,  4.467 byte/cycle, 13.400 GB/s @3.0GHz 
-
-wyhash                  :   3355.000 cycle/hash,  0.205 cycle/byte,  4.883 byte/cycle, 14.650 GB/s @3.0GHz 
-
-HighwayHash64_portable  :  43452.560 cycle/hash,  2.652 cycle/byte,  0.377 byte/cycle,  1.131 GB/s @3.0GHz 
-
-HighwayHash64_sse41     :   6434.000 cycle/hash,  0.393 cycle/byte,  2.546 byte/cycle,  7.639 GB/s @3.0GHz 
-
-HighwayHash64_avx2      :   4539.024 cycle/hash,  0.277 cycle/byte,  3.610 byte/cycle, 10.829 GB/s @3.0GHz 
-
-----------------------------------------
-
-https://github.com/lemire/testingRNG
 
 Lemire:[The fastest conventional random number generator that can pass Big Crush?](https://lemire.me/blog/2019/03/19/the-fastest-conventional-random-number-generator-that-can-pass-big-crush/)
+
+https://github.com/lemire/testingRNG
 
 | PRNG |  cycles per byte |
 | ---- | ---- |

@@ -71,7 +71,7 @@ https://github.com/lemire/testingRNG
 
 ----------------------------------------
 
-I thank these great names:
+I thank these names:
 
 Reini Urban
 

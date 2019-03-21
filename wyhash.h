@@ -1,13 +1,18 @@
 /*Author: Wang Yi <godspeed_china@yeah.net>*/
-#ifndef wyhash_20190320
-#define wyhash_20190320
+#ifndef wyhash_20190322
+#define wyhash_20190322
+#include	<string.h>
+#if defined(_MSC_VER) && defined(_M_X64)
+#include <intrin.h>
+#pragma	intrinsic(_umul128)
+#endif
 const	unsigned long long	_wyp0=0x60bee2bee120fc15ull,	_wyp1=0xa3b195354a39b70dull,	_wyp2=0x1b03738712fad5c9ull;
 const	unsigned long long	_wyp3=0xd985068bc5439bd7ull,	_wyp4=0x897f236fb004a8e7ull,	_wyp5=0xc104aa67c96b7d55ull;
 static	inline	unsigned long long	_wymum(unsigned long long	A,	unsigned long long	B){
 #ifdef __SIZEOF_INT128__
 	__uint128_t	r=A;	r*=B;	return	(r>>64)^r;
-#elif defined(_MSC_VER) && defined(_M_X64)
-	A=_umul128(A,	B,	&B);	return A^B;
+#elif	defined(_MSC_VER) && defined(_M_X64)
+	A=_umul128(A, B, &B);	return	A^B;
 #else
 	unsigned long long	ha=A>>32,	hb=B>>32,	la=(unsigned int)A,	lb=(unsigned int)B,	hi, lo;
 	unsigned long long	rh=ha*hb,	rm0=ha*lb,	rm1=hb*la,	rl=la*lb,	t=rl+(rm0<<32),	c=t<rl;
@@ -15,7 +20,6 @@ static	inline	unsigned long long	_wymum(unsigned long long	A,	unsigned long long
 	return hi^lo;
 #endif
 }
-#include	<string.h>
 static	inline	unsigned long long	_wyr08(const	unsigned char	*p){	unsigned char v;	memcpy(&v,	p,	1);	return	v;	}
 static	inline	unsigned long long	_wyr16(const	unsigned char	*p){	unsigned short v;	memcpy(&v,	p,	2);	return	v;	}
 static	inline	unsigned long long	_wyr32(const	unsigned char	*p){	unsigned int v;	memcpy(&v,	p,	4);	return	v;	}

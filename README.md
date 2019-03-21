@@ -1,4 +1,4 @@
-Simple Is Best  ~One
+Simple Is Best
 ========
 
 

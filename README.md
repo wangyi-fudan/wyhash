@@ -129,7 +129,7 @@ Lemire:[The fastest conventional random number generator that can pass Big Crush
 
 ----------------------------------------
 
-Names that also contributes:
+I thank these great names:
 
 Reini Urban
 

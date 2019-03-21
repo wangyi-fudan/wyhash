@@ -1,3 +1,5 @@
+Simple Is Best
+========
 ![](https://github.com/wangyi-fudan/wyhash/blob/master/logo.PNG)
 
 wyhash and wyrng are the ideal hash function and PRNG respectively： solid, fastest, simplest and portable.

@@ -21,11 +21,12 @@ static	inline	unsigned long long	_wyr08(const	unsigned char	*p){	unsigned char v
 static	inline	unsigned long long	_wyr16(const	unsigned char	*p){	unsigned short v;	memcpy(&v,	p,	2);	return	v;	}
 static	inline	unsigned long long	_wyr32(const	unsigned char	*p){	unsigned int v;	memcpy(&v,	p,	4);	return	v;	}
 static	inline	unsigned long long	_wyr64(const	unsigned char	*p){	unsigned long long v;	memcpy(&v,	p,	8);	return	v;	}
-#define __wyr64(p)	((_wyr32(p)<<32)|_wyr32(p+4))
+static	inline	unsigned long long	__wyr64(const	unsigned char	*p){	return	(_wyr32(p)<<32)|_wyr32(p+4);	}
+
 static	inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsigned long long	seed){
 	const	unsigned char	*p=(const	unsigned char*)key;	unsigned long long i;
 	for(i=0;	i+32<=len;	i+=32,	p+=32)	seed=_wymum(seed^_wyp0,	_wymum(_wyr64(p)^_wyp1,_wyr64(p+8)^_wyp2)^_wymum(_wyr64(p+16)^_wyp3,_wyr64(p+24)^_wyp4));
-	seed^=_wyp0;	
+	seed^=_wyp0;
 	switch(len&31){
 	case	1:	seed=_wymum(seed,_wyr08(p)^_wyp1);	break;
 	case	2:	seed=_wymum(seed,_wyr16(p)^_wyp1);	break;

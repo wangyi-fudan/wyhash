@@ -3,8 +3,8 @@
 #define wyhash_20190322
 #include	<string.h>
 #if defined(_MSC_VER) && defined(_M_X64)
-#include <intrin.h>
-#pragma	intrinsic(_umul128)
+	#include <intrin.h>
+	#pragma	intrinsic(_umul128)
 #endif
 const	unsigned long long	_wyp0=0x60bee2bee120fc15ull,	_wyp1=0xa3b195354a39b70dull,	_wyp2=0x1b03738712fad5c9ull;
 const	unsigned long long	_wyp3=0xd985068bc5439bd7ull,	_wyp4=0x897f236fb004a8e7ull,	_wyp5=0xc104aa67c96b7d55ull;

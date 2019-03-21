@@ -1,6 +1,6 @@
 ![](https://github.com/wangyi-fudan/wyhash/blob/master/logo.PNG)
 
-wyhash and wyrng are the ideal hash function and PRNG respectively： solid, fastest and simplest and portable.
+wyhash and wyrng are the ideal hash function and PRNG respectively： solid, fastest, simplest and portable.
 
 wyhash passed SMHasher, wyrng passed BigCrush, practrand. The speed benchmarks are as follow:
 

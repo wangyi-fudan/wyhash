@@ -127,4 +127,14 @@ Lemire:[The fastest conventional random number generator that can pass Big Crush
 | xorshift1024plus | 0.91 |
 | wyhash64 | 0.67 |
 
+Names that also contributes:
 
+Reini Urban
+
+Dietrich Epp
+
+Joshua Haberman
+
+Tommy Ettinger
+
+Daniel Lemire

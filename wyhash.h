@@ -6,8 +6,8 @@
 	#include <intrin.h>
 	#pragma	intrinsic(_umul128)
 #endif
-const	unsigned long long	_wyp0=0x60bee2bee120fc15ull,	_wyp1=0xa3b195354a39b70dull,	_wyp2=0x1b03738712fad5c9ull;
-const	unsigned long long	_wyp3=0xd985068bc5439bd7ull,	_wyp4=0x897f236fb004a8e7ull,	_wyp5=0xc104aa67c96b7d55ull;
+const	unsigned long long	_wyp0=0xa0761d6478bd642full,	_wyp1=0xe7037ed1a0b428dbull,	_wyp2=0x8ebc6af09c88c6e3ull;
+const	unsigned long long	_wyp3=0x589965cc75374cc3ull,	_wyp4=0x1d8e4e27c47d124full,	_wyp5=0xeb44accab455d165ull;
 static	inline	unsigned long long	_wymum(unsigned long long	A,	unsigned long long	B){
 #ifdef __SIZEOF_INT128__
 	__uint128_t	r=A;	r*=B;	return	(r>>64)^r;

@@ -1,6 +1,6 @@
 /*Author: Wang Yi <godspeed_china@yeah.net>*/
-#ifndef wyhash_20190322
-#define wyhash_20190322
+#ifndef wyhash_20190324
+#define wyhash_20190324
 #include	<string.h>
 #if defined(_MSC_VER) && defined(_M_X64)
 	#include <intrin.h>

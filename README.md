@@ -2,7 +2,7 @@ Simple Is Best
 ========
 
 
-wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively: solid, portable, fastest, simplest. wyhash passed SMHasher, wyrand passed BigCrush, practrand. 
+wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively: solid, portable, fastest, simplest. wyhash passed SMHasher, wyrand passed BigCrush, practrand.
 
 ```
 inline	unsigned long long	wyrand(unsigned long long	*seed){    

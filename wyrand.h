@@ -17,7 +17,7 @@ static	inline	unsigned long long	_wymum(unsigned long long	A,	unsigned long long
 	return hi^lo;
 #endif
 }
-static	inline	unsigned long long	wyrng(unsigned long long *seed){	
+static	inline	unsigned long long	wyrand(unsigned long long *seed){	
 	*seed+=11464284564125869423ull;	
 	return	_wymum(*seed^14117165359962661627ull,*seed);	
 }

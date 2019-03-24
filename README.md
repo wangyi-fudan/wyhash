@@ -2,9 +2,9 @@ Simple Is Best
 ========
 
 
-wyhash and wyrng are the ideal 64-bit hash function and PRNG respectively: solid, portable, fastest, simplest.
+wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively: solid, portable, fastest, simplest.
 
-wyhash passed SMHasher, wyrng passed BigCrush, practrand. The speed benchmarks are as follow:
+wyhash passed SMHasher, wyrand passed BigCrush, practrand. The speed benchmarks are as follow:
 
 https://github.com/rurban/smhasher
 
@@ -67,7 +67,7 @@ https://github.com/lemire/testingRNG
 | pcg64 | 1.16 |
 | xorshift1024star | 1.28 |
 | xorshift1024plus | 0.91 |
-| wyhash64 | 0.67 |
+| wyrand | 0.67 |
 
 ----------------------------------------
 

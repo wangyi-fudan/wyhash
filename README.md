@@ -1,6 +1,7 @@
 Simple Is Best
 ========
 
+There is no lisence for this code as mathematics belongs to human. It is completely free!
 
 wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively: solid, portable, fastest, simplest. wyhash passed SMHasher, wyrand passed BigCrush, practrand.
 

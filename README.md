@@ -53,8 +53,6 @@ https://github.com/rurban/smhasher
 
 ----------------------------------------
 
-Lemire:[The fastest conventional random number generator that can pass Big Crush?](https://lemire.me/blog/2019/03/19/the-fastest-conventional-random-number-generator-that-can-pass-big-crush/)
-
 https://github.com/lemire/testingRNG
 
 | PRNG |  cycles per byte |
@@ -77,6 +75,25 @@ https://github.com/lemire/testingRNG
 | xorshift1024star | 1.28 |
 | xorshift1024plus | 0.91 |
 | wyrand | 0.67 |
+
+----------------------------------------
+
+Lemire:[The fastest conventional random number generator that can pass Big Crush?](https://lemire.me/blog/2019/03/19/the-fastest-conventional-random-number-generator-that-can-pass-big-crush/)
+
+```
+g++ BenchmarkPRNG.cpp -o BenchmarkPRNG -O2 -fno-tree-vectorize -Wall
+```
+
+| PRNG | ns/rand | vs wyrand |
+| ---- | ---- | ---- |
+| wyrand | 0.737 | 100.000% |
+| lehmer64 | 1.186 | 160.802% |
+| 3-lehmer64 | 0.743 | 100.820% |
+| splitmix64 | 1.104 | 149.752% |
+| 3-splitmix64 | 1.104 | 149.690% |
+| xoshiro256 | 2.983 | 404.541% |
+| pcg64 | 2.487 | 337.229% |
+| pcg32 | 1.279 | 173.421% |
 
 ----------------------------------------
 

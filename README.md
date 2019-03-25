@@ -1,4 +1,4 @@
-Simple Is Best [Completely Free](https://choosealicense.com/licenses/unlicense/)
+Simple Is Best [unlicensed](https://unlicense.org/)
 ========
 
 wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively: solid, portable, fastest, simplest. wyhash passed SMHasher, wyrand passed BigCrush, practrand.

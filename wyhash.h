@@ -67,6 +67,6 @@ static	inline	unsigned long long	wyhash(const void* key,	unsigned long long	len,
 }
 static	inline	unsigned long long	wyhash64(unsigned long long	A, unsigned long long	B){	return	_wymum(_wymum(A^_wyp0,	B^_wyp1),	_wyp2);	}
 static	inline	unsigned long long	wyrand(unsigned long long *s){	*s+=_wyp0;	return	_wymum(*s^_wyp1,*s);	}
-static	inline	unsigned long long	wytruerand(unsigned long long *s,	unsigned long long secret){	return	*s=_wymum(_wymum(_wymum(_wymum(*s^_wyp0,clock()^_wyp1),time(NULL)^_wyp2),secret^_wyp3),_wyp4);	}
+static	inline	unsigned long long	wytruerand(unsigned long long *s,	unsigned long long secret){	*s=_wymum(_wymum(*s^_wyp0,	clock()^_wyp1),	_wymum(secret^_wyp2,	time(NULL)^_wyp3));	return	_wymum(*s^_wyp4,*s);	}
 static	inline	double	wyrandu01(unsigned long long	*seed){	const	double	_wynorm=1.0/(1ull<<52);	return	(wyrand(seed)&0x000fffffffffffffull)*_wynorm; }
 #endif

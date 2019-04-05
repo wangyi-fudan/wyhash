@@ -3,6 +3,17 @@ Simple Is Best
 
 wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively: solid, portable, fastest, simplest. wyhash passed SMHasher, wyrand passed BigCrush, practrand. wytruerand (experimental) is based on dynamic hashing of clock().
 
+wyhash test vectors:
+```
+wyhash("",0)=f961f936e29c9345
+wyhash("a",1)=6dc395f88b363baa
+wyhash("abc",2)=3bc9d7844798ddaa
+wyhash("message digest",3)=b31238dc2c500cd3
+wyhash("abcdefghijklmnopqrstuvwxyz",4)=ea0f542c58cddfe4
+wyhash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",5)=1799aca591fe73b4
+wyhash("12345678901234567890123456789012345678901234567890123456789012345678901234567890",6)=7f0d02f53d64c1f9
+```
+wyrng code:
 ```
 inline	unsigned long long	wyrand(unsigned long long	*seed){    
 	*seed+=0xa0761d6478bd642full;    

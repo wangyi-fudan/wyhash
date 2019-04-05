@@ -13,7 +13,7 @@ wyhash("abcdefghijklmnopqrstuvwxyz",4)=ea0f542c58cddfe4
 wyhash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",5)=1799aca591fe73b4
 wyhash("12345678901234567890123456789012345678901234567890123456789012345678901234567890",6)=7f0d02f53d64c1f9
 ```
-wyrng code:
+wyrand code:
 ```
 inline	unsigned long long	wyrand(unsigned long long	*seed){    
 	*seed+=0xa0761d6478bd642full;    

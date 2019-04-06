@@ -23,7 +23,7 @@ public:
 	bool	load(const	char	*F){
 		FILE	*f=fopen(F,	"rb");
 		if(f==NULL)	return	false;
-		unsigned	n;	if(fread(&n,	4,	1,	f)!=1)	return	false;	if(fread(keys,	(1u<<Bits)*sizeof(unsigned char),	1,	f)!=1)	return	false;
+		unsigned	n;	if(fread(&n,	4,	1,	f)!=1||n!=Bits)	return	false;	if(fread(keys,	(1u<<Bits)*sizeof(unsigned char),	1,	f)!=1)	return	false;
 		fclose(f);
 		return	true;
 	}

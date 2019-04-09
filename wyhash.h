@@ -66,10 +66,7 @@ static	inline	unsigned long long	wyhash(const void* key,	unsigned long long	len,
 	return	_wymum(seed,	len^_wyp5);
 }
 static	inline	unsigned long long	wyhash64(unsigned long long	A, unsigned long long	B){	return	_wymum(_wymum(A^_wyp0,	B^_wyp1),	_wyp2);	}
-static	inline	unsigned long long	wyrand(unsigned long long *s){	*s+=_wyp0;	return	_wymum(*s^_wyp1,*s);	}
-static	inline	double	wyrandu01(unsigned long long	*s){	const	double	_wynorm=1.0/(1ull<<52);	return	(wyrand(s)&0x000fffffffffffffull)*_wynorm; }
-
-static	unsigned long long	wyrand_seed;
+static	unsigned long long	wyrand_seed=0;
 static	inline	void	wysrand(unsigned long long	seed){	wyrand_seed=seed;	}
 static	inline	unsigned long long	wyrand(void){	
 	#pragma omp atomic

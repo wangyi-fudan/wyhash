@@ -1,8 +1,8 @@
-/*Author: Wang Yi <godspeed_china@yeah.net>*/
-#ifndef wyhash_20190328
-#define wyhash_20190328
+/*	Author: Wang Yi <godspeed_china@yeah.net>	*/
+#ifndef wyhash_version_1
+#define wyhash_version_1
 #include	<string.h>
-#include	<time.h>
+#include	<math.h>
 #if defined(_MSC_VER) && defined(_M_X64)
 	#include <intrin.h>
 	#pragma	intrinsic(_umul128)
@@ -66,7 +66,16 @@ static	inline	unsigned long long	wyhash(const void* key,	unsigned long long	len,
 	return	_wymum(seed,	len^_wyp5);
 }
 static	inline	unsigned long long	wyhash64(unsigned long long	A, unsigned long long	B){	return	_wymum(_wymum(A^_wyp0,	B^_wyp1),	_wyp2);	}
+
 static	inline	unsigned long long	wyrand(unsigned long long *s){	*s+=_wyp0;	return	_wymum(*s^_wyp1,*s);	}
-static	inline	unsigned long long	wytruerand(unsigned long long *s,	unsigned long long secret){	*s=_wymum(_wymum(*s^_wyp0,	clock()^_wyp1)^_wyp2,	_wymum(secret^_wyp3,	time(NULL)^_wyp4)^_wyp5);	return	_wymum(*s^_wyp0,*s);	}
 static	inline	double	wyrandu01(unsigned long long	*seed){	const	double	_wynorm=1.0/(1ull<<52);	return	(wyrand(seed)&0x000fffffffffffffull)*_wynorm; }
+static	unsigned long long	wyrand_seed;
+static	inline	void	wysrand(unsigned long long	seed){	wyrand_seed=seed;	}
+static	inline	unsigned long long	wyrand(void){	
+	#pragma omp atomic
+	wyrand_seed+=_wyp0;	
+	return	_wymum(wyrand_seed^_wyp1,wyrand_seed);
+}
+static	inline	double	wyrandu01(void){	const	double	_wynorm=1.0/(1ull<<52);	return	(wyrand()&0x000fffffffffffffull)*_wynorm; }
+static	inline	double	wyrandgau(void){	return	2*(wyrandu01()+wyrandu01()+wyrandu01()-1.5);	}
 #endif

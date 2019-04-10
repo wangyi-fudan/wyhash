@@ -66,12 +66,13 @@ static	inline	unsigned long long	wyhash(const void* key,	unsigned long long	len,
 	return	_wymum(seed,	len^_wyp5);
 }
 static	inline	unsigned long long	wyhash64(unsigned long long	A, unsigned long long	B){	return	_wymum(_wymum(A^_wyp0,	B^_wyp1),	_wyp2);	}
-static	unsigned long long	wyrand_seed=0;
-static	inline	void	wysrand(unsigned long long	seed){	wyrand_seed=seed;	}
+static	unsigned long long	_wyrand_seed=0;
+#define	WYRAND_MAX	0xffffffffffffffffull
+static	inline	void	wysrand(unsigned long long	seed){	_wyrand_seed=seed;	}
 static	inline	unsigned long long	wyrand(void){	
 	#pragma omp atomic
-	wyrand_seed+=_wyp0;	
-	return	_wymum(wyrand_seed^_wyp1,wyrand_seed);
+	_wyrand_seed+=_wyp0;	
+	return	_wymum(_wyrand_seed^_wyp1,_wyrand_seed);
 }
 static	inline	double	wyrandu01(void){	const	double	_wynorm=1.0/(1ull<<52);	return	(wyrand()&0x000fffffffffffffull)*_wynorm; }
 static	inline	double	wyrandgau(void){	return	2*(wyrandu01()+wyrandu01()+wyrandu01()-1.5);	}

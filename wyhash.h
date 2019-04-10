@@ -78,4 +78,6 @@ static	inline	unsigned long long	wyrand(void){
 	_wyrand_seed+=_wyp0;	
 	return	_wymum(_wyrand_seed^_wyp1,_wyrand_seed);
 }
+static	inline	double	wyrandu01(void){	const	double	_wynorm=1.0/(1ull<<52);	return	(wyrand()&0x000fffffffffffffull)*_wynorm; }
+static	inline	double	wyrandgau(void){	return	2*(wyrandu01()+wyrandu01()+wyrandu01()-1.5);	}
 #endif

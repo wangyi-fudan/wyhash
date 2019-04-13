@@ -66,10 +66,9 @@ static	inline	unsigned long long	wyhash(const void* key,	unsigned long long	len,
 	return	_wymum(seed,	len^_wyp5);
 }
 static	inline	unsigned long long	wyhash64(unsigned long long	A, unsigned long long	B){	return	_wymum(_wymum(A^_wyp0,	B^_wyp1),	_wyp2);	}
-static	inline	double	wytransu01(unsigned long long	r){	const	double	_wynorm=1.0/(1ull<<52);	return	(r&0x000fffffffffffffull)*_wynorm; }
-static	inline	float	wytransgau(unsigned long long	r){	const	float	_wynorm1=1.0f/(1ull<<20);	return	((r&0x1fffff)+((r>>21)&0x1fffff)+(r>>43))*_wynorm1-3.0f;	}
+static	inline	double	wy2u01(unsigned long long	r){	const	double	_wynorm=1.0/(1ull<<52);	return	(r&0x000fffffffffffffull)*_wynorm; }
+static	inline	float	wy2gau(unsigned long long	r){	const	float	_wynorm1=1.0f/(1ull<<20);	return	((r&0x1fffff)+((r>>21)&0x1fffff)+(r>>43))*_wynorm1-3.0f;	}
 static	inline	unsigned long long	wyrand(unsigned long long	*seed){	*seed+=_wyp0;	return	_wymum(*seed^_wyp1,*seed);	}
-//drop-in replacement of rand()
 static	unsigned long long	_wyrand_seed=0;
 #define	WYRAND_MAX	0xffffffffffffffffull
 static	inline	void	wysrand(unsigned long long	seed){	_wyrand_seed=seed;	}

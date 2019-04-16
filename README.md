@@ -15,7 +15,7 @@ wyhash("123456789012345678901234567890123456789012345678901234567890123456789012
 ```
 wyrand code:
 ```
-inline	unsigned long long	wyrand(unsigned long long	*seed){    
+inline	uint64_t	wyrand(uint64_t	*seed){    
 	*seed+=0xa0761d6478bd642full;    
 	__uint128_t	t=(__uint128_t)(*seed^0xe7037ed1a0b428dbull)*(*seed);    
 	return	(t>>64)^t;    

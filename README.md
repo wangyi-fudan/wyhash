@@ -89,9 +89,6 @@ https://github.com/lemire/testingRNG
 
 Lemire:[The fastest conventional random number generator that can pass Big Crush?](https://lemire.me/blog/2019/03/19/the-fastest-conventional-random-number-generator-that-can-pass-big-crush/)
 
-```
-g++ BenchmarkPRNG.cpp -o BenchmarkPRNG -O2 -fno-tree-vectorize -Wall
-```
 
 | PRNG | ns/rand | vs wyrand |
 | ---- | ---- | ---- |

@@ -96,7 +96,6 @@ g++ BenchmarkPRNG.cpp -o BenchmarkPRNG -O2 -fno-tree-vectorize -Wall
 | PRNG | ns/rand | vs wyrand |
 | ---- | ---- | ---- |
 | wyrand | 0.792 | 100.000% |
-| wytruerand | 350.033 | 44186.663% |
 | lehmer64 | 1.219 | 153.858% |
 | 3-lehmer64 | 0.816 | 103.010% |
 | splitmix64 | 1.220 | 154.059% |

@@ -28,7 +28,7 @@ uint64_t mum(uint64_t A, uint64_t B){
 ```
 MUM is powerful in mixing data as 64x64-bit multiplication can do the same work as 32 shifts and additions.
 
-Despite the nominal 128-bit mulplication, the actual assembly code is only a MULQ and XOR on 64-bit machines.
+Despite the nominal 128-bit mulplication, the actual instruction is only one MULQ and one XORQ on 64-bit machines.
 
 wyhash design
 

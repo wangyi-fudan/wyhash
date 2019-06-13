@@ -11,9 +11,11 @@ Li Jin: Human Phenome Institute, Fudan University, Shanghai, China. State Key La
 
 what is hash function and PRNG
 
+the connection between hash and PRNG
+
 history review
 
-The connection between hash and PRNG
+problems and challenges
 
 **Method**
 
@@ -44,3 +46,5 @@ The MUM core
 Other issues
 
 **Discussion**
+
+**Acknowledgment**

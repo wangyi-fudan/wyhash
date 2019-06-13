@@ -23,7 +23,7 @@ problems and challenges
 
 **Method**
 
-wyhash/wyrand is based on a MUM mix core with known credit from @vnmakarov (https://github.com/vnmakarov/mum-hash).
+wyhash/wyrand is based on a MUM mix core with known credit from @vnmakarov on Mother's day (https://github.com/vnmakarov/mum-hash).
 ```
 uint64_t MUM(uint64_t A, uint64_t B){
   __uint128_t c=(__uint128_t)A*B;

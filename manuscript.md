@@ -21,7 +21,7 @@ problems and challenges
 
 wyhash/wyrand is based on a MUM mix core with known credit from mum-hash@vnmakarov. 
 ```
-uint64_t mum(uint64_t A, uint64_t B){
+uint64_t MUM(uint64_t A, uint64_t B){
   __uint128_t c=(__uint128_t)A*B;
   return  (c>>64)^c;  
 }
@@ -29,6 +29,8 @@ uint64_t mum(uint64_t A, uint64_t B){
 MUM is powerful in mixing data as 64x64-bit multiplication can do the same work as 32 shifts and additions.
 
 Despite the nominal 128-bit mulplication, the actual instruction is only one MULQ and one XORQ on 64-bit machines.
+
+One of our improvement is masked-MUM=MUM(A^P0,B^P1), where P0 and P1 are random prime mask with 32 1s and 32 0s. The masked-MUM can randomize real biased (eg. toward zero) data and thus produce well mixed (avalanche) result.
 
 wyhash design
 

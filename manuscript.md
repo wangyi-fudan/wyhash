@@ -28,11 +28,7 @@ uint64_t MUM(uint64_t A, uint64_t B){
   return  (c>>64)^c;  
 }
 ```
-MUM is powerful in mixing data as 64x64-bit multiplication can do the same work as 32 shifts and additions.
-
-Despite the nominal 128-bit mulplication, the actual instruction is only one MULQ and one XORQ on 64-bit machines.
-
-One of our improvement is masked-MUM=MUM(A^P0,B^P1), where P0 and P1 are random prime mask with 32 1s and 32 0s. The masked-MUM can randomize real biased (eg. toward zero) data and thus produce well mixed (avalanche) result.
+MUM is powerful in mixing data as 64x64-bit multiplication can do the same work as 32 shifts and additions. Despite the nominal 128-bit mulplication, the actual instruction is only one MULQ and one XORQ on 64-bit machines. One of our improvement is masked-MUM=MUM(A^P0,B^P1), where P0 and P1 are random prime mask with 32 1s and 32 0s. The masked-MUM can randomize real biased data and thus produce well mixed (avalanche) result.
 
 wyhash design
 

@@ -1,2 +1,4 @@
-##The fastest hash function and pseudo random number generator
+The Fastest Hash Function and Pseudo Random Number Generator
+====
+
 

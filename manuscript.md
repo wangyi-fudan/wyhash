@@ -17,6 +17,8 @@ history review
 
 problems and challenges
 
+----------------------------------------
+
 **Method**
 
 wyhash/wyrand is based on a MUM mix core with known credit from mum-hash@vnmakarov. 
@@ -36,6 +38,8 @@ wyhash design
 
 wyrand design
 
+----------------------------------------
+
 **Statistical Test**
 
 SMHasher
@@ -44,11 +48,15 @@ BigCrush
 
 PractRand
 
+----------------------------------------
+
 **Speed Benchmark**
 
 Benchmark of Hash functions 
 
 Benchmark of PRNG
+
+----------------------------------------
 
 **Security Analysis**
 
@@ -56,10 +64,18 @@ The MUM core
 
 Other issues
 
+----------------------------------------
+
 **Languages Bindings**
+
+----------------------------------------
 
 **Discussion**
 
+----------------------------------------
+
 **Acknowledgment**
+
+----------------------------------------
 
 **References**

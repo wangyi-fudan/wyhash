@@ -8,21 +8,39 @@ Li Jin: Human Phenome Institute, Fudan University, Shanghai, China. State Key La
 
 ----------------------------------------
 **Introduction**
+
 what is hash function and PRNG
+
 history review
+
 The connection between hash and PRNG
+
 **Method**
+
 the MUM core
+
 wyhash design
+
 wyrand design
+
 **Statistical Test**
+
 SMHasher
+
 BigCrush
+
 PractRand
+
 **Speed Benchmark**
+
 Benchmark of Hash functions 
+
 Benchmark of PRNG
+
 **Security Analysis**
+
 The MUM core
-Other issue
+
+Other issues
+
 **Discussion**

@@ -19,7 +19,16 @@ problems and challenges
 
 **Method**
 
-the MUM core
+wyhash/wyrand is based on a MUM mix core with known credit from mum-hash@vnmakarov. 
+```
+uint64_t mum(uint64_t A, uint64_t B){
+  __uint128_t c=(__uint128_t)A*B;
+  return  (c>>64)^c;  
+}
+```
+MUM is powerful in mixing data as 64x64-bit multiplication can do the same work as 32 shifts and additions.
+
+Despite the nominal 128-bit mulplication, the actual assembly code is only a MULQ and XOR on 64-bit machines.
 
 wyhash design
 

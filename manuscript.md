@@ -25,7 +25,7 @@ problems and challenges
 
 **Method**
 
-wyhash/wyrand is based on a MUM mix core created by @vnmakarov and released on Mothen's day (https://github.com/vnmakarov/mum-hash) in a [Merkle-Dåmgard construction](https://en.wikipedia.org/wiki/Merkle%E2%80%93Damg%C3%A5rd_construction).
+wyhash/wyrand is based on a MUM mix core created by @vnmakarov and released on Mother's day (https://github.com/vnmakarov/mum-hash) in a [Merkle-Dåmgard construction](https://en.wikipedia.org/wiki/Merkle%E2%80%93Damg%C3%A5rd_construction).
 ```C
 uint64_t MUM(uint64_t A, uint64_t B){
   __uint128_t c=(__uint128_t)A*B;
@@ -42,7 +42,7 @@ uint64_t wyhash(const void* p, uint64_t len, uint64_t seed);
 The algorithm works on 256-bit blocks starting from pointer `p` with the following iterations:
 
 ```C
-seed = MUM(p^p0^seed, (p+8)^p1^seed) ^ MUM((p+16)^p2^seed, (p+24)^p3^seed);
+seed = MUM(read64(p)^p0^seed, read64(p+8)^p1^seed) ^ MUM(read64(p+16)^p2^seed, read64(p+24)^p3^seed);
 ```
 
 It can be viewed as a chaotic dynamic system with 64-bit internal states.
@@ -50,7 +50,7 @@ It can be viewed as a chaotic dynamic system with 64-bit internal states.
 We process the last block with proper paddings and finalize the hash with
 
 ```C
-return MUM(seed, len^p4);
+return MUM(seed^len, p4);
 ```
 
 Note that the finalization MUM is critical to pass statistical tests.

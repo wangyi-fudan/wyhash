@@ -88,7 +88,7 @@ Other issues
 
 **Language Bindings and Ports**
 
-wyhash provides C functions that provide a simple interface like
+wyhash provides C functions that provide a simple interface:
 ```C
 uint64_t wyhash(const void* key, uint64_t len, uint64_t seed);
 uint64_t wyrand(uint64_t *seed);
@@ -101,7 +101,7 @@ Nevertheless, ports to several languages have been made by the community. Comple
 - [Rust](https://github.com/eldruin/wyhash-rs)
 - [Swift](https://github.com/lemire/SwiftWyhash)
 
-TODO: Add speed comparisons between the different language ports and the C implementation.
+TODO: Add speed comparisons between the different language ports and the C implementation?
 
 ----------------------------------------
 

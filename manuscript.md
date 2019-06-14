@@ -99,6 +99,10 @@ Benchmark of PRNG
 
 **Security Analysis**
 
+wyhash is designed for speed and is not to be cryptographically secure. Analysis by @leo-yuriev highlighted that wyhash uses a so-called "narrow-pipe" [Merkle-Dåmgard construction](https://en.wikipedia.org/wiki/Merkle%E2%80%93Damg%C3%A5rd_construction) where manipulation of the input data can lead to entropy loss.
+The probability of these cases occurring in known natural data is relatively low and thus wyhash is still useful in this context.
+Some improvements which did not impact speed have been added to wyhash in version 2 to counter these effects. However, the fundamental shortcomings of the "narrow-pipe" construction still apply.
+
 The MUM core
 
 Other issues

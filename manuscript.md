@@ -11,6 +11,8 @@ Li Jin: Human Phenome Institute, Fudan University, Shanghai, China. State Key La
 ----------------------------------------
 **Introduction**
 
+wyhash was born out of the desire to find a 64-bit hash function and PRNG that are solid, portable, fastest and simplest.
+
 what is hash function and PRNG
 
 the connection between hash and PRNG

@@ -25,35 +25,35 @@ problems and challenges
 
 **Method**
 
-wyhash/wyrand is based on a MUM mix core with known credit from @vnmakarov on Mother's day (https://github.com/vnmakarov/mum-hash).
+wyhash/wyrand is based on a MUM mix core with created by @vnmakarov and released on Mother's day (https://github.com/vnmakarov/mum-hash) in a [Merkle-Dåmgard construction](https://en.wikipedia.org/wiki/Merkle%E2%80%93Damg%C3%A5rd_construction).
 ```C
 uint64_t MUM(uint64_t A, uint64_t B){
   __uint128_t c=(__uint128_t)A*B;
   return  (c>>64)^c;
 }
 ```
-MUM is powerful in mixing data as 64x64-bit multiplication can do the same work as 32 shifts and additions. Despite the nominal 128-bit mulplication, the actual instructions are only one MULQ and one XORQ on 64-bit machines. One of our improvement is masked-MUM=MUM(A^P0,B^P1), where P0 and P1 are random prime mask with 32-1s. The masked-MUM can randomize biased real data toward 32-1s and thus produce avalanche result. We observed from experiment that just two rounds of masked-MUM can pass statistical tests.
+MUM is powerful in mixing data as 64x64-bit multiplications can do the same work as 32 shifts and additions. Despite the nominal 128-bit multiplication, the actual instructions are only one `MULQ` and one `XORQ` on 64-bit machines. One of our improvements is masked-MUM: `MUM(A^P0, B^P1)`, where P0 and P1 are random prime masks containing 32 1s. The masked-MUM can randomize biased real data toward 32 1s and thus produce an avalanche effect. We observed experimentally that just two rounds of masked-MUM can pass statistical tests.
 
-The wyhash algorithm's interface is a follow:
+The wyhash algorithm's interface is a follows:
 
 ```C
-uint64_t wyhash(const void* key, uint64_t len, uint64_t seed);
+uint64_t wyhash(const void* p, uint64_t len, uint64_t seed);
 ```
-The algorithm works on 256-bit blocks starting a pointer p with the following iterations:
+The algorithm works on 256-bit blocks starting from pointer `p` with the following iterations:
 
 ```C
-seed=MUM(p^p0^seed,(p+8)^p1^seed) ^ MUM((p+16)^p2^seed,(p+24)^p3^seed);
+seed = MUM(p^p0^seed, (p+8)^p1^seed) ^ MUM((p+16)^p2^seed, (p+24)^p3^seed);
 ```
 
 It can be viewed as a chaotic dynamic system with 64-bit internal states.
 
-We process the last block with proper paddings and finalized the hash with
+We process the last block with proper paddings and finalize the hash with
 
 ```C
 return MUM(seed, len^p4);
 ```
 
-Note that the finalization MUM is critical to pass statistical test.
+Note that the finalization MUM is critical to pass statistical tests.
 
 
 wyrand design

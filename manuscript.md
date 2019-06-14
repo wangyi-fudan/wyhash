@@ -56,7 +56,26 @@ return MUM(seed, len^p4);
 Note that the finalization MUM is critical to pass statistical tests.
 
 
-wyrand design
+The wyrand algorithm is as follows:
+
+wyrand uses a 64-bit state which is updated by adding a polinomial `P0` on each round. This state is mixed again with polinomial `P1` on one of the inputs and fed into the MUM core.
+
+```C
+*seed += p0;
+return MUM(*seed^p1, *seed);
+```
+
+The primary wyrand interface is as follows:
+```C
+uint64_t wyrand(uint64_t *seed);
+```
+
+Where the `seed` represents the internal state of the generator and will be updated as described above. For convenience, a second interface has been added which are a drop-in replacement for the C standard library `srand()` and `rand()` functions. In this case, the state is kept in a global variable, which can be initialized via the `wysrand()` function.
+
+```C
+void wysrand(uint64_t seed);
+uint64_t wyrand(void);
+```
 
 ----------------------------------------
 

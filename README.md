@@ -20,7 +20,7 @@ wyhash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",5)=7a0e6
 wyhash("12345678901234567890123456789012345678901234567890123456789012345678901234567890",6)=51746b2f56523286
 ```
 wyrand code:
-```
+```C
 inline	uint64_t	wyrand(uint64_t	*seed){    
 	*seed+=0xa0761d6478bd642full;    
 	__uint128_t	t=(__uint128_t)(*seed^0xe7037ed1a0b428dbull)*(*seed);    

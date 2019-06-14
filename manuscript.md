@@ -24,15 +24,35 @@ problems and challenges
 **Method**
 
 wyhash/wyrand is based on a MUM mix core with known credit from @vnmakarov on Mother's day (https://github.com/vnmakarov/mum-hash).
-```
+```C
 uint64_t MUM(uint64_t A, uint64_t B){
   __uint128_t c=(__uint128_t)A*B;
   return  (c>>64)^c;
 }
 ```
-MUM is powerful in mixing data as 64x64-bit multiplication can do the same work as 32 shifts and additions. Despite the nominal 128-bit mulplication, the actual instructions are only one MULQ and one XORQ on 64-bit machines. One of our improvement is masked-MUM=MUM(A^P0,B^P1), where P0 and P1 are random prime mask with 32 1s and 32 0s. The masked-MUM can randomize (toward 32 1s) biased real data and thus produce well mixed (avalanche) result. We observed from experiment that just two rounds of masked-MUM can pass statistical tests.
+MUM is powerful in mixing data as 64x64-bit multiplication can do the same work as 32 shifts and additions. Despite the nominal 128-bit mulplication, the actual instructions are only one MULQ and one XORQ on 64-bit machines. One of our improvement is masked-MUM=MUM(A^P0,B^P1), where P0 and P1 are random prime mask with 32-1s. The masked-MUM can randomize biased real data toward 32-1s and thus produce avalanche result. We observed from experiment that just two rounds of masked-MUM can pass statistical tests.
 
-wyhash design
+The wyhash algorithm's interface is a follow:
+
+```C
+uint64_t wyhash(const void* key, uint64_t len, uint64_t seed);
+```
+The algorithm works on 256-bit blocks starting a pointer p with the following iterations:
+
+```C
+seed=MUM(p^p0^seed,(p+8)^p1^seed) ^ MUM((p+16)^p2^seed,(p+24)^p3^seed);
+```
+
+It can be viewed as a chaotic dynamic system with 64-bit internal states.
+
+We process the last block with proper paddings and finalized the hash with
+
+```C
+return MUM(seed, len^p4);
+```
+
+Note that the finalization MUM is critical to pass statistical test.
+
 
 wyrand design
 

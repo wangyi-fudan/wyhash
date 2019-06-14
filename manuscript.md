@@ -25,7 +25,7 @@ problems and challenges
 
 **Method**
 
-wyhash/wyrand is based on a MUM mix core with created by @vnmakarov (https://github.com/vnmakarov/mum-hash) in a [Merkle-Dåmgard construction](https://en.wikipedia.org/wiki/Merkle%E2%80%93Damg%C3%A5rd_construction).
+wyhash/wyrand is based on a MUM mix core created by @vnmakarov and released on Mothen's day (https://github.com/vnmakarov/mum-hash) in a [Merkle-Dåmgard construction](https://en.wikipedia.org/wiki/Merkle%E2%80%93Damg%C3%A5rd_construction).
 ```C
 uint64_t MUM(uint64_t A, uint64_t B){
   __uint128_t c=(__uint128_t)A*B;

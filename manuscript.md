@@ -11,7 +11,7 @@ Li Jin: Human Phenome Institute, Fudan University, Shanghai, China. State Key La
 ----------------------------------------
 **Introduction**
 
-wyhash was born out of the desire to find a 64-bit hash function and PRNG that are solid, portable, fastest and simplest.
+wyhash was born out of the desire to find a 64-bit hash function and PRNG that are solid, portable, fast and simple.
 
 what is hash function and PRNG
 
@@ -25,7 +25,7 @@ problems and challenges
 
 **Method**
 
-wyhash/wyrand is based on a MUM mix core with created by @vnmakarov and released on Mother's day (https://github.com/vnmakarov/mum-hash) in a [Merkle-Dåmgard construction](https://en.wikipedia.org/wiki/Merkle%E2%80%93Damg%C3%A5rd_construction).
+wyhash/wyrand is based on a MUM mix core with created by @vnmakarov (https://github.com/vnmakarov/mum-hash) in a [Merkle-Dåmgard construction](https://en.wikipedia.org/wiki/Merkle%E2%80%93Damg%C3%A5rd_construction).
 ```C
 uint64_t MUM(uint64_t A, uint64_t B){
   __uint128_t c=(__uint128_t)A*B;
@@ -34,7 +34,7 @@ uint64_t MUM(uint64_t A, uint64_t B){
 ```
 MUM is powerful in mixing data as 64x64-bit multiplications can do the same work as 32 shifts and additions. Despite the nominal 128-bit multiplication, the actual instructions are only one `MULQ` and one `XORQ` on 64-bit machines. One of our improvements is masked-MUM: `MUM(A^P0, B^P1)`, where P0 and P1 are random prime masks containing 32 1s. The masked-MUM can randomize biased real data toward 32 1s and thus produce an avalanche effect. We observed experimentally that just two rounds of masked-MUM can pass statistical tests.
 
-The wyhash algorithm's interface is a follows:
+The wyhash algorithm's interface is as follows:
 
 ```C
 uint64_t wyhash(const void* p, uint64_t len, uint64_t seed);
@@ -58,7 +58,7 @@ Note that the finalization MUM is critical to pass statistical tests.
 
 The wyrand algorithm is as follows:
 
-wyrand uses a 64-bit state which is updated by adding a polinomial `P0` on each round. This state is mixed again with polinomial `P1` on one of the inputs and fed into the MUM core.
+wyrand uses a 64-bit state which is updated by adding a prime `P0` on each round. This state is mixed again with prime `P1` on one of the inputs and fed into the MUM core.
 
 ```C
 *seed += p0;
@@ -99,7 +99,7 @@ Benchmark of PRNG
 
 **Security Analysis**
 
-wyhash is designed for speed and is not to be cryptographically secure. Analysis by @leo-yuriev highlighted that wyhash uses a so-called "narrow-pipe" [Merkle-Dåmgard construction](https://en.wikipedia.org/wiki/Merkle%E2%80%93Damg%C3%A5rd_construction) where manipulation of the input data can lead to entropy loss.
+wyhash is designed for speed - not to be cryptographically secure. Analysis by @leo-yuriev highlighted that wyhash uses a so-called "narrow-pipe" [Merkle-Dåmgard construction](https://en.wikipedia.org/wiki/Merkle%E2%80%93Damg%C3%A5rd_construction) where manipulation of the input data can lead to entropy loss.
 The probability of these cases occurring in known natural data is relatively low and thus wyhash is still useful in this context.
 Some improvements which did not impact speed have been added to wyhash in version 2 to counter these effects. However, the fundamental shortcomings of the "narrow-pipe" construction still apply.
 

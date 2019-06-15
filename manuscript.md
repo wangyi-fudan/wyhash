@@ -84,6 +84,7 @@ return MUM(*seed^p1, *seed);
 wyhash and wyrand is tested and benchmarked on a dual-Xeon E5 2683-v3 server with 4 X 16 DDR3 @ 2133 MHz memory. To control machine specific bias, we also report the results of three modern hash functions: t1ha2_atonce (known for speed), xxHash64 (known for popularity), SipHash (known for security).
 
 The SMHasher test result is reported in SMHasher.wyhash, SMHasher.t1ha2_atonce, SMHasher.xxHash64, SMHasher.SipHash respectively. All benchmarked algorithm passed all tests. 
+
 | key size	| wyhash	| t1ha2_atonce	| xxHash64	| SipHash | 
 | ----| ----| ----| ----| ---- | 
 | 256kb	| 4.249	| 6.224	| 5.627	| 0.477 | 

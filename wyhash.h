@@ -8,8 +8,7 @@
 	#include <intrin.h>
 	#pragma	intrinsic(_umul128)
 #endif
-const	uint64_t	_wyp0=0xa0761d6478bd642full,	_wyp1=0xe7037ed1a0b428dbull,	_wyp2=0x8ebc6af09c88c6e3ull;
-const	uint64_t	_wyp3=0x589965cc75374cc3ull,	_wyp4=0x1d8e4e27c47d124full,	_wyp5=0xeb44accab455d165ull;
+const	uint64_t	_wyp0=0xa0761d6478bd642full,	_wyp1=0xe7037ed1a0b428dbull,	_wyp2=0x8ebc6af09c88c6e3ull,	_wyp3=0x589965cc75374cc3ull,	_wyp4=0x1d8e4e27c47d124full;
 static	inline	uint64_t	_wymum(uint64_t	A,	uint64_t	B){
 #ifdef __SIZEOF_INT128__
 	__uint128_t	r=A;	r*=B;	return	(r>>64)^r;
@@ -66,7 +65,7 @@ static	inline	uint64_t	wyhash(const void* key,	uint64_t	len, uint64_t	seed){
 	case	30:	seed=_wymix0(__wyr64(p),__wyr64(p+8),seed)^_wymix1(__wyr64(p+16),(_wyr32(p+24)<<16)|_wyr16(p+24+4),seed);	break;
 	case	31:	seed=_wymix0(__wyr64(p),__wyr64(p+8),seed)^_wymix1(__wyr64(p+16),(_wyr32(p+24)<<24)|(_wyr16(p+24+4)<<8)|_wyr08(p+24+6),seed);	break;
 	}
-	return	_wymum(seed,	len^_wyp5);
+	return	_wymum(seed^len,	_wyp4);
 }
 static	inline	uint64_t	wyhash64(uint64_t	A, uint64_t	B){	return	_wymum(_wymum(A^_wyp0,	B^_wyp1),	_wyp2);	}
 static	inline	double	wy2u01(uint64_t	r){	const	double	_wynorm=1.0/(1ull<<52);	return	(r&0x000fffffffffffffull)*_wynorm; }

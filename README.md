@@ -9,16 +9,6 @@ Dear user and developers, based on recent discussions with @leo-yuriev on issue 
 
 My deep worry on this upgrade is the split of wyhash ecosystem since many language binding have been developed. However, my goal is to build an ultimate hash function for human. Come on with me, we are young!
 
-wyhash test vectors:
-```
-wyhash("",0)=0
-wyhash("a",1)=9f3b46cc0bb6e65f
-wyhash("abc",2)=f5e4bd7ddf1b1d87
-wyhash("message digest",3)=279f20f12ccc1137
-wyhash("abcdefghijklmnopqrstuvwxyz",4)=2253f90ec5d56ad3
-wyhash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",5)=7a0e6c50b05fb3cd
-wyhash("12345678901234567890123456789012345678901234567890123456789012345678901234567890",6)=51746b2f56523286
-```
 wyrand code:
 ```C
 inline	uint64_t	wyrand(uint64_t	*seed){    

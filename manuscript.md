@@ -55,8 +55,7 @@ return MUM(seed^len, p4);
 
 Note that the finalization MUM is critical to pass statistical tests.
 
-wyhash reads data with memcpy function. This is due to safty reason on some machines architecture that does not support unaligned reads. A key trick on the speed improvement is that when we are reading the last block, each 64-bit reading is implemented by two 32-bit reading. 
-`_read64(p)=(read32(p)<<32)|read32(p+4)` The significant speed improvement of this trick may be explained by the fact that memory are aligned at 4 byte boundary.
+wyhash reads data with memcpy function. This is due to safty reason on some machines architecture that does not support unaligned reads. A key trick to speedup wyhash is that in the last block, each 64-bit reading is implemented by two 32-bit reading. `_read64(p)=(read32(p)<<32)|read32(p+4)`  This trick may be explained by the fact that memory are aligned with 4 byte boundary.
 
 The primary wyrand interface is as follows:
 ```C
@@ -70,7 +69,7 @@ void wysrand(uint64_t seed);
 uint64_t wyrand(void);
 ```
 
-wyrand uses a 64-bit state which is updated by adding a prime p0 on each round. The state is quickly hashed to produce an output.
+wyrand uses a 64-bit state which is updated by adding a prime p0 on each round. The state is simply hashed to produce an output.
 
 ```C
 *seed += p0;

@@ -55,15 +55,8 @@ return MUM(seed^len, p4);
 
 Note that the finalization MUM is critical to pass statistical tests.
 
-
-The wyrand algorithm is as follows:
-
-wyrand uses a 64-bit state which is updated by adding a prime `P0` on each round. This state is mixed again with prime `P1` on one of the inputs and fed into the MUM core.
-
-```C
-*seed += p0;
-return MUM(*seed^p1, *seed);
-```
+wyhash reads data with memcpy function. This is due to safty reason on some machines architecture that does not support unaligned reads. A key trick on the speed improvement is that when we are reading the last block, each 64-bit reading is implemented by two 32-bit reading. 
+`_read64(p)=(read32(p)<<32)|read32(p+4)` The significant speed improvement of this trick may be explained by the fact that memory are aligned at 4 byte boundary.
 
 The primary wyrand interface is as follows:
 ```C
@@ -76,6 +69,14 @@ Where the `seed` represents the internal state of the generator and will be upda
 void wysrand(uint64_t seed);
 uint64_t wyrand(void);
 ```
+
+wyrand uses a 64-bit state which is updated by adding a prime p0 on each round. The state is quickly hashed to produce an output.
+
+```C
+*seed += p0;
+return MUM(*seed^p1, *seed);
+```
+
 
 ----------------------------------------
 

@@ -11,11 +11,18 @@ Li Jin: Human Phenome Institute, Fudan University, Shanghai, China. State Key La
 ----------------------------------------
 **Introduction**
 
-wyhash was born out of the desire to find a 64-bit hash function and PRNG that are solid, portable, fast and simple.
+wyhash was born out of the desire to find a 64-bit hash function and pseudorandom number generator (PRNG) that are solid, portable, fast and simple.
 
-what is hash function and PRNG
+A hash function is a function which is capable of mapping data of arbitrary size onto data of a fixed size (see [here](https://en.wikipedia.org/wiki/Hash_function)).
+Hash functions are useful in a variety of applications. A notable one is hash tables.
 
-the connection between hash and PRNG
+Hash tables use a hash function to accelerate the lookup of data in a table as it is faster to compute the hash of the key once and use that as an index. This yields an amortized constant average operation cost.
+
+Desirable properties of a hash function include determinism, speed, being non-invertible, and generating an avalanche-effect.
+
+On the other hand, a PRNG is an algorithm that is capable of generating a stream of numbers which appear to be randomly chosen. PRNGs are only an approximation, though. Its values are completely determined by the original seed used for initialization.
+
+To an outside observer, a hash function generates an apparently random output and thus it can also serve as the basis for a PRNG.
 
 history review
 
@@ -55,21 +62,21 @@ return MUM(seed^len, p4);
 
 Note that the finalization MUM is critical to pass statistical tests.
 
-wyhash reads data with memcpy function. This is due to safty reason on some machines architecture that does not support unaligned reads. A key trick to speedup wyhash is that in the last block, each 64-bit reading is implemented by two 32-bit reading. `_read64(p)=(read32(p)<<32)|read32(p+4)`  This trick may be explained by the fact that memory are aligned with 4 byte boundary.
+wyhash reads the data with the memcpy function. This is necessary because some machine architectures do not support unaligned reads and will generate hardware exceptions. A key trick to speedup wyhash is that in the last block each 64-bit reading is implemented as two 32-bit readings: `read64(p) = (read32(p)<<32) | read32(p+4)`. This trick may be explained by the fact that memory is 4-byte aligned.
 
 The primary wyrand interface is as follows:
 ```C
 uint64_t wyrand(uint64_t *seed);
 ```
 
-Where the `seed` represents the internal state of the generator and will be updated. For convenience, a second interface has been added which are a drop-in replacement for the C standard library `srand()` and `rand()` functions. In this case, the state is kept in a global variable, which can be initialized via the `wysrand()` function.
+Where the `seed` represents the internal state of the generator and will be updated. For convenience, a second interface has been added which is a drop-in replacement for the C standard library `srand()` and `rand()` functions. In this case, the state is kept in a global variable, which can be initialized via the `wysrand()` function.
 
 ```C
 void wysrand(uint64_t seed);
 uint64_t wyrand(void);
 ```
 
-wyrand updates 64-bit state by simply adding a prime p0 on each round. The state is then simply hashed to produce an output using MUM core.
+wyrand updates its 64-bit state by simply adding a prime `p0` on each round. The state is then hashed to produce an output using the MUM core.
 
 ```C
 *seed += p0;
@@ -81,52 +88,52 @@ return MUM(*seed^p1, *seed);
 
 **Statistical Tests and Speed Benchmarks**
 
-wyhash and wyrand is tested and benchmarked on a dual-Xeon E5 2683-v3 server with 4 X 16 DDR3 @ 2133 MHz memory. To control machine specific bias, we also report the results of three modern hash functions: t1ha2_atonce (known for speed), xxHash64 (known for popularity), SipHash (known for security).
+wyhash and wyrand are tested and benchmarked on a dual-Xeon E5 2683-v3 server with 4 X 16 DDR3 @ 2133 MHz memory. To control machine-specific bias, we also report the results of three modern hash functions: t1ha2_atonce (known for speed), xxHash64 (known for popularity), SipHash (known for security).
 
-The SMHasher test result is reported in SMHasher.wyhash, SMHasher.t1ha2_atonce, SMHasher.xxHash64, SMHasher.SipHash respectively. All benchmarked algorithm passed all tests. 
+The SMHasher test results are reported in SMHasher.wyhash, SMHasher.t1ha2_atonce, SMHasher.xxHash64, SMHasher.SipHash respectively. All benchmarked algorithms passed all tests.
 
 Large key speed (Bytes/Cycle)
 
-| key size	| wyhash	| t1ha2_atonce	| xxHash64	| SipHash | 
-| ----| ----| ----| ----| ---- | 
-| 256kb	| 4.249	| 6.224	| 5.627	| 0.477 | 
+| key size	| wyhash	| t1ha2_atonce	| xxHash64	| SipHash |
+| ----| ----| ----| ----| ---- |
+| 256kb	| 4.249	| 6.224	| 5.627	| 0.477 |
 
 Short key time cost (Cycle/Hash)
 
-| key size	| wyhash	| t1ha2_atonce	| xxHash64	| SipHash | 
-| ----| ----| ----| ----| ---- |  
-| 1	| 16	| 41	| 21	| 75 | 
-| 2	| 16	| 33.49	| 24	| 75 | 
-| 3	| 17	| 27	| 28	| 75 | 
-| 4	| 16	| 27	| 22	| 75 | 
-| 5	| 17	| 27	| 25	| 75 | 
-| 6	| 17	| 27	| 28	| 75 | 
-| 7	| 18	| 27.86	| 32	| 75 | 
-| 8	| 17	| 27	| 31	| 92 | 
-| 9	| 17	| 30	| 34	| 92 | 
-| 10	| 17	| 30	| 38	| 92 | 
-| 11	| 17	| 30	| 41	| 92 | 
-| 12	| 17	| 29.97	| 35	| 91 | 
-| 13	| 17	| 29.89	| 38	| 92 | 
-| 14	| 17	| 29.9	| 42	| 92 | 
-| 15	| 17	| 29.93	| 45	| 92 | 
-| 16	| 17	| 29.97	| 35	| 108 | 
-| 17	| 18	| 33.32	| 38	| 109 | 
-| 18	| 18	| 33.24	| 42	| 108 | 
-| 19	| 18	| 33.12	| 45	| 109 | 
-| 20	| 18	| 33.12	| 39	| 108 | 
-| 21	| 18	| 33	| 42	| 109 | 
-| 22	| 18	| 33.48	| 46	| 109 | 
-| 23	| 18	| 33.17	| 49	| 110 | 
-| 24	| 18	| 33	| 39	| 125 | 
-| 25	| 18	| 37	| 42	| 125.27 | 
-| 26	| 18	| 37	| 46	| 125 | 
-| 27	| 18	| 37	| 49	| 125.61 | 
-| 28	| 18	| 37	| 43	| 125 | 
-| 29	| 18	| 37	| 46	| 126 | 
-| 30	| 18	| 37	| 50	| 125 | 
-| 31	| 18.26	| 37	| 53	| 130.5 | 
-| average	| 17.428	| 32.305	| 38.323	| 101.206 | 
+| key size	| wyhash	| t1ha2_atonce	| xxHash64	| SipHash |
+| ----| ----| ----| ----| ---- |
+| 1	| 16	| 41	| 21	| 75 |
+| 2	| 16	| 33.49	| 24	| 75 |
+| 3	| 17	| 27	| 28	| 75 |
+| 4	| 16	| 27	| 22	| 75 |
+| 5	| 17	| 27	| 25	| 75 |
+| 6	| 17	| 27	| 28	| 75 |
+| 7	| 18	| 27.86	| 32	| 75 |
+| 8	| 17	| 27	| 31	| 92 |
+| 9	| 17	| 30	| 34	| 92 |
+| 10	| 17	| 30	| 38	| 92 |
+| 11	| 17	| 30	| 41	| 92 |
+| 12	| 17	| 29.97	| 35	| 91 |
+| 13	| 17	| 29.89	| 38	| 92 |
+| 14	| 17	| 29.9	| 42	| 92 |
+| 15	| 17	| 29.93	| 45	| 92 |
+| 16	| 17	| 29.97	| 35	| 108 |
+| 17	| 18	| 33.32	| 38	| 109 |
+| 18	| 18	| 33.24	| 42	| 108 |
+| 19	| 18	| 33.12	| 45	| 109 |
+| 20	| 18	| 33.12	| 39	| 108 |
+| 21	| 18	| 33	| 42	| 109 |
+| 22	| 18	| 33.48	| 46	| 109 |
+| 23	| 18	| 33.17	| 49	| 110 |
+| 24	| 18	| 33	| 39	| 125 |
+| 25	| 18	| 37	| 42	| 125.27 |
+| 26	| 18	| 37	| 46	| 125 |
+| 27	| 18	| 37	| 49	| 125.61 |
+| 28	| 18	| 37	| 43	| 125 |
+| 29	| 18	| 37	| 46	| 126 |
+| 30	| 18	| 37	| 50	| 125 |
+| 31	| 18.26	| 37	| 53	| 130.5 |
+| average	| 17.428	| 32.305	| 38.323	| 101.206 |
 
 ----------------------------------------
 

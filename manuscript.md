@@ -62,14 +62,14 @@ The primary wyrand interface is as follows:
 uint64_t wyrand(uint64_t *seed);
 ```
 
-Where the `seed` represents the internal state of the generator and will be updated as described above. For convenience, a second interface has been added which are a drop-in replacement for the C standard library `srand()` and `rand()` functions. In this case, the state is kept in a global variable, which can be initialized via the `wysrand()` function.
+Where the `seed` represents the internal state of the generator and will be updated. For convenience, a second interface has been added which are a drop-in replacement for the C standard library `srand()` and `rand()` functions. In this case, the state is kept in a global variable, which can be initialized via the `wysrand()` function.
 
 ```C
 void wysrand(uint64_t seed);
 uint64_t wyrand(void);
 ```
 
-wyrand uses a 64-bit state which is updated by adding a prime p0 on each round. The state is simply hashed to produce an output.
+wyrand updates 64-bit state by simply adding a prime p0 on each round. The state is then simply hashed to produce an output using MUM core.
 
 ```C
 *seed += p0;

@@ -81,9 +81,9 @@ return MUM(*seed^p1, *seed);
 
 **Statistical Test**
 
-wyhash and wyrand is tested and benchmarked on a Xeon E5 2683-v3 server with 4 X 16 DDR3 @ 2133 MHz memory.
+wyhash and wyrand is tested and benchmarked on a Xeon E5 2683-v3 server with 4 X 16 DDR3 @ 2133 MHz memory. 
 
-The SMHasher test result is reported in SMHasher.wyhash. To control machine specific bias, we also report SMHasher tests of three modern hash functions: t1ha2_atonce (known for speed), xxHash64 (known for popularity), SipHash (known for security).
+The SMHasher test result is reported in SMHasher.wyhash. To control machine specific bias, we also report SMHasher tests of three modern hash functions: t1ha2_atonce (known for speed), xxHash64 (known for popularity), SipHash (known for security). For a comprehensive test of all known hash functions, one can visit https://github.com/rurban/smhasher.
 
 BigCrush
 

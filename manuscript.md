@@ -85,9 +85,16 @@ wyhash and wyrand is tested and benchmarked on a dual-Xeon E5 2683-v3 server wit
 
 The SMHasher test result is reported in SMHasher.wyhash, SMHasher.t1ha2_atonce, SMHasher.xxHash64, SMHasher.SipHash respectively. All benchmarked algorithm passed all tests. 
 
+large key speed (Bytes/Cycle)
+
 | key size	| wyhash	| t1ha2_atonce	| xxHash64	| SipHash | 
 | ----| ----| ----| ----| ---- | 
 | 256kb	| 4.249	| 6.224	| 5.627	| 0.477 | 
+
+Short key time cost (Cycle/Hash)
+
+| key size	| wyhash	| t1ha2_atonce	| xxHash64	| SipHash | 
+| ----| ----| ----| ----| ---- |  
 | 1	| 16	| 41	| 21	| 75 | 
 | 2	| 16	| 33.49	| 24	| 75 | 
 | 3	| 17	| 27	| 28	| 75 | 

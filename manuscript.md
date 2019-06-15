@@ -1,4 +1,4 @@
-The Fastest Hash Function and Pseudo Random Number Generator
+The Fastest Short Key Hash Function and Pseudo Random Number Generator
 ----
 Yi Wang, ..., Diego Barrios Romero , ..., Li Jin*
 

@@ -135,6 +135,19 @@ Short key time cost (Cycle/Hash)
 | 31	| 18.26	| 37	| 53	| 130.5 |
 | average	| 17.428	| 32.305	| 38.323	| 101.206 |
 
+We benchmark wyrand, lehmer64, 3 parallel lehmer64, splitmix64, xoshiro256, pcg64, pcg32 PRNGs using a loop of 4 billion. The result is shown below:
+
+| PRNG | ns/rand | vs wyrand |
+| ---- | ---- | ---- |
+| wyrand | 0.868 | 100.000% |
+| lehmer64 | 1.359 | 156.538% |
+| 3-lehmer64 | 0.906 | 104.412% |
+| splitmix64 | 1.366 | 157.331% |
+| xoshiro256 | 3.424 | 394.455% |
+| pcg64 | 2.760 | 318.042% |
+| pcg32 | 1.471 | 169.500% |
+
+
 ----------------------------------------
 
 **Security Analysis**

@@ -165,6 +165,9 @@ The masked-MUM is almost safe with normal data but is not secure for intended at
 
 The seed-masked-MUM is almost safe for both normal data and intended attack when seed is kept privatedly by the hasher. Only when A=seed^p0 or B=seed^p1, MUM(A^seed^p0, B^seed^p1)=0. This can occur at low probability (2^-64) both for natural data and intended attacks.
 
+The iterative security is also discussed. Simple MUM has a problem when seed is zeroed before reaching the end. We want the seed to be regenarated toward 32 1s in any case. The seed-masked-MUM enables this ability: the next block will almost produce another seed value no matter the current seed value.
+
+The iterative dynamic is also attractive in the sense of security. Some other hash functions uses accmulators as internal states. We consider iterative dynamic system is more hard to be analysed than accumulators and is more sensitive to initial values and has better avalanche effect (chaos).
 
 Other issues
 

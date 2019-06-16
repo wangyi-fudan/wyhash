@@ -171,7 +171,7 @@ The iterative dynamic is also attractive in the sense of security. Some other ha
 
 **TODO** can somebody prove the MUM is reversible or not? it seems that one can solve a new type of equation for x:
 
-MUM(x,p)=q     x=?
+MUM(x,p)=q     x=?    @lemire
 
 
 Other issues

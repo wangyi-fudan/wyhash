@@ -1,4 +1,4 @@
-The Fastest Short Key Hash Function and Pseudo Random Number Generator
+The Fastest Short Key Hash Function and Pseudo-Random Number Generator
 ----
 Yi Wang, ..., Diego Barrios Romero , ..., Li Jin*
 
@@ -19,9 +19,9 @@ To an outside observer, a hash function generates an apparently random output an
 
 Numberous hash functions have been designed in last decades. [SMHasher](https://github.com/rurban/smhasher/) is a hub to collect and evaluate more than 100 hash functions. We name a few excellent hash function: t1ha2_atonce (known for speed), xxHash64 (known for popularity), SipHash (known for security). Also numberous PRNGs have been designed in last decades. [testingRNG](https://github.com/lemire/testingRNG) is a collection and benchmark of some modern PRNGs. We name a few excellent PRNGs: splitmix64 ( popular in Java), [PCG](http://www.pcg-random.org/), [xoshiro256**](http://xoshiro.di.unimi.it/), lehmer64 (simple and fast). 
 
-Despite the richness of hash function and PRNGs, we are still on the way to our ultimate aesthetic goals: fastest and simplest under the premise of soildity and portability. Security is a secondary goal as 64-bit hash function and PRNGs are fundamentally weak against brute force attacks. 
+Despite the richness of hash function and PRNGs, we are still on the way to our ultimate aesthetic goals: fastest and simplest under the premise of soildity and portability. Speed, especially for short keys is of high priority for a valid hash functions in hash table applications. Speed is also of highest priority for a valid PRNG. Simplisity is of great aesthetic values. Simple not only imples speed but also transparency. Security is a secondary goal as 64-bit hash function and PRNGs are fundamentally weak against brute force attacks. 
 
-With the above goals in mind and heart, we feel lucky to discover/invent a new hash function named as wyhash and a new PRNG named as wyrand. wyhash and wyrand are solid, portable, fastest and simplest. They are not designed to be cryptographically secure but still have a little security considerations without sacrifying speeed and simplisity. 
+With the above goals in mind and heart, we feel lucky to announce a new hash function named as wyhash and a new PRNG named as wyrand. wyhash and wyrand are solid, portable, fastest and simplest. They are not designed to be cryptographically secure but still have a little security considerations without sacrifying speeed and simplisity. 
 
 ----------------------------------------
 

@@ -17,7 +17,7 @@ On the other hand, a PRNG is an algorithm that is capable of generating a stream
 
 To an outside observer, a hash function generates an apparently random output and thus it can also serve as the basis for a PRNG. If we have a good hash functions, then we can apply it to time or rounds to obtain a good PRNG. This idea means that we can test a hash function with BigCrush (conventionally for PRNG) by applying it on rounds. We did crushed some hash functions in this way. [eg. t1ha](https://github.com/rurban/smhasher/issues/54)
 
-history review
+Numberous hash functions have been designed in last decades. [SMHasher](https://github.com/rurban/smhasher/) is a hub to collect and evaluate more than 100 hash functions. We name a few excellent hash function: t1ha2_atonce (known for speed), xxHash64 (known for popularity), SipHash (known for security). Also numberous PRNGs have been designed in last decades. [testingRNG](https://github.com/lemire/testingRNG) is a collection and benchmark of some modern PRNGs. We name a few excellent PRNGs: splitmix64 ( popular in Java), [PCG](http://www.pcg-random.org/), [xoshiro256**](http://xoshiro.di.unimi.it/), lehmer64 (simple and fast). 
 
 problems and challenges
 
@@ -83,7 +83,7 @@ return MUM(*seed^p1, *seed);
 
 **Statistical Tests and Speed Benchmarks**
 
-wyhash and wyrand are tested and benchmarked on a dual-Xeon E5 2683-v3 server with 4 X 16 DDR3 @ 2133 MHz memory. To control machine-specific bias, we also report the results of three modern hash functions: t1ha2_atonce (known for speed), xxHash64 (known for popularity), SipHash (known for security).
+wyhash and wyrand are tested and benchmarked on a dual-Xeon E5 2683-v3 server with 4 X 16 DDR3 @ 2133 MHz memory.
 
 The SMHasher test results are reported in SMHasher.wyhash, SMHasher.t1ha2_atonce, SMHasher.xxHash64, SMHasher.SipHash respectively. All benchmarked algorithms passed all tests.
 

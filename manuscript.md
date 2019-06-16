@@ -169,6 +169,11 @@ The iterative security is also discussed. Simple MUM has a problem when seed is 
 
 The iterative dynamic is also attractive in the sense of security. Some other hash functions uses accmulators as internal states. We consider iterative dynamic system is more hard to be analysed than accumulators and is more sensitive to initial values and has better avalanche effect (chaos).
 
+**TODO** can somebody prove the MUM is reversible or not? it seems that one can solve a new type of equation for x:
+
+MUM(x,p)=q     x=?
+
+
 Other issues
 
 ----------------------------------------

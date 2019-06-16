@@ -135,7 +135,11 @@ Short key time cost (Cycle/Hash)
 | 31	| 18.26	| 37	| 53	| 130.5 |
 | average	| 17.428	| 32.305	| 38.323	| 101.206 |
 
-We benchmark wyrand, lehmer64, 3 parallel lehmer64, splitmix64, xoshiro256, pcg64, pcg32 PRNGs using a loop of 4 billion. The result is shown below:
+We benchmark wyrand, lehmer64, 3 parallel lehmer64, splitmix64, xoshiro256, pcg64, pcg32 PRNGs using a loop of 4 billion.
+```
+g++ BenchmarkPRNG.cpp -o BenchmarkPRNG -O2 -fno-tree-vectorize -Wall
+```
+The result is shown in the below table:
 
 | PRNG | ns/rand | vs wyrand |
 | ---- | ---- | ---- |

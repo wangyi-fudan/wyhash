@@ -203,6 +203,12 @@ TODO: Add speed comparisons between the different language ports and the C imple
 
 **Acknowledgment**
 
+We appreciate these people/user for contributing codes and/or comments in the development of wyhash/wyrand.
+
+Reini Urban, Dietrich Epp, Joshua Haberman, Tommy Ettinger, Daniel Lemire, Otmar Ertl, cocowalla, leo-yuriev
+
+**TODO** you can be moved to author area by joining the paper writing process.
+
 ----------------------------------------
 
 **References**

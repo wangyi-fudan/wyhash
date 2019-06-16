@@ -7,7 +7,7 @@
 #include	"wyhash.h"
 using namespace std;
 
-static unsigned long long wyseed=123456;
+static uint64_t wyseed=123456;
 
 __uint128_t	lehmer64_seed0=123456,	lehmer64_seed1=13456,	lehmer64_seed2=12345;
 inline unsigned long long lehmer64(__uint128_t	*lehmer64_seed) {

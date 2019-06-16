@@ -22,7 +22,7 @@ Desirable properties of a hash function include determinism, speed, being non-in
 
 On the other hand, a PRNG is an algorithm that is capable of generating a stream of numbers which appear to be randomly chosen. PRNGs are only an approximation, though. Its values are completely determined by the original seed used for initialization.
 
-To an outside observer, a hash function generates an apparently random output and thus it can also serve as the basis for a PRNG. If we have a good hash functions, then we can apply it to time or rounds to obtain a good PRNG. This idea means that we can test a hash function with BigCrush by using it on rounds. We did crushed some hash functions in this way. [example here] (https://github.com/rurban/smhasher/issues/54)
+To an outside observer, a hash function generates an apparently random output and thus it can also serve as the basis for a PRNG. If we have a good hash functions, then we can apply it to time or rounds to obtain a good PRNG. This idea means that we can test a hash function with BigCrush by using it on rounds. We did crushed some hash functions in this way. [eg.t1ha](https://github.com/rurban/smhasher/issues/54)
 
 history review
 

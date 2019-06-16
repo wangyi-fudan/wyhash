@@ -11,22 +11,17 @@ Li Jin: Human Phenome Institute, Fudan University, Shanghai, China. State Key La
 ----------------------------------------
 **Introduction**
 
-wyhash was born out of the desire to find a 64-bit hash function and pseudorandom number generator (PRNG) that are solid, portable, fast and simple.
-
-A hash function is a function which is capable of mapping data of arbitrary size onto data of a fixed size (see [here](https://en.wikipedia.org/wiki/Hash_function)).
-Hash functions are useful in a variety of applications. A notable one is hash tables.
-
-Hash tables use a hash function to accelerate the lookup of data in a table as it is faster to compute the hash of the key once and use that as an index. This yields an amortized constant average operation cost.
-
-Desirable properties of a hash function include determinism, speed, being non-invertible, and generating an avalanche-effect.
+A hash function is a function which is capable of mapping data of arbitrary size onto data of a fixed size (see [here](https://en.wikipedia.org/wiki/Hash_function)). Hash functions are useful in a variety of applications. A notable one is hash tables. Hash tables use a hash function to accelerate the lookup of data in a table as it is faster to compute the hash of the key once and use that as an index. This yields an amortized constant average operation cost. Desirable properties of a hash function include determinism, speed, being non-invertible, and generating an avalanche-effect.
 
 On the other hand, a PRNG is an algorithm that is capable of generating a stream of numbers which appear to be randomly chosen. PRNGs are only an approximation, though. Its values are completely determined by the original seed used for initialization.
 
-To an outside observer, a hash function generates an apparently random output and thus it can also serve as the basis for a PRNG. If we have a good hash functions, then we can apply it to time or rounds to obtain a good PRNG. This idea means that we can test a hash function with BigCrush by using it on rounds. We did crushed some hash functions in this way. [eg.t1ha](https://github.com/rurban/smhasher/issues/54)
+To an outside observer, a hash function generates an apparently random output and thus it can also serve as the basis for a PRNG. If we have a good hash functions, then we can apply it to time or rounds to obtain a good PRNG. This idea means that we can test a hash function with BigCrush (conventionally for PRNG) by applying it on rounds. We did crushed some hash functions in this way. [eg. t1ha](https://github.com/rurban/smhasher/issues/54)
 
 history review
 
 problems and challenges
+
+wyhash was born out of the desire to find a 64-bit hash function and pseudorandom number generator (PRNG) that are solid, portable, fast and simple.
 
 ----------------------------------------
 

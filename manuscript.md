@@ -197,7 +197,7 @@ We appreciate these people/user for contributing codes and/or comments in the de
 
 Reini Urban, Dietrich Epp, Joshua Haberman, Tommy Ettinger, Daniel Lemire, Otmar Ertl, cocowalla, leo-yuriev
 
-**TODO** you can be moved to author area by joining the paper writing process.
+**TODO** you are welcome to the author area by joining the paper writing process.
 
 ----------------------------------------
 

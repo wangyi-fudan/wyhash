@@ -21,7 +21,7 @@ Numberous hash functions have been designed in last decades. [SMHasher](https://
 
 Despite the richness of hash function and PRNGs, we are still on the way to our ultimate aesthetic goals: fastest and simplest under the premise of soildity and portability. Speed, especially for short keys is of high priority for a valid hash functions in hash table applications. Speed is also of highest priority for a valid PRNG. Simplisity is of great aesthetic values. Simplisity not only imples speed but also transparency and mathematics. Security is a secondary goal as 64-bit hash function and PRNGs are fundamentally weak against brute force attacks. 
 
-With the above goals in mind and heart, we feel lucky to announce a new hash function named as wyhash and a new PRNG named as wyrand. wyhash and wyrand are solid, portable, fastest and simplest. They are not designed to be cryptographically secure but still have a little security considerations without sacrifying speeed and simplisity. 
+With the above goals in mind and heart, we feel lucky to announce a new hash function named as wyhash and a new PRNG named as wyrand. wyhash and wyrand are solid, portable, fastest and simplest. They are 64 bit functions (however, we only claim 32-bit randomness of wyrand) and are portable on little endian machines and work best on 64-bit machines. They are not designed to be cryptographically secure but still have a little security considerations without sacrifying speeed and simplisity. 
 
 ----------------------------------------
 

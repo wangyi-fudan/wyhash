@@ -164,12 +164,7 @@ The iterative security is also discussed. Simple MUM has a problem when seed is 
 
 The iterative dynamic is also attractive in the sense of security. Some other hash functions uses accmulators as internal states. We consider iterative dynamic system is more hard to be analysed than accumulators and is more sensitive to initial values and has better avalanche effect (chaos).
 
-**TODO** can somebody prove the MUM is reversible or not? it seems that one can solve a new type of equation for x:
-
-MUM(x,p)=q     x=?    @lemire
-
-
-Other issues
+One open question is whether MUM function is inversible. Can we solve x for the equation: `MUM(x,p)=q`? In our limited mathematic skills and knowledge, the answer is NO (O(2^64)). However, [someone](https://lemire.me/blog/2019/03/19/the-fastest-conventional-random-number-generator-that-can-pass-big-crush/) discussed on interenet says YES.
 
 ----------------------------------------
 

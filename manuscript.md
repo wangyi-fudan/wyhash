@@ -154,7 +154,7 @@ The result is shown in the below table:
 wyhash is designed for speed - not to be cryptographically secure. Analysis by @leo-yuriev highlighted that wyhash uses a so-called "narrow-pipe" [Merkle-Dåmgard construction](https://en.wikipedia.org/wiki/Merkle%E2%80%93Damg%C3%A5rd_construction) where manipulation of the input data can lead to entropy loss.
 The probability of these cases occurring in known natural data is relatively low and thus wyhash is still useful in this context. Some improvements which did not impact speed have been added to wyhash in version 2 to counter these effects. However, the fundamental shortcomings of the "narrow-pipe" construction still apply. The detailed discussion is as follow:
 
-The MUM core is not secure. If A=0 or B=0 then MUM(A,B)=0 no matter the other part. Attackers or commom input data can trig this security problem.
+The MUM core is not secure. If A=0 or B=0 then MUM(A,B)=0 no matter the other part. Attackers or commom input data can trigger this security problem.
 
 The masked-MUM is almost safe with normal data but is not secure for intended attack. If A=p0 or B=p1 then MUM(A^p0,B^p1)=0. Normal data has a rare probabily to match the prime mask (prob=2^-64). But attackers can hide any B content by providing A=p0.
 

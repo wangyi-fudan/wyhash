@@ -22,9 +22,9 @@ Numberous hash functions have been designed in the last decades. [SMHasher](http
 Despite the rich collection of hash functions and PRNGs, there may still be faster and better alternatives for some use cases. Speed, especially for short keys, is important for a hash functions in hash table applications. Speed is also important for PRNG for applications such as simulations.  With this goal in mind, we propose a new hash function named as wyhash and a new PRNG named as wyrand. Both wyhash and wyrand are portable, fast and simple. They may be well suited for non-crypographic applications. 
 
 
-# (D. Lemire: Claiming that it is fastest without any qualification is not prudent. The high speed relies fundamentally on the fact that you have a fast 64-bit multiplier that can produce the full product. [On some ARM processors, it is slower than splitmix](https://lemire.me/blog/2019/03/20/arm-and-intel-have-different-performance-characteristics-a-case-study-in-random-number-generation/).) Yi Wang: I still want to claim the fastest on x86-64 architecture.
+## (D. Lemire: Claiming that it is fastest without any qualification is not prudent. The high speed relies fundamentally on the fact that you have a fast 64-bit multiplier that can produce the full product. [On some ARM processors, it is slower than splitmix](https://lemire.me/blog/2019/03/20/arm-and-intel-have-different-performance-characteristics-a-case-study-in-random-number-generation/).) Yi Wang: I still want to claim the fastest on x86-64 architecture.
 
-# (D. Lemire: You should not make any claim regarding security unless you can back it up with strong evidence. E.g., that one does not know how to invert a function is not a security feature. You have to prove that nobody else can (in some sense).) Yi Wang: Yes, we don't claim security. 
+## (D. Lemire: You should not make any claim regarding security unless you can back it up with strong evidence. E.g., that one does not know how to invert a function is not a security feature. You have to prove that nobody else can (in some sense).) Yi Wang: Yes, we don't claim security. 
 
 ----------------------------------------
 
@@ -150,15 +150,13 @@ The result is shown in the below table:
 | pcg32 | 1.471 | 169.500% |
 
 
-# (D. Lemire: If you are going to offer a hash function, and claim that it can be useful for hash tables, then you have to test it out. We know that the murmur hash function is good enough to achieve good performance with hash tables. See for example: Richter, Stefan; Alvarez, Victor; Dittrich, Jens (2015), "A seven-dimensional analysis of hashing methods and its implications on query processing" (PDF), Proceedings of the VLDB Endowment, 9 (3): 293–331.) Yi Wang: I am not sure whether hash function is the bottleneck of hash table. I will explore that later.
+## (D. Lemire: If you are going to offer a hash function, and claim that it can be useful for hash tables, then you have to test it out. We know that the murmur hash function is good enough to achieve good performance with hash tables. See for example: Richter, Stefan; Alvarez, Victor; Dittrich, Jens (2015), "A seven-dimensional analysis of hashing methods and its implications on query processing" (PDF), Proceedings of the VLDB Endowment, 9 (3): 293–331.) Yi Wang: I am not sure whether hash function is the bottleneck of hash table. I will explore that later.
 
 ----------------------------------------
 
-[/*]
-
 **Security Analysis**
 
-# (D. Lemire: I think that this section should dropped entirely. These functions should never be used if security is a concern. There are far better alternatives.)
+## (D. Lemire: I think that this section should dropped entirely. These functions should never be used if security is a concern. There are far better alternatives.)
 
 wyhash is designed for speed - not to be cryptographically secure. Analysis by @leo-yuriev highlighted that wyhash uses a so-called "narrow-pipe" [Merkle-Dåmgard construction](https://en.wikipedia.org/wiki/Merkle%E2%80%93Damg%C3%A5rd_construction) where manipulation of the input data can lead to entropy loss.
 The probability of these cases occurring in known natural data is relatively low and thus wyhash is still useful in this context. Some improvements which did not impact speed have been added to wyhash in version 2 to counter these effects. However, the fundamental shortcomings of the "narrow-pipe" construction still apply. The detailed discussion is as follow:
@@ -174,8 +172,6 @@ The iterative security is also discussed. Simple MUM has a problem when seed is 
 The iterative dynamic is also attractive in the sense of security. Some other hash functions uses accmulators as internal states. We consider iterative dynamic system is more hard to be analysed than accumulators and is more sensitive to initial values and has better avalanche effect (chaos).
 
 One open question is whether MUM function is solvable. Can we solve x for the equation: `MUM(x,p)=q`? To our limited mathematic skills and knowledge, the answer is NOT EASY (O(2^64)). But we can not prove it now and can not rule out the existance of some easier attacks (ie. O(2^32)).
-[/*]
-
 
 ----------------------------------------
 

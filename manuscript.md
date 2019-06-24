@@ -1,4 +1,4 @@
-The Fastest Short Key Hash Function and Pseudo-Random Number Generator
+A Fast Short Key Hash Function and Pseudo-Random Number Generator
 ----
 Yi Wang, ..., Diego Barrios Romero , ..., Li Jin*
 
@@ -11,17 +11,18 @@ Li Jin: Human Phenome Institute, Fudan University, Shanghai, China. State Key La
 ----------------------------------------
 **Introduction**
 
-A hash function is a function which is capable of mapping data of arbitrary size onto data of a fixed size ([wikipedia](https://en.wikipedia.org/wiki/Hash_function)). Hash functions are useful in a variety of applications. A notable one is hash tables. Hash tables use a hash function to accelerate the lookup of data in a table as it is faster to compute the hash of the key once and use that as an index. This yields an amortized constant average operation cost. Desirable properties of a hash function include determinism, speed, being non-invertible, and generating an avalanche-effect.
+A hash function is a function which is capable of mapping data of arbitrary size onto data of a fixed size ([wikipedia](https://en.wikipedia.org/wiki/Hash_function)). Hash functions are useful in a variety of applications. A notable one is hash tables. In practice, good hash functions  yield an amortized constant lookup time.  A pseudo-random number generator (PRNG) is an algorithm that is capable of generating a stream of numbers which appears random. PRNGs are only an approximation to randomness. Their values are completely determined by the original seed used for initialization.
 
-On the other hand, a pseudo-random number generator (PRNG) is an algorithm that is capable of generating a stream of numbers which appear to be randomly chosen. PRNGs are only an approximation, though. Its values are completely determined by the original seed used for initialization.
+To an outside observer, a hash function generates an apparently random output and thus it can also serve as the basis for a PRNG. If we have a good hash functions, then we can apply it to time or rounds to obtain a good PRNG. Thus we can test a hash function with statistical tests meant for random number generators such as  BigCrush or PractRand [eg. t1ha](https://github.com/rurban/smhasher/issues/54)
 
-To an outside observer, a hash function generates an apparently random output and thus it can also serve as the basis for a PRNG. If we have a good hash functions, then we can apply it to time or rounds to obtain a good PRNG. This idea means that we can test a hash function with BigCrush (conventionally for PRNG) by applying it on rounds. We did crushed some hash functions in this way. [eg. t1ha](https://github.com/rurban/smhasher/issues/54)
+Numberous hash functions have been designed in the last decades. [SMHasher](https://github.com/rurban/smhasher/) is a hub to collect and evaluate more than 100 hash functions: t1ha2_atonce (known for speed), xxHash64 (known for popularity), SipHash (known for security). Also numberous PRNGs have been designed in last decades: [testingRNG](https://github.com/lemire/testingRNG) is a collection and benchmark of some modern PRNGs. We name a few excellent PRNGs: splitmix64 ( popular in Java), [PCG](http://www.pcg-random.org/), [xoshiro256**](http://xoshiro.di.unimi.it/), lehmer64 (simple and fast). 
 
-Numberous hash functions have been designed in last decades. [SMHasher](https://github.com/rurban/smhasher/) is a hub to collect and evaluate more than 100 hash functions. We name a few excellent hash function: t1ha2_atonce (known for speed), xxHash64 (known for popularity), SipHash (known for security). Also numberous PRNGs have been designed in last decades. [testingRNG](https://github.com/lemire/testingRNG) is a collection and benchmark of some modern PRNGs. We name a few excellent PRNGs: splitmix64 ( popular in Java), [PCG](http://www.pcg-random.org/), [xoshiro256**](http://xoshiro.di.unimi.it/), lehmer64 (simple and fast). 
+Despite the rich collection of hash functions and PRNGs, there may still be faster and better alternatives for some use cases. Speed, especially for short keys, is important for a hash functions in hash table applications. Speed is also important for PRNG for applications such as simulations.  With this goal in mind, we propose a new hash function named as wyhash and a new PRNG named as wyrand. Both wyhash and wyrand are portable, fast and simple. They may be well suited for non-crypographic applications. 
 
-Despite the richness of hash function and PRNGs, we are still on the way to our ultimate aesthetic goals: fastest and simplest under the premise of soildity and portability. Speed, especially for short keys is of high priority for a valid hash functions in hash table applications. Speed is also of highest priority for a valid PRNG. Simplisity is of great aesthetic values. Simplisity not only imples speed but also transparency and mathematics. Security is a secondary goal as 64-bit hash function and PRNGs are fundamentally weak against brute force attacks. 
 
-With the above goals in mind and heart, we feel lucky to announce a new hash function named as wyhash and a new PRNG named as wyrand. wyhash and wyrand are solid, portable, fastest and simplest. They are 64 bit functions (however, we only claim 32-bit randomness of wyrand) and are portable on little endian machines and work best on 64-bit machines. They are not designed to be cryptographically secure but still have a little security considerations without sacrifying speeed and simplisity. 
+# (D. Lemire: Claiming that it is fastest without any qualification is not prudent. The high speed relies fundamentally on the fact that you have a fast 64-bit multiplier that can produce the full product. [On some ARM processors, it is slower than splitmix](https://lemire.me/blog/2019/03/20/arm-and-intel-have-different-performance-characteristics-a-case-study-in-random-number-generation/).)
+
+# (D. Lemire: You should not make any claim regarding security unless you can back it up with strong evidence. E.g., that one does not know how to invert a function is not a security feature. You have to prove that nobody else can (in some sense).)
 
 ----------------------------------------
 
@@ -147,9 +148,16 @@ The result is shown in the below table:
 | pcg32 | 1.471 | 169.500% |
 
 
+# (D. Lemire: If you are going to offer a hash function, and claim that it can be useful for hash tables, then you have to test it out. We know that the murmur hash function is good enough to achieve good performance with hash tables. See for example: Richter, Stefan; Alvarez, Victor; Dittrich, Jens (2015), "A seven-dimensional analysis of hashing methods and its implications on query processing" (PDF), Proceedings of the VLDB Endowment, 9 (3): 293–331.)
+
+
+# (D. Lemire: I would suggest testing the random generator with PractRand.)
+
 ----------------------------------------
 
 **Security Analysis**
+
+# (D. Lemire: I think that this section should dropped entirely. These functions should never be used if security is a concern. There are far better alternatives.)
 
 wyhash is designed for speed - not to be cryptographically secure. Analysis by @leo-yuriev highlighted that wyhash uses a so-called "narrow-pipe" [Merkle-Dåmgard construction](https://en.wikipedia.org/wiki/Merkle%E2%80%93Damg%C3%A5rd_construction) where manipulation of the input data can lead to entropy loss.
 The probability of these cases occurring in known natural data is relatively low and thus wyhash is still useful in this context. Some improvements which did not impact speed have been added to wyhash in version 2 to counter these effects. However, the fundamental shortcomings of the "narrow-pipe" construction still apply. The detailed discussion is as follow:

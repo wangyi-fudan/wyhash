@@ -1,10 +1,12 @@
-A Fast Short Key Hash Function and Pseudo-Random Number Generator
+The Fastest Short Key Hash Function and Pseudo-Random Number Generator on x86-64 Architecture
 ----
-Yi Wang, ..., Diego Barrios Romero , ..., Li Jin*
+Yi Wang, ..., Diego Barrios Romero , Daniel Lemire, ..., Li Jin*
 
 Yi Wang: Ministry of Education Key Laboratory of Contemporary Anthropology, Collaborative Innovation Center for Genetics and Development, School of Life Sciences, Shanghai, China. Human Phenome Institute, Fudan University, Shanghai, China.
 
 Diego Barrios Romero: Fraunhofer Institute for Digital Medicine MEVIS, Bremen, Germany.
+
+Daniel Lemire:  Université du Québec (TÉLUQ) Montreal, Canada
 
 Li Jin: Human Phenome Institute, Fudan University, Shanghai, China. State Key Laboratory of Genetic Engineering, Collaborative Innovation Center for Genetics and Development, School of Life Sciences, Fudan University, Shanghai, China.
 
@@ -20,9 +22,9 @@ Numberous hash functions have been designed in the last decades. [SMHasher](http
 Despite the rich collection of hash functions and PRNGs, there may still be faster and better alternatives for some use cases. Speed, especially for short keys, is important for a hash functions in hash table applications. Speed is also important for PRNG for applications such as simulations.  With this goal in mind, we propose a new hash function named as wyhash and a new PRNG named as wyrand. Both wyhash and wyrand are portable, fast and simple. They may be well suited for non-crypographic applications. 
 
 
-# (D. Lemire: Claiming that it is fastest without any qualification is not prudent. The high speed relies fundamentally on the fact that you have a fast 64-bit multiplier that can produce the full product. [On some ARM processors, it is slower than splitmix](https://lemire.me/blog/2019/03/20/arm-and-intel-have-different-performance-characteristics-a-case-study-in-random-number-generation/).)
+# (D. Lemire: Claiming that it is fastest without any qualification is not prudent. The high speed relies fundamentally on the fact that you have a fast 64-bit multiplier that can produce the full product. [On some ARM processors, it is slower than splitmix](https://lemire.me/blog/2019/03/20/arm-and-intel-have-different-performance-characteristics-a-case-study-in-random-number-generation/).) Yi Wang: I still want to claim the fastest on x86-64 architecture.
 
-# (D. Lemire: You should not make any claim regarding security unless you can back it up with strong evidence. E.g., that one does not know how to invert a function is not a security feature. You have to prove that nobody else can (in some sense).)
+# (D. Lemire: You should not make any claim regarding security unless you can back it up with strong evidence. E.g., that one does not know how to invert a function is not a security feature. You have to prove that nobody else can (in some sense).) Yi Wang: Yes, we don't claim security. 
 
 ----------------------------------------
 

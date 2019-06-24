@@ -133,7 +133,7 @@ Short key time cost (Cycle/Hash)
 | 31	| 18.26	| 37	| 53	| 130.5 |
 | average	| 17.428	| 32.305	| 38.323	| 101.206 |
 
-We benchmark wyrand, lehmer64, 3 parallel lehmer64, splitmix64, xoshiro256, pcg64, pcg32 PRNGs using a loop of 4 billion.
+We evaluated wyrand with BigCrush and Practrand. wyrand passed both tests. The BigCrush results is attached as supporting information. We benchmark wyrand, lehmer64, 3 parallel lehmer64, splitmix64, xoshiro256, pcg64, pcg32 PRNGs using a loop of 4 billion.
 ```
 g++ BenchmarkPRNG.cpp -o BenchmarkPRNG -O2 -fno-tree-vectorize -Wall
 ```
@@ -150,12 +150,11 @@ The result is shown in the below table:
 | pcg32 | 1.471 | 169.500% |
 
 
-# (D. Lemire: If you are going to offer a hash function, and claim that it can be useful for hash tables, then you have to test it out. We know that the murmur hash function is good enough to achieve good performance with hash tables. See for example: Richter, Stefan; Alvarez, Victor; Dittrich, Jens (2015), "A seven-dimensional analysis of hashing methods and its implications on query processing" (PDF), Proceedings of the VLDB Endowment, 9 (3): 293–331.)
-
-
-# (D. Lemire: I would suggest testing the random generator with PractRand.)
+# (D. Lemire: If you are going to offer a hash function, and claim that it can be useful for hash tables, then you have to test it out. We know that the murmur hash function is good enough to achieve good performance with hash tables. See for example: Richter, Stefan; Alvarez, Victor; Dittrich, Jens (2015), "A seven-dimensional analysis of hashing methods and its implications on query processing" (PDF), Proceedings of the VLDB Endowment, 9 (3): 293–331.) Yi Wang: I am not sure whether hash function is the bottleneck of hash table. I will explore that later.
 
 ----------------------------------------
+
+[/*]
 
 **Security Analysis**
 
@@ -175,6 +174,8 @@ The iterative security is also discussed. Simple MUM has a problem when seed is 
 The iterative dynamic is also attractive in the sense of security. Some other hash functions uses accmulators as internal states. We consider iterative dynamic system is more hard to be analysed than accumulators and is more sensitive to initial values and has better avalanche effect (chaos).
 
 One open question is whether MUM function is solvable. Can we solve x for the equation: `MUM(x,p)=q`? To our limited mathematic skills and knowledge, the answer is NOT EASY (O(2^64)). But we can not prove it now and can not rule out the existance of some easier attacks (ie. O(2^32)).
+[/*]
+
 
 ----------------------------------------
 

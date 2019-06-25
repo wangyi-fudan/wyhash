@@ -150,7 +150,7 @@ The result is shown in the below table:
 | pcg32 | 1.471 | 169.500% |
 
 
-## (D. Lemire: If you are going to offer a hash function, and claim that it can be useful for hash tables, then you have to test it out. We know that the murmur hash function is good enough to achieve good performance with hash tables. See for example: Richter, Stefan; Alvarez, Victor; Dittrich, Jens (2015), "A seven-dimensional analysis of hashing methods and its implications on query processing" (PDF), Proceedings of the VLDB Endowment, 9 (3): 293–331.) Yi Wang: I am not sure whether hash function is the bottleneck of hash table. I will explore that later.
+## (D. Lemire: If you are going to offer a hash function, and claim that it can be useful for hash tables, then you have to test it out. We know that the murmur hash function is good enough to achieve good performance with hash tables. See for example: Richter, Stefan; Alvarez, Victor; Dittrich, Jens (2015), "A seven-dimensional analysis of hashing methods and its implications on query processing" (PDF), Proceedings of the VLDB Endowment, 9 (3): 293–331.) Yi Wang: I did some experiment and show that in state-of-art hash tables (https://github.com/skarupke/flat_hash_map) with short string key, hash function is not a bottleneck. Replacing default hash function with wyhash yields ~1% speedup.
 
 ----------------------------------------
 

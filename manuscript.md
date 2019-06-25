@@ -154,27 +154,6 @@ The result is shown in the below table:
 
 ----------------------------------------
 
-**Security Analysis**
-
-## (D. Lemire: I think that this section should dropped entirely. These functions should never be used if security is a concern. There are far better alternatives.)
-
-wyhash is designed for speed - not to be cryptographically secure. Analysis by @leo-yuriev highlighted that wyhash uses a so-called "narrow-pipe" [Merkle-Dåmgard construction](https://en.wikipedia.org/wiki/Merkle%E2%80%93Damg%C3%A5rd_construction) where manipulation of the input data can lead to entropy loss.
-The probability of these cases occurring in known natural data is relatively low and thus wyhash is still useful in this context. Some improvements which did not impact speed have been added to wyhash in version 2 to counter these effects. However, the fundamental shortcomings of the "narrow-pipe" construction still apply. The detailed discussion is as follow:
-
-The MUM core is not secure. If A=0 or B=0 then MUM(A,B)=0 no matter the other part. Attackers or commom input data can trigger this security problem.
-
-The masked-MUM is almost safe with normal data but is not secure for intended attack. If A=p0 or B=p1 then MUM(A^p0,B^p1)=0. Normal data has a rare probabily to match the prime mask (prob=2^-64). But attackers can hide any B content by providing A=p0.
-
-The seed-masked-MUM is almost safe for both normal data and intended attack when seed is kept privatedly by the hasher. Only when A=seed^p0 or B=seed^p1, MUM(A^seed^p0, B^seed^p1)=0. This can occur at low probability (2^-64) both for natural data and intended attacks.
-
-The iterative security is also discussed. Simple MUM has a problem when seed is zeroed before reaching the end. We want the seed to be regenarated toward 32 1s in any case. The seed-masked-MUM enables this ability: the next block will almost produce another seed value no matter the current seed value.
-
-The iterative dynamic is also attractive in the sense of security. Some other hash functions uses accmulators as internal states. We consider iterative dynamic system is more hard to be analysed than accumulators and is more sensitive to initial values and has better avalanche effect (chaos).
-
-One open question is whether MUM function is solvable. Can we solve x for the equation: `MUM(x,p)=q`? To our limited mathematic skills and knowledge, the answer is NOT EASY (O(2^64)). But we can not prove it now and can not rule out the existance of some easier attacks (ie. O(2^32)).
-
-----------------------------------------
-
 **Language Bindings and Ports**
 
 wyhash provides C functions that provide a simple interface:

@@ -17,7 +17,7 @@ A hash function is a function which is capable of mapping data of arbitrary size
 
 To an outside observer, a hash function generates an apparently random output and thus it can also serve as the basis for a PRNG. If we have a good hash functions, then we can apply it to time or rounds to obtain a good PRNG. Thus we can test a hash function with statistical tests meant for random number generators such as  BigCrush or PractRand [eg. t1ha](https://github.com/rurban/smhasher/issues/54)
 
-Numberous hash functions have been designed in the last decades. [SMHasher](https://github.com/rurban/smhasher/) is a hub to collect and evaluate more than 100 hash functions: t1ha2_atonce (known for speed), xxHash64 (known for popularity), SipHash (known for security). Also numberous PRNGs have been designed in last decades: [testingRNG](https://github.com/lemire/testingRNG) is a collection and benchmark of some modern PRNGs. We name a few excellent PRNGs: splitmix64 ( popular in Java), [PCG](http://www.pcg-random.org/), [xoshiro256**](http://xoshiro.di.unimi.it/), lehmer64 (simple and fast).
+Numerous hash functions have been designed in the last decades. [SMHasher](https://github.com/rurban/smhasher/) is a hub to collect and evaluate more than 100 hash functions: t1ha2_atonce (known for speed), xxHash64 (known for popularity), SipHash (known for security). Also numberous PRNGs have been designed in last decades: [testingRNG](https://github.com/lemire/testingRNG) is a collection and benchmark of some modern PRNGs. We name a few excellent PRNGs: splitmix64 (popular in Java), [PCG](http://www.pcg-random.org/), [xoshiro256**](http://xoshiro.di.unimi.it/), lehmer64 (simple and fast).
 
 Despite the rich collection of hash functions and PRNGs, there may still be faster and better alternatives for some use cases. Speed, especially for short keys, is important for a hash functions in hash table applications. Speed is also important for PRNG for applications such as simulations.  With this goal in mind, we propose a new hash function named as wyhash and a new PRNG named as wyrand. Both wyhash and wyrand are portable, fast and simple. They may be well suited for non-crypographic applications.
 
@@ -37,7 +37,7 @@ uint64_t MUM(uint64_t A, uint64_t B){
   return  (c>>64)^c;
 }
 ```
-MUM is powerful in mixing data as 64x64-bit multiplications can do the same work as 32 shifts and additions. Despite the nominal 128-bit multiplication, the actual instructions are only one `MULQ` and one `XORQ` on 64-bit machines. One of our improvements is masked-MUM: `MUM(A^p0, B^p1)`, where p0 and p1 are random prime masks containing 32 1s. The masked-MUM can randomize biased real data toward 32 1s and thus produce an avalanche effect. We observed experimentally that just two rounds of masked-MUM can pass statistical tests.
+MUM is powerful in mixing data as 64x64-bit multiplications can do the same work as 32 shifts and additions. Despite the nominal 128-bit multiplication, the actual instructions are only one `MULQ` and one `XORQ` on 64-bit machines. One of our improvements is masked-MUM: `MUM(A^p0, B^p1)`, where p0 and p1 are random prime masks containing 32 1s. The masked-MUM can randomize biased real data toward 32 1s and thus produce an avalanche effect. We observed experimentally that just two rounds of masked-MUM suffice to pass statistical tests.
 
 The wyhash algorithm's interface is as follows:
 
@@ -52,7 +52,7 @@ seed = MUM(read64(p)^p0^seed, read64(p+8)^p1^seed) ^ MUM(read64(p+16)^p2^seed, r
 
 It can be viewed as a chaotic dynamic system with 64-bit internal states.
 
-We process the last block with proper paddings and finalize the hash with
+We process the last block with proper paddings and finalize the hash with:
 
 ```C
 return MUM(seed^len, p4);
@@ -60,7 +60,7 @@ return MUM(seed^len, p4);
 
 Note that the finalization MUM is critical to pass statistical tests.
 
-wyhash reads the data with the memcpy function. This is necessary because some machine architectures do not support unaligned reads and will generate hardware exceptions. A key trick to speedup wyhash is that in the last block each 64-bit reading is implemented as two 32-bit readings: `read64(p) = (read32(p)<<32) | read32(p+4)`. This trick may be explained by the fact that memory is 4-byte aligned.
+wyhash reads the data with the `memcpy` function. This is necessary because some machine architectures do not support unaligned reads and will generate hardware exceptions. A key trick to speedup wyhash is that in the last block each 64-bit reading is implemented as two 32-bit readings: `read64(p) = (read32(p)<<32) | read32(p+4)`. This trick may be explained by the fact that memory is 4-byte aligned.
 
 The primary wyrand interface is as follows:
 ```C
@@ -133,11 +133,11 @@ Short key time cost (Cycle/Hash)
 | 31	| 18.26	| 37	| 53	| 130.5 |
 | average	| 17.428	| 32.305	| 38.323	| 101.206 |
 
-We evaluated wyrand with BigCrush and Practrand. wyrand passed both tests. The BigCrush results is attached as supporting information. We benchmark wyrand, lehmer64, 3 parallel lehmer64, splitmix64, xoshiro256, pcg64, pcg32 PRNGs using a loop of 4 billion.
+We evaluated wyrand with BigCrush and Practrand. wyrand passed both tests. The BigCrush results are attached as supporting information. We benchmarked wyrand, lehmer64, 3 parallel lehmer64, splitmix64, xoshiro256, pcg64 and pcg32 PRNGs using loops with 4 billion iterations.
 ```
 g++ BenchmarkPRNG.cpp -o BenchmarkPRNG -O2 -fno-tree-vectorize -Wall
 ```
-The result is shown in the below table:
+The result is shown in the table below:
 
 | PRNG | ns/rand | vs wyrand |
 | ---- | ---- | ---- |
@@ -180,7 +180,7 @@ TODO: Add speed comparisons between the different language ports and the C imple
 
 **Acknowledgment**
 
-We appreciate these people/user for contributing codes and/or comments in the development of wyhash/wyrand.
+We appreciate these people/users for contributing code and/or comments in the development of wyhash/wyrand.
 
 Reini Urban, Dietrich Epp, Joshua Haberman, Tommy Ettinger, Daniel Lemire, Otmar Ertl, cocowalla, leo-yuriev
 

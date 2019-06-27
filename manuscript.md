@@ -17,14 +17,14 @@ A hash function is a function which is capable of mapping data of arbitrary size
 
 To an outside observer, a hash function generates an apparently random output and thus it can also serve as the basis for a PRNG. If we have a good hash functions, then we can apply it to time or rounds to obtain a good PRNG. Thus we can test a hash function with statistical tests meant for random number generators such as  BigCrush or PractRand [eg. t1ha](https://github.com/rurban/smhasher/issues/54)
 
-Numberous hash functions have been designed in the last decades. [SMHasher](https://github.com/rurban/smhasher/) is a hub to collect and evaluate more than 100 hash functions: t1ha2_atonce (known for speed), xxHash64 (known for popularity), SipHash (known for security). Also numberous PRNGs have been designed in last decades: [testingRNG](https://github.com/lemire/testingRNG) is a collection and benchmark of some modern PRNGs. We name a few excellent PRNGs: splitmix64 ( popular in Java), [PCG](http://www.pcg-random.org/), [xoshiro256**](http://xoshiro.di.unimi.it/), lehmer64 (simple and fast). 
+Numberous hash functions have been designed in the last decades. [SMHasher](https://github.com/rurban/smhasher/) is a hub to collect and evaluate more than 100 hash functions: t1ha2_atonce (known for speed), xxHash64 (known for popularity), SipHash (known for security). Also numberous PRNGs have been designed in last decades: [testingRNG](https://github.com/lemire/testingRNG) is a collection and benchmark of some modern PRNGs. We name a few excellent PRNGs: splitmix64 ( popular in Java), [PCG](http://www.pcg-random.org/), [xoshiro256**](http://xoshiro.di.unimi.it/), lehmer64 (simple and fast).
 
-Despite the rich collection of hash functions and PRNGs, there may still be faster and better alternatives for some use cases. Speed, especially for short keys, is important for a hash functions in hash table applications. Speed is also important for PRNG for applications such as simulations.  With this goal in mind, we propose a new hash function named as wyhash and a new PRNG named as wyrand. Both wyhash and wyrand are portable, fast and simple. They may be well suited for non-crypographic applications. 
+Despite the rich collection of hash functions and PRNGs, there may still be faster and better alternatives for some use cases. Speed, especially for short keys, is important for a hash functions in hash table applications. Speed is also important for PRNG for applications such as simulations.  With this goal in mind, we propose a new hash function named as wyhash and a new PRNG named as wyrand. Both wyhash and wyrand are portable, fast and simple. They may be well suited for non-crypographic applications.
 
 
 ## (D. Lemire: Claiming that it is fastest without any qualification is not prudent. The high speed relies fundamentally on the fact that you have a fast 64-bit multiplier that can produce the full product. [On some ARM processors, it is slower than splitmix](https://lemire.me/blog/2019/03/20/arm-and-intel-have-different-performance-characteristics-a-case-study-in-random-number-generation/).) Yi Wang: I still want to claim the fastest on x86-64 architecture. And in your blog, you benchmarked the older version of wyrand which needs two MUM. I think the latest wyrand which has only one MUM will be faster. However, I don't have ARM processor to benchmark.
 
-## (D. Lemire: You should not make any claim regarding security unless you can back it up with strong evidence. E.g., that one does not know how to invert a function is not a security feature. You have to prove that nobody else can (in some sense).) Yi Wang: Yes, we don't claim security. 
+## (D. Lemire: You should not make any claim regarding security unless you can back it up with strong evidence. E.g., that one does not know how to invert a function is not a security feature. You have to prove that nobody else can (in some sense).) Yi Wang: Yes, we don't claim security.
 
 ----------------------------------------
 
@@ -166,6 +166,7 @@ This should allow wyhash to be integrated easily into any other language like Py
 
 Nevertheless, ports to several languages have been made by the community. Complete implementations of the hashing algorithm and random-number generator include versions in:
 - [C#](https://github.com/cocowalla/wyhash-dotnet)
+- [Go](https://github.com/dgryski/go-wyhash)
 - [Rust](https://github.com/eldruin/wyhash-rs)
 - [Swift](https://github.com/lemire/SwiftWyhash)
 

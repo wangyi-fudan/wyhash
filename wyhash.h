@@ -34,7 +34,7 @@ static	inline	uint64_t	wyhash(const void* key,	uint64_t	len, uint64_t	seed){
 	uint64_t mix = len;
 	for(i=0;	i+32<=len;	i+=32,	p+=32)	seed=_wymix0(_wyr64(p),_wyr64(p+8),seed)^_wymix1(_wyr64(p+16),_wyr64(p+24),seed);
 	switch(len&31){
-	case 	0:	mix= _wymum(seed^_wyp0,seed^_wyp1); break;
+	case 	0:	mix=  len ? mix: _wymum(_wyp0,seed); break;
 	case	1:	seed=_wymix0(_wyr08(p),_wyp4,seed);	break;
 	case	2:	seed=_wymix0(_wyr16(p),_wyp4,seed);	break;
 	case	3:	seed=_wymix0((_wyr16(p)<<8)|_wyr08(p+2),_wyp4,seed);	break;

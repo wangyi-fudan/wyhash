@@ -29,16 +29,10 @@ static	inline	uint64_t	_wyr64(const	uint8_t	*p){	uint64_t v;	memcpy(&v,	p,	8);	r
 static	inline	uint64_t	__wyr64(const	uint8_t	*p){	return	(_wyr32(p)<<32)|_wyr32(p+4);	}
 //to avoid attacks, seed should be initialized as a secret
 static	inline	uint64_t	wyhash(const void* key,	uint64_t	len, uint64_t	seed){
-	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t i;
+	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t i,	len1=len;
 	for(i=0;	i+32<=len;	i+=32,	p+=32)	seed=_wymix0(_wyr64(p),_wyr64(p+8),seed)^_wymix1(_wyr64(p+16),_wyr64(p+24),seed);
 	switch(len&31){
-	case	0:	
-		#if defined(__GNUC__) || defined(__INTEL_COMPILER)
-		if(__builtin_expect(!len, 0))
-		#else
-		if(!len)	
-		#endif
-			seed=_wymix0(0,0,seed);	break;
+	case 	0:	len1=_wymix0(len1,0,seed);	break;
 	case	1:	seed=_wymix0(_wyr08(p),0,seed);	break;
 	case	2:	seed=_wymix0(_wyr16(p),0,seed);	break;
 	case	3:	seed=_wymix0((_wyr16(p)<<8)|_wyr08(p+2),0,seed);	break;
@@ -71,7 +65,7 @@ static	inline	uint64_t	wyhash(const void* key,	uint64_t	len, uint64_t	seed){
 	case	30:	seed=_wymix0(__wyr64(p),__wyr64(p+8),seed)^_wymix1(__wyr64(p+16),(_wyr32(p+24)<<16)|_wyr16(p+24+4),seed);	break;
 	case	31:	seed=_wymix0(__wyr64(p),__wyr64(p+8),seed)^_wymix1(__wyr64(p+16),(_wyr32(p+24)<<24)|(_wyr16(p+24+4)<<8)|_wyr08(p+24+6),seed);	break;
 	}
-	return	_wymum(seed^len,	_wyp4);
+	return	_wymum(seed^len1,_wyp4);
 }
 static	inline	uint64_t	wyhash64(uint64_t	A, uint64_t	B){	return	_wymum(_wymum(A^_wyp0,	B^_wyp1),	_wyp2);	}
 static	inline	double	wy2u01(uint64_t	r){	const	double	_wynorm=1.0/(1ull<<52);	return	(r&0x000fffffffffffffull)*_wynorm; }

@@ -3,11 +3,9 @@ Simple Is Best
 
 wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively: solid, portable, fastest, simplest. wyhash passed SMHasher, wyrand passed BigCrush, practrand and designed to drop-in replace C rand(). See our [manuscript](manuscript.md).
 
-Updated to version 2
+Updated to version 3
 ----
-Dear user and developers, based on recent discussions with @leo-yuriev on issue 15, I decide to upgrade wyhash to version 2 draft. Version 2 provide better security against intended attacks without obvious compromise of speed.  
-
-My deep worry on this upgrade is the split of wyhash ecosystem since many language binding have been developed. However, my goal is to build an ultimate hash function for human. Come on with me, we are young!
+Dear user and developers, for a hard night work, I propose wyhash version 3 draft. Version 3 provides double bulk hash speed and slightly faster for short keys compared to version 2. Hope you like it.
 
 ----------------------------------------
 

@@ -5,7 +5,7 @@ wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively: soli
 
 CLaim & Clearify
 ----
-Currently, wyhash is the fastest hash function when len is known at compile time. When len is dynamic, XXH3 is faster.
+Currently, wyhash is the fastest hash function when len is known at compile time. When len is dynamic, XXH3 is faster. The wyhash_unsafe function is for hashing random length short keys(eg. English words), it use unaligned reads and read 7 byte through boundary, just being fast.
 
 Updated to version 3
 ----

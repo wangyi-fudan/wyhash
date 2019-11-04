@@ -45,11 +45,15 @@ static	inline	uint64_t	__wyr8(const	uint8_t	*p) {	uint64_t v;	memcpy(&v,	p,	8);	
 //to avoid attacks, seed should be initialized as a secret.
 static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
 	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t i,	see1=seed;
-	for(i=0;	UNLIKELY(i+128<=len);	i+=128,	p+=128) {
+	for(i=0;	UNLIKELY(i+256<=len);	i+=256,	p+=256) {
 		seed=_wymix0(__wyr8(p),__wyr8(p+8),seed)^_wymix1(__wyr8(p+16),__wyr8(p+24),seed);
 		see1=_wymix2(__wyr8(p+32),__wyr8(p+40),see1)^_wymix3(__wyr8(p+48),__wyr8(p+56),see1);
 		seed=_wymix0(__wyr8(p+64),__wyr8(p+72),seed)^_wymix1(__wyr8(p+80),__wyr8(p+88),seed);
 		see1=_wymix2(__wyr8(p+96),__wyr8(p+104),see1)^_wymix3(__wyr8(p+112),__wyr8(p+120),see1);
+		seed=_wymix0(__wyr8(p+128),__wyr8(p+136),seed)^_wymix1(__wyr8(p+144),__wyr8(p+152),seed);
+		see1=_wymix2(__wyr8(p+160),__wyr8(p+168),see1)^_wymix3(__wyr8(p+176),__wyr8(p+184),see1);
+		seed=_wymix0(__wyr8(p+192),__wyr8(p+200),seed)^_wymix1(__wyr8(p+208),__wyr8(p+216),seed);
+		see1=_wymix2(__wyr8(p+224),__wyr8(p+232),see1)^_wymix3(__wyr8(p+240),__wyr8(p+248),see1);
 	}
 	for(;	UNLIKELY(i+32<=len);	i+=32,	p+=32) {	seed=_wymix0(__wyr8(p),__wyr8(p+8),seed);	see1=_wymix1(__wyr8(p+16),__wyr8(p+24),see1);	}
 	switch(len&31) {

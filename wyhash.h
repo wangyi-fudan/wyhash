@@ -28,7 +28,7 @@ static	inline	uint64_t	_wymum(uint64_t	A,	uint64_t	B) {
 	lo=t+(rm1<<32);	c+=lo<t;	hi=rh+(rm0>>32)+(rm1>>32)+c;	return hi^lo;
 #endif
 }
-//unaligned read, read throug 8 byte memory bound. however, it is really fast for practical short string hash
+//unaligned read, read through 8 byte memory bound. however, it is really fast for practical short string hash
 static  inline  uint64_t    wyhash_unsafe(const void* key, uint64_t    len,    uint64_t    seed) {
 	if(!len)    return  0;
 	const   uint64_t    *p=(const   uint64_t*)key;  uint64_t    i,  w=(len>>3)-!(len&7);

@@ -22,9 +22,10 @@ The speed benchmarks are as follow:
 
 https://github.com/rurban/smhasher
 
-|bulk:bytes/cycle|9.888|15.500|7.872|
-|samll:cycles | wyhash | XXH3 | t1ha2_atonce |
+
+|key size | wyhash | XXH3 | t1ha2_atonce |
 | ---- | ---- | ---- | ---- |
+|bulk|9.888 bytes/cycle|15.500 bytes/cycle|7.872 bytes/cycle|
 | 1-byte | 16.00 | 19.00 | 29.00 |
 | 2-byte | 16.00 | 19.00 | 29.00 |
 | 3-byte | 17.00 | 19.00 | 29.00 | 

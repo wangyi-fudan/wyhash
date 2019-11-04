@@ -3,6 +3,10 @@ Simple Is Best
 
 wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively: solid, portable, fastest, simplest. wyhash passed SMHasher, wyrand passed BigCrush, practrand and designed to drop-in replace C rand(). See our [manuscript](manuscript.md).
 
+CLaim & Clearify
+----
+wyhash is the fastest hash function when len is known at compile time. When len is dynamic, XXH3 is faster.
+
 Updated to version 3
 ----
 Dear user and developers, for a hard night work, I propose wyhash version 3 draft. Version 3 provides double bulk hash speed and slightly faster for short keys compared to version 2. Hope you like it.

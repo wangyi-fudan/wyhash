@@ -28,13 +28,6 @@ static	inline	uint64_t	_wymum(uint64_t	A,	uint64_t	B) {
 	lo=t+(rm1<<32);	c+=lo<t;	hi=rh+(rm0>>32)+(rm1>>32)+c;	return hi^lo;
 #endif
 }
-//unaligned read, read through 8 byte memory bound. however, it is really fast for practical short string hash
-static  inline  uint64_t    wyhash_unsafe(const void* key, uint64_t    len,    uint64_t    seed) {
-	if(!len)    return  0;
-	const   uint64_t    *p=(const   uint64_t*)key;  uint64_t    i,  w=(len>>3)-!(len&7);
-	for(seed^=_wyp1,i=0;i<w;i++,p++)    seed=_wymum(*p^_wyp0,seed);
- 	return  _wymum(len^_wyp4,_wymum((*p<<((8-(len&7))<<3))^_wyp0,seed));
-}
 static	inline	uint64_t	_wymix0(uint64_t	A,	uint64_t	B,	uint64_t	seed) {	return	_wymum(A^seed^_wyp0,	B^seed^_wyp1);}
 static	inline	uint64_t	_wymix1(uint64_t	A,	uint64_t	B,	uint64_t	seed) {	return	_wymum(A^seed^_wyp2,	B^seed^_wyp3);}
 static	inline	uint64_t	_wymix2(uint64_t	A,	uint64_t	B,	uint64_t	seed) {	return	_wymum(A^seed^_wyp3,	B^seed^_wyp0);}
@@ -50,6 +43,13 @@ static	inline	uint64_t	_wyr8(const	uint8_t	*p) {	return	(_wyr4(p)<<32)|_wyr4(p+4
 static	inline	uint64_t	__wyr8(const	uint8_t	*p) {	uint64_t v;	memcpy(&v,	p,	8);	return	v;}
 //to avoid attacks, seed should be initialized as a secret.
 static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
+#ifndef	WYHASH_SAFE
+	const   uint64_t    *q=(const   uint64_t*)key;
+	if(len<=8)	return	_wymum(len^_wyp4,_wymum((q[0]<<((8-(len&7))<<3))^seed^_wyp0,seed^_wyp1));	
+	if(len<=16)	return	_wymum(len^_wyp4,_wymum(q[0]^seed^_wyp0,(q[1]<<((8-(len&7))<<3))^seed^_wyp1));
+	if(len<=24)	return	_wymum(len^_wyp4,_wymum(q[0]^seed^_wyp0,q[1]^seed^_wyp1)^_wymum((q[2]<<((8-(len&7))<<3))^seed^_wyp2,seed^_wyp3));
+	if(len<=32)	return	_wymum(len^_wyp4,_wymum(q[0]^seed^_wyp0,q[1]^seed^_wyp1)^_wymum(q[2]^seed^_wyp2,(q[3]<<((8-(len&7))<<3))^seed^_wyp3));
+#endif
 	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t i,	see1=seed,see2=seed,see3=seed;
 	for(i=0;	UNLIKELY(i+128<=len);	i+=128,	p+=128) {
 		seed=_wymix0(__wyr8(p),__wyr8(p+8),seed);	see1=_wymix1(__wyr8(p+16),__wyr8(p+24),see1);	
@@ -59,7 +59,6 @@ static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
 	}
 	for(;	UNLIKELY(i+32<=len);	i+=32,	p+=32) {	seed=_wymix0(__wyr8(p),__wyr8(p+8),seed);	see1=_wymix1(__wyr8(p+16),__wyr8(p+24),see1);	}
 	switch(len&31) {
-	case 	0:	see1=_wymix0(see1,0,seed);	break;
 	case	1:	seed=_wymix0(_wyr1(p),0,seed);	break;
 	case	2:	seed=_wymix0(_wyr2(p),0,seed);	break;
 	case	3:	seed=_wymix0(_wyr3(p),0,seed);	break;

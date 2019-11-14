@@ -3,34 +3,6 @@ Simple Is Best
 
 wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively: solid, portable, fastest, simplest. wyhash passed SMHasher, wyrand passed BigCrush, practrand and designed to drop-in replace C rand(). See our [manuscript](manuscript.md). Currently wyhash is a hasher by default in a hash table in the great Zig language.
 
-wyhash vs XXH3
-====
-Initially, we found wyhash is fastest for short keys based on SMHasher. However, things becomes complex later. I will discuss as follow:
-
-Safety and Portability:
-----
-0: wyhash passes all SMHasher tests, while XXH3 fails on the moment chi2 test created by me (without intention).
-
-1: wyhash obeys all safty rules. It uses memcpy to access memory, while XXH3 do unaligned memory access.
-
-2: wyhash is about 62 bit strength against hash collision, not perfect but not bad. XXH3 is of 64 bit strength.
-
-3: the amazing bulk speed of XXH is based on AVX2 instruction, while wyhash uses no "magic" instructions.
-
-4: the wyhash_v3 have a macro WYHASH_EVIL_FAST which is unsafe but fast, I leave the choice for users.
-
-5: wyhash paid attentions on adverarial attacks, though I can't prove wyhash is secure due my poor math.
-
-Speed:
-----
-0: XXH3 is faster on bulk hash with AVX2 instruction. With SSE instruction, XXH3 and wyhash are of similar speed. And without any vector instructions, wyhash is faster.
-
-1: for fixed length short keys, wyhash is the faster due to inlining.
-
-2: for dynamic length short keys, XXH3 is faster. 
-
-3: If you turn on WYHASH_EVIL_FAST, wyhash is faster on dynamic length short keys.
-
 ----------------------------------------
 
 wyrand code:

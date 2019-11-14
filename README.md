@@ -23,7 +23,7 @@ Safety and Portability:
 
 Speed:
 ----
-0: XXH3 is fast on bulk hash with AVX2 instruction. With SSE instruction, XXH3 and wyhash are of similar speed. And without any vector instructions, wyhash is faster.
+0: XXH3 is faster on bulk hash with AVX2 instruction. With SSE instruction, XXH3 and wyhash are of similar speed. And without any vector instructions, wyhash is faster.
 
 1: for fixed length short keys, wyhash is the faster due to inlining.
 

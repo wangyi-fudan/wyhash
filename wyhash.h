@@ -41,7 +41,7 @@ static	inline	uint64_t	_wyr(const	uint8_t	*p,	unsigned	k){
 }
 //to avoid attacks, seed should be initialized as a secret.
 static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
-#ifdef	WYHASH_FASTEST_UNSAFE	//	unaligned access, read through
+#ifdef	WYHASH_EVIL_FAST	//	unaligned access, read through
 	const   uint64_t    *q=(const   uint64_t*)key;
 	if(len<=8)	return	_wymum(len^_wyp4,_wymum((q[0]<<((8-(len&7))<<3))^seed^_wyp0,seed^_wyp1));	
 	if(len<=16)	return	_wymum(len^_wyp4,_wymum(q[0]^seed^_wyp0,(q[1]<<((8-(len&7))<<3))^seed^_wyp1));

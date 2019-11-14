@@ -28,7 +28,6 @@ static	inline	uint64_t	_wyr8(const	uint8_t	*p) {	return	(_wyr4(p)<<32)|_wyr4(p+4
 static	inline	uint64_t	__wyr8(const	uint8_t	*p) {	uint64_t v;	memcpy(&v,	p,	8);	return	v;}
 static	inline	uint64_t	_wyr(const	uint8_t	*p,	unsigned	k){
 	switch(k){
-		case	0:	return	0;
 		case	1:	return	_wyr1(p);
 		case	2:	return	_wyr2(p);
 		case	3:	return	(_wyr2(p)<<8)|_wyr1(p+2);
@@ -38,6 +37,7 @@ static	inline	uint64_t	_wyr(const	uint8_t	*p,	unsigned	k){
 		case	7:	return	(_wyr4(p)<<24)|(_wyr2(p+4)<<8)|_wyr1(p+6);
 		case	8:	return	_wyr8(p);
 	}
+	return	0;
 }
 //to avoid attacks, seed should be initialized as a secret.
 static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {

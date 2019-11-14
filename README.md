@@ -21,9 +21,9 @@ https://github.com/rurban/smhasher
 
 |key size | wyhash | XXH3_SCALAR| XXH3_SSE| XXH3_AVX2 | t1ha2_atonce |
 | ---- | ---- | ---- | ---- | ---- | ---- |
-|bulk:bytes/cycle|5.371 | 2.568|6.422|8.427|6.089|
-|small:cycles/hash|18.677 |23.097 |23.097|23.097|31.609|
-|hashmap:cycles/op|180.262 |182.231 |182.267|180.901|186.502|
+|bulk:bytes/cycle|5.258 | 2.568|6.422|8.427|6.089|
+|small:cycles/hash|18.698 |23.097 |23.097|23.097|31.609|
+|hashmap:cycles/op|179.580 |182.231 |182.267|180.901|186.502|
 
 ----------------------------------------
 

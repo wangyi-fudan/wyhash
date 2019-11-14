@@ -11,7 +11,7 @@ Safety and Portability:
 ----
 0: wyhash passes all SMHasher tests, while XXH3 fails on recent moment chi2 test created by me (without intention).
 
-1: wyhash obtain all safty rules. It uses memcpy to access memory, while XXH3 do unaligned memory access.
+1: wyhash obeys all safty rules. It uses memcpy to access memory, while XXH3 do unaligned memory access.
 
 2: wyhash is about 62 bit strength against hash collision, not perfect but not bad. XXH3 is of 64 bit strength.
 

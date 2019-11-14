@@ -9,7 +9,7 @@ Initially, we found wyhash is fastest for short keys based on SMHasher. However,
 
 Safety and Portability:
 ----
-0: wyhash passes all SMHasher tests, while XXH3 fails on recent moment chi2 test created by me (without intention).
+0: wyhash passes all SMHasher tests, while XXH3 fails on the moment chi2 test created by me (without intention).
 
 1: wyhash obeys all safty rules. It uses memcpy to access memory, while XXH3 do unaligned memory access.
 

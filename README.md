@@ -19,10 +19,11 @@ The speed benchmarks are as follow:
 https://github.com/rurban/smhasher
 
 
-|key size | wyhash | XXH_SCALAR|XXH_SSE2|XXH3_AVX2 | t1ha2_atonce |
+|key size | wyhash | XXH3_SCALAR| XXH3_SSE| XXH3_AVX2 | t1ha2_atonce |
 | ---- | ---- | ---- | ---- | ---- | ---- |
-|bulk:bytes/cycle|9.888 | 3.173| 9.931|15.500|7.872|
-|small:cycles/hash|13.070 |18.293 |18.304|18.242|25.830|
+|bulk:bytes/cycle|5.371 | 2.568|6.422|8.427|6.089|
+|small:cycles/hash|18.677 |23.097 |23.097|23.097|31.609|
+|hashmap:cycles/op|180.262 |182.231 |182.267|180.901|186.502|
 
 ----------------------------------------
 

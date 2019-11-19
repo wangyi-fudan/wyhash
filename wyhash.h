@@ -25,13 +25,12 @@ static	inline	uint64_t	_wyr8(const	uint8_t	*p)	{	uint64_t v; memcpy(&v,  p,  8);
 static	inline	uint64_t	_wyr4(const	uint8_t	*p) {	uint32_t v;	memcpy(&v,	p,	4);	return	v;}
 static	inline	uint64_t	_wyr3(const	uint8_t	*p,	unsigned	k){	return	(((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];	}
 static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
-#if defined(__GNUC__) || defined(__INTEL_COMPILER)
-	if(__builtin_expect(!len，0）)	return	0;
 	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t	see1=seed,	i=len;	   
+#if defined(__GNUC__) || defined(__INTEL_COMPILER)
+	if(__builtin_expect(!len,0))	return	0;
 	if(__builtin_expect(len>32,0)){
 #elif
-	if（!len)	return	0;
-	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t	see1=seed,	i=len;
+	if(!len)	return	0;
 	if(len>32){
 #endif		
 		for(;i>256;i-=256,p+=256){	

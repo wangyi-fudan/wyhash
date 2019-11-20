@@ -25,7 +25,7 @@ https://github.com/rurban/smhasher
 |bulk:bytes/cycle|3.721 | 6.958|4.404|
 |small:cycles/hash|24.169 |35.124|45.616|
 |hashmap:cycles/op|283.421 |298.846|301.363|
-|code size:instructions|166|744|541|
+|instruction size|166|744|541|
 
 ----------------------------------------
 

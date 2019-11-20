@@ -29,25 +29,12 @@ static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
 	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t	see1=seed,	i=len;	   
 #if defined(__GNUC__) || defined(__INTEL_COMPILER)
 	if(__builtin_expect(!len,0))	return	0;
-	if(__builtin_expect(len>32,0)){
+	if(__builtin_expect(len>32,0))
 #elif
 	if(!len)	return	0;
-	if(len>32){
+	if(len>32)
 #endif	
-/*tradeoff between bulk speed and code size
-		for(;i>256;i-=256,p+=256){	
-			seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1)^_wymum(_wyr8(p+16)^seed^_wyp2,_wyr8(p+24)^seed^_wyp3);	
-			see1=_wymum(_wyr8(p+32)^see1^_wyp1,_wyr8(p+40)^see1^_wyp2)^_wymum(_wyr8(p+48)^see1^_wyp3,_wyr8(p+56)^see1^_wyp0);	
-			seed=_wymum(_wyr8(p+64)^seed^_wyp0,_wyr8(p+72)^seed^_wyp1)^_wymum(_wyr8(p+80)^seed^_wyp2,_wyr8(p+88)^seed^_wyp3);	
-			see1=_wymum(_wyr8(p+96)^see1^_wyp1,_wyr8(p+104)^see1^_wyp2)^_wymum(_wyr8(p+112)^see1^_wyp3,_wyr8(p+120)^see1^_wyp0);	
-			seed=_wymum(_wyr8(p+128)^seed^_wyp0,_wyr8(p+136)^seed^_wyp1)^_wymum(_wyr8(p+144)^seed^_wyp2,_wyr8(p+152)^seed^_wyp3);	
-			see1=_wymum(_wyr8(p+160)^see1^_wyp1,_wyr8(p+168)^see1^_wyp2)^_wymum(_wyr8(p+176)^see1^_wyp3,_wyr8(p+184)^see1^_wyp0);	
-			seed=_wymum(_wyr8(p+192)^seed^_wyp0,_wyr8(p+200)^seed^_wyp1)^_wymum(_wyr8(p+208)^seed^_wyp2,_wyr8(p+216)^seed^_wyp3);	
-			see1=_wymum(_wyr8(p+224)^see1^_wyp1,_wyr8(p+232)^see1^_wyp2)^_wymum(_wyr8(p+240)^see1^_wyp3,_wyr8(p+248)^see1^_wyp0);	
-		}
-*/		
-		for(;i>32;i-=32,p+=32){	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1);	see1=_wymum(_wyr8(p+16)^see1^_wyp2,_wyr8(p+24)^see1^_wyp3);	}
-	}
+	for(;i>32;i-=32,p+=32){	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1);	see1=_wymum(_wyr8(p+16)^see1^_wyp2,_wyr8(p+24)^see1^_wyp3);	}
 	if(i<4)	seed=_wymum(_wyr3(p,i)^seed^_wyp0,seed^_wyp1);
 	else	if(i<=8)	seed=_wymum(_wyr4(p)^seed^_wyp0,_wyr4(p+i-4)^seed^_wyp1);
 	else	if(i<=16)	seed=_wymum(__wyr8(p)^seed^_wyp0,__wyr8(p+i-8)^seed^_wyp1);

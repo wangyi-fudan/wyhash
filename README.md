@@ -22,10 +22,10 @@ https://github.com/rurban/smhasher
 |key size | wyhash | XXH3_AVX2 | t1ha2_atonce |
 | ---- | ---- | ---- | ---- |
 |failed tests|-|MomentChi2/low32 coll|-|
-|bulk:bytes/cycle|3.721 | 6.958|4.404|
-|small:cycles/hash|24.169 |35.124|45.616|
-|hashmap:cycles/op|283.421 |298.846|301.363|
-|instruction size|159|744|541|
+|bulk:bytes/cycle|6.660 | 9.691|6.104|
+|small:cycles/hash|18.724 |23.172|31.581|
+|hashmap:cycles/op|179.913 |185.197|184.066|
+|instruction size|345|744|541|
 
 ----------------------------------------
 

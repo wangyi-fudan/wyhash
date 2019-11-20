@@ -3,6 +3,22 @@ Simple Is Best
 
 wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively: solid, portable, fastest, simplest. wyhash passed SMHasher, wyrand passed BigCrush, practrand and designed to drop-in replace C rand(). See our [manuscript](manuscript.md). Currently wyhash is a hasher by default in a hash table in the great Zig language.
 
+wyhash_v3
+----
+
+Dear users, wyhash now upgrades to version 3. 
+
+1:v3 provides double bulk speed compared to v2.
+
+2:v3 provides extra 50% speed for dynamic length short key compared to v2.
+
+3:v3 provides WYHASH_EVIL_FAST option that doubles speed for dynamic length short key compared to v2. It violates many safty rules (unaligned read, read extra 7 bytes at the end), just be a fast option leave for the user.
+
+4:v3 code size have been reduces to 15%. The big switch disappears, thanks to xxh3's idea for finalization.
+
+It closes to the perfection. Cheers!
+
+
 ----------------------------------------
 
 wyrand code:

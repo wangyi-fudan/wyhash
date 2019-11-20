@@ -14,7 +14,7 @@ Dear users, wyhash now upgrades to version 3.
 
 3:v3 provides WYHASH_EVIL_FAST option that doubles speed for dynamic length short key compared to v2. It violates many safty rules (unaligned read, read extra 7 bytes at the end), just be a fast option leave for the user.
 
-4:v3 code size have been reduces to 15%. The big switch disappears, thanks to xxh3's idea for finalization.
+4:v3 code size have been reduces to 50%. The big switch disappears, thanks to xxh3's idea for finalization.
 
 It closes to the perfection. Cheers!
 

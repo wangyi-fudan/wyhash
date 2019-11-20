@@ -36,11 +36,12 @@ static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
 	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t	see1=seed,	i=len;	   
 #if defined(__GNUC__) || defined(__INTEL_COMPILER)
 	if(__builtin_expect(!len,0))	return	0;
-	if(__builtin_expect(len>32,0)){
+	if(__builtin_expect(len>32,0))
 #elif
 	if(!len)	return	0;
-	if(len>32){
+	if(len>32)
 #endif	
+	{
 	for(;i>256;i-=256,p+=256){	
 			seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1)^_wymum(_wyr8(p+16)^seed^_wyp2,_wyr8(p+24)^seed^_wyp3);	
 			see1=_wymum(_wyr8(p+32)^see1^_wyp1,_wyr8(p+40)^see1^_wyp2)^_wymum(_wyr8(p+48)^see1^_wyp3,_wyr8(p+56)^see1^_wyp0);	

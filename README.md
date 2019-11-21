@@ -36,9 +36,59 @@ https://github.com/rurban/smhasher
 
 |key size | wyhash | t1ha2_atonce |
 | ---- | ---- | ---- |
-|bulk:bytes/cycle|6.660 | 6.104|
-|small:cycles/hash|18.724 |31.581|
-|hashmap:cycles/op|179.913|184.066|
+|bulk:bytes/cycle|5.222 | 4.393|
+|small:cycles/hash|25.103 |45.513|
+|hashmap:cycles/op|176.384|198.052|
+
+```
+--- Testing wyhash "wyhash v3 (portable, 64-bit, little-endian)" GOOD
+
+[[[ Speed Tests ]]]
+
+Bulk speed test - 262144-byte keys
+Alignment  7 -  5.217 bytes/cycle - 14925.35 MiB/sec @ 3 ghz
+Alignment  6 -  5.217 bytes/cycle - 14925.25 MiB/sec @ 3 ghz
+Alignment  5 -  5.205 bytes/cycle - 14890.80 MiB/sec @ 3 ghz
+Alignment  4 -  5.212 bytes/cycle - 14911.61 MiB/sec @ 3 ghz
+Alignment  3 -  5.217 bytes/cycle - 14927.32 MiB/sec @ 3 ghz
+Alignment  2 -  5.213 bytes/cycle - 14914.75 MiB/sec @ 3 ghz
+Alignment  1 -  5.212 bytes/cycle - 14910.51 MiB/sec @ 3 ghz
+Alignment  0 -  5.281 bytes/cycle - 15108.72 MiB/sec @ 3 ghz
+Average      -  5.222 bytes/cycle - 14939.29 MiB/sec @ 3 ghz
+
+Small key speed test -    1-byte keys -    22.67 cycles/hash
+Small key speed test -    2-byte keys -    23.00 cycles/hash
+Small key speed test -    3-byte keys -    23.00 cycles/hash
+Small key speed test -    4-byte keys -    19.63 cycles/hash
+Small key speed test -    5-byte keys -    31.00 cycles/hash
+Small key speed test -    6-byte keys -    31.00 cycles/hash
+Small key speed test -    7-byte keys -    31.00 cycles/hash
+Small key speed test -    8-byte keys -    19.00 cycles/hash
+Small key speed test -    9-byte keys -    32.00 cycles/hash
+Small key speed test -   10-byte keys -    32.00 cycles/hash
+Small key speed test -   11-byte keys -    32.00 cycles/hash
+Small key speed test -   12-byte keys -    21.99 cycles/hash
+Small key speed test -   13-byte keys -    21.99 cycles/hash
+Small key speed test -   14-byte keys -    21.99 cycles/hash
+Small key speed test -   15-byte keys -    21.99 cycles/hash
+Small key speed test -   16-byte keys -    21.99 cycles/hash
+Small key speed test -   17-byte keys -    24.00 cycles/hash
+Small key speed test -   18-byte keys -    24.00 cycles/hash
+Small key speed test -   19-byte keys -    24.00 cycles/hash
+Small key speed test -   20-byte keys -    24.00 cycles/hash
+Small key speed test -   21-byte keys -    24.00 cycles/hash
+Small key speed test -   22-byte keys -    24.00 cycles/hash
+Small key speed test -   23-byte keys -    24.00 cycles/hash
+Small key speed test -   24-byte keys -    24.00 cycles/hash
+Small key speed test -   25-byte keys -    25.65 cycles/hash
+Small key speed test -   26-byte keys -    25.64 cycles/hash
+Small key speed test -   27-byte keys -    25.63 cycles/hash
+Small key speed test -   28-byte keys -    25.00 cycles/hash
+Small key speed test -   29-byte keys -    26.00 cycles/hash
+Small key speed test -   30-byte keys -    26.00 cycles/hash
+Small key speed test -   31-byte keys -    26.00 cycles/hash
+Average                                    25.103 cycles/hash
+```
 
 https://github.com/leo-yuriev/t1ha
 ```

@@ -41,7 +41,7 @@ https://github.com/rurban/smhasher
 |hashmap:cycles/op|179.913|184.066|
 
 https://github.com/leo-yuriev/t1ha
-``
+```
 Bench for tiny keys (7 bytes):
 t1ha2_atonce            :     16.953 cycle/hash,  2.422 cycle/byte,  0.413 byte/cycle,  1.239 GiB/s @3.0GHz roughly
 t1ha2_atonce128*        :     33.344 cycle/hash,  4.763 cycle/byte,  0.210 byte/cycle,  0.630 GiB/s @3.0GHz roughly
@@ -71,7 +71,7 @@ HighwayHash64_pure_c    :  46788.000 cycle/hash,  2.856 cycle/byte,  0.350 byte/
 HighwayHash64_portable  :  41933.000 cycle/hash,  2.559 cycle/byte,  0.391 byte/cycle,  1.172 GiB/s @3.0GHz roughly
 HighwayHash64_sse41     :   6074.000 cycle/hash,  0.371 cycle/byte,  2.697 byte/cycle,  8.092 GiB/s @3.0GHz roughly
 wyhash                  :   3496.000 cycle/hash,  0.213 cycle/byte,  4.686 byte/cycle, 14.059 GiB/s @3.0GHz roughly
-``
+```
 
 ----------------------------------------
 

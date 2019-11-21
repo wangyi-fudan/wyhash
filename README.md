@@ -28,7 +28,8 @@ inline	uint64_t	wyrand(uint64_t	*seed){
 }
 ```
 
-The speed benchmarks are as follow:
+Benchmarks
+----
 
 https://github.com/rurban/smhasher
 
@@ -38,6 +39,39 @@ https://github.com/rurban/smhasher
 |bulk:bytes/cycle|6.660 | 6.104|
 |small:cycles/hash|18.724 |31.581|
 |hashmap:cycles/op|179.913|184.066|
+
+https://github.com/leo-yuriev/t1ha
+`
+Bench for tiny keys (7 bytes):
+t1ha2_atonce            :     16.953 cycle/hash,  2.422 cycle/byte,  0.413 byte/cycle,  1.239 GiB/s @3.0GHz roughly
+t1ha2_atonce128*        :     33.344 cycle/hash,  4.763 cycle/byte,  0.210 byte/cycle,  0.630 GiB/s @3.0GHz roughly
+t1ha2_stream*           :     85.875 cycle/hash, 12.268 cycle/byte,  0.082 byte/cycle,  0.245 GiB/s @3.0GHz roughly
+t1ha2_stream128*        :    105.875 cycle/hash, 15.125 cycle/byte,  0.066 byte/cycle,  0.198 GiB/s @3.0GHz roughly
+t1ha1_64le              :     16.828 cycle/hash,  2.404 cycle/byte,  0.416 byte/cycle,  1.248 GiB/s @3.0GHz roughly
+t1ha0                   :     14.102 cycle/hash,  2.015 cycle/byte,  0.496 byte/cycle,  1.489 GiB/s @3.0GHz roughly
+xxhash32                :     18.703 cycle/hash,  2.672 cycle/byte,  0.374 byte/cycle,  1.123 GiB/s @3.0GHz roughly
+xxhash64                :     22.062 cycle/hash,  3.152 cycle/byte,  0.317 byte/cycle,  0.952 GiB/s @3.0GHz roughly
+StadtX                  :     18.750 cycle/hash,  2.679 cycle/byte,  0.373 byte/cycle,  1.120 GiB/s @3.0GHz roughly
+HighwayHash64_pure_c    :    584.000 cycle/hash, 83.429 cycle/byte,  0.012 byte/cycle,  0.036 GiB/s @3.0GHz roughly
+HighwayHash64_portable  :    483.000 cycle/hash, 69.000 cycle/byte,  0.014 byte/cycle,  0.043 GiB/s @3.0GHz roughly
+HighwayHash64_sse41     :     70.000 cycle/hash, 10.000 cycle/byte,  0.100 byte/cycle,  0.300 GiB/s @3.0GHz roughly
+wyhash                  :     13.266 cycle/hash,  1.895 cycle/byte,  0.528 byte/cycle,  1.583 GiB/s @3.0GHz roughly
+
+Bench for large keys (16384 bytes):
+t1ha2_atonce            :   3552.000 cycle/hash,  0.217 cycle/byte,  4.613 byte/cycle, 13.838 GiB/s @3.0GHz roughly
+t1ha2_atonce128*        :   3538.000 cycle/hash,  0.216 cycle/byte,  4.631 byte/cycle, 13.893 GiB/s @3.0GHz roughly
+t1ha2_stream*           :   3614.000 cycle/hash,  0.221 cycle/byte,  4.533 byte/cycle, 13.600 GiB/s @3.0GHz roughly
+t1ha2_stream128*        :   3612.000 cycle/hash,  0.220 cycle/byte,  4.536 byte/cycle, 13.608 GiB/s @3.0GHz roughly
+t1ha1_64le              :   3637.000 cycle/hash,  0.222 cycle/byte,  4.505 byte/cycle, 13.514 GiB/s @3.0GHz roughly
+t1ha0                   :   1308.000 cycle/hash,  0.080 cycle/byte, 12.526 byte/cycle, 37.578 GiB/s @3.0GHz roughly
+xxhash32                :   8296.000 cycle/hash,  0.506 cycle/byte,  1.975 byte/cycle,  5.925 GiB/s @3.0GHz roughly
+xxhash64                :   4227.000 cycle/hash,  0.258 cycle/byte,  3.876 byte/cycle, 11.628 GiB/s @3.0GHz roughly
+StadtX                  :   3750.000 cycle/hash,  0.229 cycle/byte,  4.369 byte/cycle, 13.107 GiB/s @3.0GHz roughly
+HighwayHash64_pure_c    :  46788.000 cycle/hash,  2.856 cycle/byte,  0.350 byte/cycle,  1.051 GiB/s @3.0GHz roughly
+HighwayHash64_portable  :  41933.000 cycle/hash,  2.559 cycle/byte,  0.391 byte/cycle,  1.172 GiB/s @3.0GHz roughly
+HighwayHash64_sse41     :   6074.000 cycle/hash,  0.371 cycle/byte,  2.697 byte/cycle,  8.092 GiB/s @3.0GHz roughly
+wyhash                  :   3496.000 cycle/hash,  0.213 cycle/byte,  4.686 byte/cycle, 14.059 GiB/s @3.0GHz roughly
+`
 
 ----------------------------------------
 

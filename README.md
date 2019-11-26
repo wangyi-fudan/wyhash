@@ -14,7 +14,7 @@ Dear users, wyhash now upgrades to version 3.
 
 * v3 code size have been halfed. The big switch disappears, thanks to xxh3's idea for finalization.
 
-* v3 comes up with the wyhash32 function that is 32-bit-machine efficient. Ideal for real applications.
+* v3 comes up with the WYHASH32 macro that is a new 32-bit-machine efficient hash function. Ideal for real applications.
 
 It closes to the perfection. Cheers!
 

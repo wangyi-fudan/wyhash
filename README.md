@@ -8,13 +8,13 @@ wyhash_v3
 
 Dear users, wyhash now upgrades to version 3. 
 
-1:v3 provides double bulk speed compared to v2.
+* v3 provides double bulk speed compared to v2.
 
-2:v3 provides extra 60% speed for dynamic length short key compared to v2.
+* v3 provides extra 60% speed for dynamic length short key compared to v2.
 
-3:v3 code size have been halfed. The big switch disappears, thanks to xxh3's idea for finalization.
+* v3 code size have been halfed. The big switch disappears, thanks to xxh3's idea for finalization.
 
-4:v3 comes up with the wyhash32 function that is 32-bit-machine efficient. Ideal for real applications.
+* v3 comes up with the wyhash32 function that is 32-bit-machine efficient. Ideal for real applications.
 
 It closes to the perfection. Cheers!
 

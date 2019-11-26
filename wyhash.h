@@ -8,6 +8,7 @@
 #pragma	intrinsic(_umul128)
 #endif
 const	uint64_t	_wyp0=0xa0761d6478bd642full,	_wyp1=0xe7037ed1a0b428dbull,	_wyp2=0x8ebc6af09c88c6e3ull,	_wyp3=0x589965cc75374cc3ull,	_wyp4=0x1d8e4e27c47d124full;
+const	unsigned	_wyp[10]={0xa362a7b8u,0x56db25a2u,0xacc943adu,0xc0a539bbu,0x75780a9bu,0x9d4e39c8u,0xfb410976u,0x3680baeeu,0xf4e37250u,0x7a2deb80u};
 static	inline	uint64_t	_wymum(uint64_t	A,	uint64_t	B) {
 #ifdef __SIZEOF_INT128__
 	__uint128_t	r=A;	r*=B;
@@ -16,16 +17,24 @@ static	inline	uint64_t	_wymum(uint64_t	A,	uint64_t	B) {
 	A=_umul128(A, B, &B);
 	return	A^B;
 #else
-    uint64_t	u1=(unsigned)A,	v1=(unsigned)B,	t=u1*v1,	w3 =(unsigned)t,	k=t>>32,	w1;
-    A>>=32;	t=A*v1+k;	k=(unsigned)t;	w1=t>>32;
-    B>>=32;	t=u1*B+k;	k=t>>32;
-    return	(A*B+w1+k)^((t<<32)+w3);
+	uint64_t	ha=A>>32,	hb=B>>32,	la=(uint32_t)A,	lb=(uint32_t)B,	hi, lo;
+	uint64_t	rh=ha*hb,	rm0=ha*lb,	rm1=hb*la,	rl=la*lb,	t=rl+(rm0<<32),	c=t<rl;
+	lo=t+(rm1<<32);	c+=lo<t;	hi=rh+(rm0>>32)+(rm1>>32)+c;	return hi^lo;
 #endif
+}
+static	inline	uint64_t _wyrotr(uint64_t v, unsigned k){	return	(v>>k)|(v<<(64-k));	}
+//this mum is 32-bit machine efficient
+static	inline	uint64_t	_wymum32(unsigned	A,	unsigned	B,	unsigned	C,	unsigned	D) {
+	uint64_t	hh=(uint64_t)A*(uint64_t)C,	hl=(uint64_t)A*(uint64_t)D,	lh=(uint64_t)B*(uint64_t)C,	ll=(uint64_t)B*(uint64_t)D;
+	return	_wyrotr(hl,32)^_wyrotr(lh,32)^hh^ll;
 }
 static	inline	uint64_t	_wyr8(const	uint8_t	*p)	{	uint64_t v; memcpy(&v,  p,  8); return  v;}
 static	inline	uint64_t	_wyr4(const	uint8_t	*p) {	uint32_t v;	memcpy(&v,	p,	4);	return	v;}
 static	inline	uint64_t	_wyr3(const	uint8_t	*p,	unsigned	k){	return	(((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];	}
 static	inline	uint64_t	__wyr8(const	uint8_t	*p)	{	return	(_wyr4(p)<<32)|_wyr4(p+4);	}
+static	inline	unsigned	_wyr32(const	uint8_t	*p) {	unsigned v;	memcpy(&v,	p,	4);	return	v;}
+static	inline	unsigned	_wyr24(const	uint8_t	*p,	unsigned	k){	return	(((unsigned)p[0])<<16)|(((unsigned)p[k>>1])<<8)|p[k-1];	}
+//this function is 64-bit machine efficient
 static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
 	const	uint8_t	*p=(const	uint8_t*)key;
 	if(!len)	return	0;
@@ -52,6 +61,27 @@ static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
 	else	if(i<=24){	seed=_wymum(__wyr8(p)^seed^_wyp0,__wyr8(p+8)^seed^_wyp1);	see1=_wymum(__wyr8(p+i-8)^see1^_wyp2,see1^_wyp3);	}
 	else{	seed=_wymum(__wyr8(p)^seed^_wyp0,__wyr8(p+8)^seed^_wyp1);	see1=_wymum(__wyr8(p+16)^see1^_wyp2,__wyr8(p+i-8)^see1^_wyp3);	}
 	return	_wymum(seed^see1,len^_wyp4);
+}
+//this function is 32-bit machine efficient
+static	inline	uint64_t	wyhash32(const void* key,	uint64_t	len,	uint64_t	seed) {
+	if(!len)	return	0;
+	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t	see1=seed,	i=len;
+	for(;i>32;i-=32,p+=32){
+		seed=_wymum32(_wyr32(p)^(seed>>32)^_wyp[0],_wyr32(p+4)^(unsigned)seed^_wyp[1],_wyr32(p+8)^(seed>>32)^_wyp[2],_wyr32(p+12)^(unsigned)seed^_wyp[3]);	
+		see1=_wymum32(_wyr32(p+16)^(see1>>32)^_wyp[4],_wyr32(p+20)^(unsigned)see1^_wyp[5],_wyr32(p+24)^(see1>>32)^_wyp[6],_wyr32(p+28)^(unsigned)see1^_wyp[7]);	
+	}
+	if(i<4)	seed=_wymum32(_wyr24(p,i)^(seed>>32)^_wyp[0],(unsigned)seed^_wyp[1],(seed>>32)^_wyp[2],(unsigned)seed^_wyp[3]);
+	else	if(i<=8)	seed=_wymum32(_wyr32(p)^(seed>>32)^_wyp[0],_wyr32(p+i-4)^(unsigned)seed^_wyp[1],(seed>>32)^_wyp[2],(unsigned)seed^_wyp[3]);
+	else	if(i<=16)	seed=_wymum32(_wyr32(p)^(seed>>32)^_wyp[0],_wyr32(p+4)^(unsigned)seed^_wyp[1],_wyr32(p+i-8)^(seed>>32)^_wyp[2],_wyr32(p+i-4)^(unsigned)seed^_wyp[3]);
+	else	if(i<=24){
+		seed=_wymum32(_wyr32(p)^(seed>>32)^_wyp[0],_wyr32(p+4)^(unsigned)seed^_wyp[1],_wyr32(p+8)^(seed>>32)^_wyp[2],_wyr32(p+12)^(unsigned)seed^_wyp[3]);	
+		see1=_wymum32(_wyr32(p+i-8)^(see1>>32)^_wyp[4],_wyr32(p+i-4)^(unsigned)see1^_wyp[5],(see1>>32)^_wyp[6],(unsigned)see1^_wyp[7]);	
+	}
+	else{
+		seed=_wymum32(_wyr32(p)^(seed>>32)^_wyp[0],_wyr32(p+4)^(unsigned)seed^_wyp[1],_wyr32(p+8)^(seed>>32)^_wyp[2],_wyr32(p+12)^(unsigned)seed^_wyp[3]);	
+		see1=_wymum32(_wyr32(p+16)^(see1>>32)^_wyp[4],_wyr32(p+20)^(unsigned)see1^_wyp[5],_wyr32(p+i-8)^(see1>>32)^_wyp[6],_wyr32(p+i-4)^(unsigned)see1^_wyp[7]);			
+	}
+	return	_wymum32((seed>>32)^(see1>>32),(unsigned)seed^(unsigned)see1,(len>>32)^_wyp[8],(unsigned)len^_wyp[9]);
 }
 static	inline	uint64_t	wyhash64(uint64_t	A, uint64_t	B) {	return	_wymum(_wymum(A^_wyp0,	B^_wyp1),	_wyp2);}
 static	inline	double	wy2u01(uint64_t	r) {	const	double	_wynorm=1.0/(1ull<<52);	return	(r&0x000fffffffffffffull)*_wynorm;}

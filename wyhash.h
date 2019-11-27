@@ -62,7 +62,7 @@ static	inline	uint64_t	wyhash64(uint64_t	A, uint64_t	B) {	return	_wymum(_wymum(A
 static	inline	double	wy2u01(uint64_t	r) {	const	double	_wynorm=1.0/(1ull<<52);	return	(r>>11)*_wynorm;}
 static	inline	float	wy2gau(uint64_t	r) {	const	float	_wynorm1=1.0f/(1ull<<15);	return	(((r>>16)&0xffff)+((r>>32)&0xffff)+(r>>48))*_wynorm1-3.0f;}
 static	inline	uint64_t	wyrand(uint64_t	*seed) {	*seed+=_wyp0;	return	_wymum(*seed^_wyp1,*seed);}
-static	inline	uint64_t	wyrand128(__uint128_t	*seed){	*s+=(((__uint128_t)0x5bdc3902e400dcdcull)<<64)|0x7097b86ae9ab319full;	return	_wymum(*s>>64,(*s>>64)^(uint64_t)(*s));	}
+static	inline	uint64_t	wyrand128(__uint128_t	*s){	*s+=(((__uint128_t)0x5bdc3902e400dcdcull)<<64)|0x7097b86ae9ab319full;	return	_wymum(*s>>64,(*s>>64)^(uint64_t)(*s));	}
 static	uint64_t	_wyrand_seed=0;
 #define	WYRAND_MAX	0xffffffffffffffffull
 static	inline	void	wysrand(uint64_t	seed) {	_wyrand_seed=seed;}

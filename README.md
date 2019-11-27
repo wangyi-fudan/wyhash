@@ -29,7 +29,14 @@ inline	uint64_t	wyrand(uint64_t	*seed){
 	return	(t>>64)^t;    
 }
 ```
-
+```C
+const	__uint128_t	_wyrandp=(((__uint128_t)0x5bdc3902e400dcdcull)<<64)|0x7097b86ae9ab319full;
+inline	uint64_t	wyrand128(uint64_t	*seed){
+	*s+=_wyrandp;
+	__uint128_t	t=(*s>>64)*((*s>>64)^(uint64_t)(*s));
+	return	(t>>64)^t;
+}
+```
 Benchmarks
 ----
 

@@ -35,8 +35,9 @@ Benchmarks
 
 ![](Clipboard01.png)
 ![](Clipboard02.png)
-![](Clipboard03.png)
 ![](Clipboard04.png)
+![](Clipboard03.png)
+![](Clipboard06.png)
 ![](Clipboard05.png)
 
 ----------------------------------------

@@ -17,12 +17,12 @@ XXH3 was not included as it fails two tests according to SMHaasher.
 #define XXH_FORCE_MEMORY_ACCESS 0
 ```
 
+![](Clipboard01.png)
+![](Clipboard02.png)
 ![](Clipboard04.png)
 ![](Clipboard03.png)
 ![](Clipboard05.png)
 ![](Clipboard06.png)
-![](Clipboard01.png)
-![](Clipboard02.png)
 
 ----------------------------------------
 

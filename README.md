@@ -8,7 +8,7 @@ wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively: soli
 
 **Good Boy Only Benchmark** 
 
-XXH3 was not included as it fails two tests according to SMHaasher.
+XXH3 was not included as it fails two tests according to SMHasher.
 
 ```C
 #define T1HA_SYS_UNALIGNED_ACCESS 0

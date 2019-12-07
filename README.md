@@ -12,7 +12,7 @@ wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively: soli
 ![](Clipboard05.png)
 ![](Clipboard06.png)
 
-**Good Boy Game Only** 
+**Good Boy Game Only Benchmark** 
 
 XXH3 was not included as it fails two tests according to SMHAasher.
 

@@ -33,16 +33,13 @@ static	inline	uint64_t	_wyr3(const	uint8_t	*p,	unsigned	k){	return	(((uint64_t)p
 static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
 	if(!len)	return	0;
 	const	uint8_t	*p=(const	uint8_t*)key;
-	#ifndef	WYHASH_MINIMAL
-	if(len<4)	return	_wymum(_wymum(_wyr3(p,len)^seed^_wyp0,seed^_wyp1)^seed,len^_wyp4);
-	else	if(len<=8)	return	_wymum(_wymum(_wyr4(p)^seed^_wyp0,_wyr4(p+len-4)^seed^_wyp1)^seed,len^_wyp4);
-	else	if(len<=16)	return	_wymum(_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+len-8)^seed^_wyp1)^seed,len^_wyp4);
+	if(len<4)	return	_wymum(_wymum(_wyr3(p,len)^seed^_wyp0,seed^_wyp1),len^_wyp4);
+	else	if(len<=8)	return	_wymum(_wymum(_wyr4(p)^seed^_wyp0,_wyr4(p+len-4)^seed^_wyp1),len^_wyp4);
+	else	if(len<=16)	return	_wymum(_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+len-8)^seed^_wyp1),len^_wyp4);
 	else	if(len<=24)	return	_wymum(_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1)^_wymum(_wyr8(p+len-8)^seed^_wyp2,seed^_wyp3),len^_wyp4);
 	else	if(len<=32)	return	_wymum(_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1)^_wymum(_wyr8(p+16)^seed^_wyp2,_wyr8(p+len-8)^seed^_wyp3),len^_wyp4);
-	#endif
 	uint64_t	see1=seed,	i=len;
-	#ifndef	WYHASH_MINIMAL
-	for(;i>=256;i-=256,p+=256){	
+	if(i>=256)	for(;i>=256;i-=256,p+=256){	
 		seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1)^_wymum(_wyr8(p+16)^seed^_wyp2,_wyr8(p+24)^seed^_wyp3);	
 		see1=_wymum(_wyr8(p+32)^see1^_wyp1,_wyr8(p+40)^see1^_wyp2)^_wymum(_wyr8(p+48)^see1^_wyp3,_wyr8(p+56)^see1^_wyp0);	
 		seed=_wymum(_wyr8(p+64)^seed^_wyp0,_wyr8(p+72)^seed^_wyp1)^_wymum(_wyr8(p+80)^seed^_wyp2,_wyr8(p+88)^seed^_wyp3);	
@@ -52,10 +49,7 @@ static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
 		seed=_wymum(_wyr8(p+192)^seed^_wyp0,_wyr8(p+200)^seed^_wyp1)^_wymum(_wyr8(p+208)^seed^_wyp2,_wyr8(p+216)^seed^_wyp3);	
 		see1=_wymum(_wyr8(p+224)^see1^_wyp1,_wyr8(p+232)^see1^_wyp2)^_wymum(_wyr8(p+240)^see1^_wyp3,_wyr8(p+248)^see1^_wyp0);	
 	}
-	#endif
-	if(len>=32){
-		for(;i>=32;i-=32,p+=32){	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1);	see1=_wymum(_wyr8(p+16)^see1^_wyp2,_wyr8(p+24)^see1^_wyp3);	}
-	}
+	for(;i>=32;i-=32,p+=32){	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1);	see1=_wymum(_wyr8(p+16)^see1^_wyp2,_wyr8(p+24)^see1^_wyp3);	}
 	if(!i){}
 	else	if(i<4)	seed=_wymum(_wyr3(p,i)^seed^_wyp0,seed^_wyp1);
 	else	if(i<=8)	seed=_wymum(_wyr4(p)^seed^_wyp0,_wyr4(p+i-4)^seed^_wyp1);

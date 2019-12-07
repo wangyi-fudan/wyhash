@@ -9,8 +9,19 @@ wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively: soli
 ![](Clipboard02.png)
 ![](Clipboard04.png)
 ![](Clipboard03.png)
-![](Clipboard06.png)
 ![](Clipboard05.png)
+![](Clipboard06.png)
+
+**We are playing "good boy" game:
+
+XXH3 was not included as it fails two tests according to SMHAasher.
+
+```C
+#define T1HA_SYS_UNALIGNED_ACCESS 0
+#define T1HA_USE_FAST_ONESHOT_READ 0
+#define XXH_INLINE_ALL
+#define XXH_FORCE_MEMORY_ACCESS 0
+```
 
 ----------------------------------------
 

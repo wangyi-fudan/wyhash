@@ -30,9 +30,9 @@ static	inline	uint64_t	_wyr4(const	uint8_t	*p) {	uint32_t v;	memcpy(&v,	p,	4);	r
 static	inline	uint64_t	_wyr3(const	uint8_t	*p,	unsigned	k) {	return	(((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];	}
 static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
 #if defined(__GNUC__) || defined(__INTEL_COMPILER)
-	if(__builtin_expect(!len,0))	return	0;
+	if(__builtin_expect(!len,0))	return	_wymum(_wymum(seed^_wyp0,seed^_wyp1),_wyp4);
 #else
-	if(!len)	return	0;
+	if(!len)	return	return	_wymum(_wymum(seed^_wyp0,seed^_wyp1),_wyp4);
 #endif
 	const	uint8_t	*p=(const	uint8_t*)key;
 	if(len<4)	return	_wymum(_wymum(_wyr3(p,len)^seed^_wyp0,seed^_wyp1),len^_wyp4);

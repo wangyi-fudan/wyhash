@@ -28,7 +28,31 @@ XXH3 was not included as it fails two tests according to SMHasher.
 
 Language Ports:
 
-https://github.com/OpenHFT/Zero-Allocation-Hashing
+**GO**  https://github.com/dgryski/go-wyhash
+
+**GO**  https://github.com/orisano/wyhash
+
+**GO** https://github.com/littleli/go-wyhash16
+
+**GO** https://github.com/zeebo/wyhash
+
+**GO** https://github.com/lonewolf3739/wyhash-go
+
+**Swift** https://github.com/lemire/SwiftWyhash
+
+**Swift**  https://github.com/lemire/SwiftWyhashBenchmark
+
+**Swift**  https://github.com/jeudesprits/SwiftWyhash
+
+**Zig** https://github.com/ManDeJan/zig-wyhash
+
+**Java** https://github.com/OpenHFT/Zero-Allocation-Hashing
+
+**Rust**  https://github.com/eldruin/wyhash-rs
+
+**C#**  https://github.com/cocowalla/wyhash-dotnet
+
+**C++**  https://github.com/tommyettinger/waterhash
 
 ----------------------------------------
 

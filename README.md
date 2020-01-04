@@ -26,6 +26,12 @@ XXH3 was not included as it fails two tests according to SMHasher.
 
 ----------------------------------------
 
+Language Ports:
+
+https://github.com/OpenHFT/Zero-Allocation-Hashing
+
+----------------------------------------
+
 I thank these names:
 
 Reini Urban

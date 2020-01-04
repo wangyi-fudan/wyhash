@@ -32,7 +32,7 @@ static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
 #if defined(__GNUC__) || defined(__INTEL_COMPILER)
 	if(__builtin_expect(!len,0))	return	_wymum(_wymum(seed^_wyp0,seed^_wyp1),_wyp4);
 #else
-	if(!len)	return	return	_wymum(_wymum(seed^_wyp0,seed^_wyp1),_wyp4);
+	if(!len)	return	_wymum(_wymum(seed^_wyp0,seed^_wyp1),_wyp4);
 #endif
 	const	uint8_t	*p=(const	uint8_t*)key;
 	if(len<4)	return	_wymum(_wymum(_wyr3(p,len)^seed^_wyp0,seed^_wyp1),len^_wyp4);

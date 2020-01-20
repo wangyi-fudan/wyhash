@@ -11,8 +11,8 @@ const	uint64_t	_wyp0=0xa0761d6478bd642full,	_wyp1=0xe7037ed1a0b428dbull,	_wyp2=0
 static	inline	uint64_t	_wyrotr(uint64_t v, unsigned k) {	return	(v>>k)|(v<<(64-k));	}
 static	inline	uint64_t	_wymum(uint64_t	A,	uint64_t	B) {
 #ifdef	WYHASH32
-	uint64_t	hh=(A>>32)*(B>>32),	hl=(A>>32)*(unsigned)B,	lh=(unsigned)A*(B>>32),	ll=(uint64_t)(unsigned)A*(unsigned)B;
-	return	_wyrotr(hl,32)^_wyrotr(lh,32)^hh^ll;
+	uint64_t	c=A^B;
+	return	((c>>32)*(unsigned)c)^_wyrotr(((A>>32)*(unsigned)A)^((B>>32)*(unsigned)B),32);
 #else
 #ifdef __SIZEOF_INT128__
 	__uint128_t	r=A;	r*=B;	return	(r>>64)^r;

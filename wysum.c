@@ -1,3 +1,4 @@
+#define WYHASH32
 #define	WYHANZI
 #include	<sys/mman.h>
 #include	<sys/stat.h>

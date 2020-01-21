@@ -10,7 +10,7 @@
 const	uint64_t	_wyp0=0xa0761d6478bd642full,	_wyp1=0xe7037ed1a0b428dbull,	_wyp2=0x8ebc6af09c88c6e3ull,	_wyp3=0x589965cc75374cc3ull,	_wyp4=0x1d8e4e27c47d124full;
 static	inline	uint64_t	_wyrotr(uint64_t v, unsigned k) {	return	(v>>k)|(v<<(64-k));	}
 static	inline	uint64_t	_wymum(uint64_t	A,	uint64_t	B) {
-#ifdef	WYHASH32
+#ifndef	WYHASH64
 	uint64_t    hh=(A>>32)*(B>>32), hl=(A>>32)*(unsigned)B, lh=(unsigned)A*(B>>32), ll=(uint64_t)(unsigned)A*(unsigned)B;
 	return  _wyrotr(hl,32)^_wyrotr(lh,32)^hh^ll;
 #else

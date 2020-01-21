@@ -3,11 +3,23 @@
 #define wyhash_version_4
 #include	<stdint.h>
 #include	<string.h>
+#if defined(_MSC_VER) && defined(_M_X64)
+#include <intrin.h>
+#pragma	intrinsic(_umul128)
+#endif
 const	uint64_t	_wyp0=0xa0761d6478bd642full,	_wyp1=0xe7037ed1a0b428dbull,	_wyp2=0x8ebc6af09c88c6e3ull,	_wyp3=0x589965cc75374cc3ull,	_wyp4=0x1d8e4e27c47d124full;
 static	inline	uint64_t	_wyrotr(uint64_t v, unsigned k) {	return	(v>>k)|(v<<(64-k));	}
 static	inline	uint64_t	_wymum(uint64_t	A,	uint64_t	B) {
+#ifndef	WYHASH64
 	uint64_t    hh=(A>>32)*(B>>32), hl=(A>>32)*(unsigned)B, lh=(unsigned)A*(B>>32), ll=(uint64_t)(unsigned)A*(unsigned)B;
 	return  _wyrotr(hl,32)^_wyrotr(lh,32)^hh^ll;
+#else
+	#ifdef __SIZEOF_INT128__
+	__uint128_t	r=A;	r*=B;	return	(r>>64)^r;
+	#elif	defined(_MSC_VER) && defined(_M_X64)
+	A=_umul128(A, B, &B);	return	A^B;
+	#endif
+#endif
 }
 static	inline	uint64_t	_wyr8(const	uint8_t	*p)	{	uint64_t v;	memcpy(&v,  p,  8);	return  v;	}
 static	inline	uint64_t	_wyr4(const	uint8_t	*p) {	uint32_t v;	memcpy(&v,	p,	4);	return	v;	}

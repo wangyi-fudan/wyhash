@@ -10,15 +10,19 @@
 const	uint64_t	_wyp0=0xa0761d6478bd642full,	_wyp1=0xe7037ed1a0b428dbull,	_wyp2=0x8ebc6af09c88c6e3ull,	_wyp3=0x589965cc75374cc3ull,	_wyp4=0x1d8e4e27c47d124full;
 static	inline	uint64_t	_wyrotr(uint64_t v, unsigned k) {	return	(v>>k)|(v<<(64-k));	}
 static	inline	uint64_t	_wymum(uint64_t	A,	uint64_t	B) {
-#ifndef	WYHASH64
+#ifdef	WYHASH32
 	uint64_t    hh=(A>>32)*(B>>32), hl=(A>>32)*(unsigned)B, lh=(unsigned)A*(B>>32), ll=(uint64_t)(unsigned)A*(unsigned)B;
 	return  _wyrotr(hl,32)^_wyrotr(lh,32)^hh^ll;
 #else
-	#ifdef __SIZEOF_INT128__
+#ifdef __SIZEOF_INT128__
 	__uint128_t	r=A;	r*=B;	return	(r>>64)^r;
-	#elif	defined(_MSC_VER) && defined(_M_X64)
+#elif	defined(_MSC_VER) && defined(_M_X64)
 	A=_umul128(A, B, &B);	return	A^B;
-	#endif
+#else
+	uint64_t	ha=A>>32,	hb=B>>32,	la=(uint32_t)A,	lb=(uint32_t)B,	hi, lo;
+	uint64_t	rh=ha*hb,	rm0=ha*lb,	rm1=hb*la,	rl=la*lb,	t=rl+(rm0<<32),	c=t<rl;
+	lo=t+(rm1<<32);	c+=lo<t;hi=rh+(rm0>>32)+(rm1>>32)+c;	return hi^lo;
+#endif
 #endif
 }
 static	inline	uint64_t	_wyr8(const	uint8_t	*p)	{	uint64_t v;	memcpy(&v,  p,  8);	return  v;	}

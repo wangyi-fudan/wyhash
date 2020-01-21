@@ -11,8 +11,8 @@ const	uint64_t	_wyp0=0xa0761d6478bd642full,	_wyp1=0xe7037ed1a0b428dbull,	_wyp2=0
 static	inline	uint64_t	_wyrotr(uint64_t v, unsigned k) {	return	(v>>k)|(v<<(64-k));	}
 static	inline	uint64_t	_wymum(uint64_t	A,	uint64_t	B) {
 #ifdef	WYHASH32
-	uint64_t	c=A^B;
-	return	((c>>32)*(unsigned)c)^_wyrotr(((A>>32)*(unsigned)A)^((B>>32)*(unsigned)B),32);
+	uint64_t    hh=(A>>32)*(B>>32), hl=(A>>32)*(unsigned)B, lh=(unsigned)A*(B>>32), ll=(uint64_t)(unsigned)A*(unsigned)B;
+	return  _wyrotr(hl,32)^_wyrotr(lh,32)^hh^ll;
 #else
 #ifdef __SIZEOF_INT128__
 	__uint128_t	r=A;	r*=B;	return	(r>>64)^r;
@@ -30,10 +30,11 @@ static	inline	uint64_t	_wyr4(const	uint8_t	*p) {	uint32_t v;	memcpy(&v,	p,	4);	r
 static	inline	uint64_t	_wyr3(const	uint8_t	*p,	unsigned	k) {	return	(((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];	}
 static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
 #if defined(__GNUC__) || defined(__INTEL_COMPILER)
-	if(__builtin_expect(!len,0))	return	_wymum(_wymum(seed^_wyp0,seed^_wyp1),_wyp4);
+	if(__builtin_expect(!len,0))
 #else
-	if(!len)	return	_wymum(_wymum(seed^_wyp0,seed^_wyp1),_wyp4);
+	if(!len)
 #endif
+	return	_wymum(_wymum(seed^_wyp0,seed^_wyp1),_wyp4);
 	const	uint8_t	*p=(const	uint8_t*)key;
 	if(len<4)	return	_wymum(_wymum(_wyr3(p,len)^seed^_wyp0,seed^_wyp1),len^_wyp4);
 	else	if(len<=8)	return	_wymum(_wymum(_wyr4(p)^seed^_wyp0,_wyr4(p+len-4)^seed^_wyp1),len^_wyp4);

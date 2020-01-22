@@ -1,7 +1,17 @@
 Simple Is Best
 ====
 
-wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively: solid, portable, fastest, simplest. wyhash passed SMHasher, wyrand passed BigCrush, practrand and designed to drop-in replace C rand(). See our [manuscript](manuscript.md). Currently wyhash is a hasher by default in a hash table in the great Zig language.
+wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively: 
+
+**solid**:  wyhash passed SMHasher, wyrand passed BigCrush, practrand.
+
+**portable**: 64-bit/32-bit system, big/little endian.
+  
+**fastest**:  Effecient on all machines, exspecially for short keys.
+  
+**simplest**: In the sense of code size.
+
+Currently wyhash has 13 language ports and is the default hasher for a hash table of the great Zig language.
 
 ----------------------------------------
 

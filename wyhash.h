@@ -1,5 +1,5 @@
 //	Author: Wang Yi <godspeed_china@yeah.net>
-//	WYHASH_AMD64: a different hash function fast on 64 bit machine
+//#define	WYHASH_AMD64	//a different 64 bit hash function
 #ifndef wyhash_version_4
 #define wyhash_version_4
 #include	<stdint.h>

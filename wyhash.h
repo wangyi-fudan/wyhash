@@ -47,7 +47,7 @@ static	inline	uint64_t	_wyr4(const	uint8_t	*p)	{	unsigned	v;	memcpy(&v,  p,  4);
 #endif
 static	inline	uint64_t	_wyr3(const	uint8_t	*p,	unsigned	k) {	return	(((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];	}
 static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
-	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t	i=len&31,	see1=seed;
+	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t	i=len&63,	see1=seed;
 	#if defined(__GNUC__) || defined(__INTEL_COMPILER)
 		#define	_like_(x)	__builtin_expect(x,1)
 		#define	_unlike_(x)	__builtin_expect(x,0)
@@ -60,8 +60,16 @@ static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
 	else	if(_like_(i<=8)){	seed=_wymum(_wyr4(p)^seed^_wyp0,_wyr4(p+i-4)^seed^_wyp1);	if(_like_(len==i)) goto ret;	}
 	else	if(_like_(i<=16)){	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+i-8)^seed^_wyp1);	if(_like_(len==i)) goto ret;	}
 	else	if(_like_(i<=24)) {	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1);	see1=_wymum(_wyr8(p+i-8)^see1^_wyp2,see1^_wyp3);	if(_like_(len==i)) goto ret;	} 
-	else{	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1);	see1=_wymum(_wyr8(p+16)^see1^_wyp2,_wyr8(p+i-8)^see1^_wyp3);	if(_like_(len==i)) goto ret;	}
-	for(p+=i,i=len-i;	i>=32; i-=32,p+=32) {	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1);	see1=_wymum(_wyr8(p+16)^see1^_wyp2,_wyr8(p+24)^see1^_wyp3);	}
+	else	if(_like_(i<=32)){	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1);	see1=_wymum(_wyr8(p+16)^see1^_wyp2,_wyr8(p+i-8)^see1^_wyp3);	if(_like_(len==i)) goto ret;	}
+	else{	
+		seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1)^_wymum(_wyr8(p+16)^seed^_wyp2,_wyr8(p+24)^seed^_wyp3);	
+		see1=_wymum(_wyr8(p+i-32)^see1^_wyp1,_wyr8(p+i-24)^see1^_wyp2)^_wymum(_wyr8(p+i-16)^see1^_wyp3,_wyr8(p+i-8)^see1^_wyp0);	
+		if(_like_(len==i)) goto ret;	
+	}
+	for(p+=i,i=len-i;	i>=64; i-=64,p+=64) {	
+		seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1)^_wymum(_wyr8(p+16)^seed^_wyp2,_wyr8(p+24)^seed^_wyp3);	
+		see1=_wymum(_wyr8(p+32)^see1^_wyp1,_wyr8(p+40)^see1^_wyp2)^_wymum(_wyr8(p+48)^see1^_wyp3,_wyr8(p+56)^see1^_wyp0);	
+	}
 	ret:	return	_wymum(seed^see1,len^_wyp4);
 }
 static	inline	uint64_t	wyhash64(uint64_t	A, uint64_t	B) {	return	_wymum(_wymum(A^_wyp0,	B^_wyp1),	_wyp2);	}

@@ -27,8 +27,8 @@ XXH3 was not included as it fails two tests according to SMHasher.
 #define XXH_FORCE_MEMORY_ACCESS 0
 ```
 
-![](Clipboard05.png)
-![](Clipboard06.png)
+![](Clipboard03.png)
+![](Clipboard04.png)
 ![](Clipboard01.png)
 ![](Clipboard02.png)
 

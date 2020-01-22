@@ -26,24 +26,15 @@ static	inline	uint64_t	_wymum(uint64_t	A,	uint64_t	B) {
 	#endif
 #endif
 }
-//modified from xxHash code
-#ifndef WYHASH_CPU_LITTLE_ENDIAN
-	#if	defined(_WIN32) /* Windows is always little endian */ \
-		|| defined(__LITTLE_ENDIAN__) \
-		|| (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
-		#define WYHASH_CPU_LITTLE_ENDIAN 1
-	#elif	defined(__BIG_ENDIAN__) \
-		|| (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
-		#define WYHASH_CPU_LITTLE_ENDIAN 0
-	#else
-		static int	_little_endian(void){
-			const union {	unsigned	u;	uint8_t	c[4]; }	one={	1	};   /* don't use static : performance detrimental  */
-			return	one.c[0];
-		}
-	#define WYHASH_CPU_LITTLE_ENDIAN	_is_little_endian()
+#ifndef WYHASH_LITTLE_ENDIAN
+	#if	defined(_WIN32) || defined(__LITTLE_ENDIAN__) || (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)		
+		#define WYHASH_LITTLE_ENDIAN 1
+	#elif	defined(__BIG_ENDIAN__) || (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)	
+		#define WYHASH_LITTLE_ENDIAN 0
 	#endif
 #endif
-#if(WYHASH_CPU_LITTLE_ENDIAN)	
+
+#if(WYHASH_LITTLE_ENDIAN)	
 static	inline	uint64_t	_wyr8(const	uint8_t	*p)	{	uint64_t	v;	memcpy(&v,  p,  8);	return  v;	}	
 static	inline	uint64_t	_wyr4(const	uint8_t	*p)	{	unsigned	v;	memcpy(&v,  p,  4);	return  v;	}	
 #else

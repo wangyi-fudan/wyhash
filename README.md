@@ -19,6 +19,9 @@ Currently wyhash has 13 language ports and is the default hasher for a hash tabl
 
 big endian support. half code size. faster short key hashing, similar bulk key hashing.
 
+![](Clipboard05.png)
+![](Clipboard06.png)
+
 **Good Boy Only Benchmark** 
 
 XXH3 was not included as it fails two tests according to SMHasher.

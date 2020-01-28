@@ -41,6 +41,8 @@ XXH3 was not included as it fails two tests according to SMHasher.
 
 Language Ports:
 
+**V** (v4) https://github.com/vlang/v/tree/master/vlib/hash/wyhash
+
 **GO**  https://github.com/dgryski/go-wyhash
 
 **GO**  https://github.com/orisano/wyhash

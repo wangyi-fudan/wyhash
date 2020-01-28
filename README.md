@@ -41,7 +41,9 @@ XXH3 was not included as it fails two tests according to SMHasher.
 
 Language Ports:
 
-**V** https://github.com/vlang/v/tree/master/vlib/hash/wyhash (v4)
+**C#**  https://github.com/cocowalla/wyhash-dotnet
+
+**C++**  https://github.com/tommyettinger/waterhash
 
 **GO**  https://github.com/dgryski/go-wyhash
 
@@ -53,21 +55,19 @@ Language Ports:
 
 **GO** https://github.com/lonewolf3739/wyhash-go
 
+**Java** https://github.com/OpenHFT/Zero-Allocation-Hashing
+
+**Rust**  https://github.com/eldruin/wyhash-rs
+
 **Swift** https://github.com/lemire/SwiftWyhash
 
 **Swift**  https://github.com/lemire/SwiftWyhashBenchmark
 
 **Swift**  https://github.com/jeudesprits/SwiftWyhash
 
+**V** https://github.com/vlang/v/tree/master/vlib/hash/wyhash (v4)
+
 **Zig** https://github.com/ManDeJan/zig-wyhash
-
-**Java** https://github.com/OpenHFT/Zero-Allocation-Hashing
-
-**Rust**  https://github.com/eldruin/wyhash-rs
-
-**C#**  https://github.com/cocowalla/wyhash-dotnet
-
-**C++**  https://github.com/tommyettinger/waterhash
 
 ----------------------------------------
 

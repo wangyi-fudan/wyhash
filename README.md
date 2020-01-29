@@ -27,8 +27,6 @@ big endian support. half code size. faster short key hashing, faster bulk key ha
 XXH3 was not included as it fails two tests according to SMHasher.
 
 ```C
-#define T1HA_SYS_UNALIGNED_ACCESS 0
-#define T1HA_USE_FAST_ONESHOT_READ 0
 #define XXH_INLINE_ALL
 #define XXH_FORCE_MEMORY_ACCESS 0
 ```

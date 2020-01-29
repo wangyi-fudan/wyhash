@@ -25,4 +25,5 @@ uint64_t mum32(uint64_t A, uint64_t B) {
  uint64_t hh=(A>>32)*(B>>32), hl=(A>>32)*(unsigned)B；
  uint64_t lh=(unsigned)A*(B>>32), ll=(uint64_t)(unsigned)A*(unsigned)B;
  return  rotr(hl,32)^rotr(lh,32)^hh^ll;
+}
 ```

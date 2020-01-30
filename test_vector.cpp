@@ -1,4 +1,4 @@
-#include	"wyhash/wyhash.h"
+#include	"wyhash.h"
 #include	<iostream>
 #include	<vector>
 using	namespace	std;

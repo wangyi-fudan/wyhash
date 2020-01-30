@@ -11,7 +11,9 @@ wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively:
   
 **simplest**: In the sense of code size.
 
-Currently wyhash has 13 language ports and is the default hasher for a hash table of the great Zig language.
+Currently wyhash has 13 language ports and is the default hasher for a hash table of the great Zig and V language.
+
+Please read our ![manuscript](manuscript.docx) and help us to publish it on top journal.
 
 ----------------------------------------
 

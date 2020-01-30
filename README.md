@@ -15,12 +15,21 @@ Currently wyhash has 13 language ports and is the default hasher for a hash tabl
 
 Please read our ![manuscript](manuscript.docx) and help us to publish it on top journal.
 
+```
+wyhash("",0)=0
+wyhash("a",1)=99782e84a7cee30
+wyhash("abc",2)=973ed17dfbe006d7
+wyhash("message digest",3)=c0189aa4012331f5
+wyhash("abcdefghijklmnopqrstuvwxyz",4)=6db0e773d1503fac
+wyhash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",5)=e062dfda99413626
+wyhash("12345678901234567890123456789012345678901234567890123456789012345678901234567890",6)=db3d8aa1be49f6c7
+```
+
 ----------------------------------------
 
 **Version 4 is ready!**
 
 big endian support. half code size. faster short key hashing, faster bulk key hashing.
-
 ![](Clipboard05.png)
 ![](Clipboard06.png)
 

@@ -96,7 +96,7 @@ int	main(void){
 	}
 	return	pos;
 }*/
-//  the minimum bloom filter
+//  the minimum bloom filter. paramters calculator: https://hur.st/bloomfilter/
 static	inline	void	bfpush(uint64_t	hash_of_key,	std::vector<bool>	&bitset,	size_t	size,	size_t	round){
 	for(size_t	i=0;	i<round;	i++)	bitset[(((__uint128_t)wyhash64(hash_of_key,i))*size)>>64]=true;
 }

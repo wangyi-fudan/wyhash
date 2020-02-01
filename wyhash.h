@@ -73,4 +73,28 @@ static	inline	uint64_t	wyhash64(uint64_t	A, uint64_t	B) {	return	_wymum(_wymum(A
 static	inline	uint64_t	wyrand(uint64_t	*seed) {	*seed+=_wyp0;	return	_wymum(*seed^_wyp1,*seed);	}
 static	inline	double	wy2u01(uint64_t	r) {	const	double	_wynorm=1.0/(1ull<<52);	return	(r>>11)*_wynorm;	}
 static	inline	double	wy2gau(uint64_t	r) {	const	double	_wynorm=1.0/(1ull<<20);	return	((r&0x1fffff)+((r>>21)&0x1fffff)+((r>>42)&0x1fffff))*_wynorm-3.0;	}
+#ifdef __cplusplus
+#include	<vector>	//	the minimum fast hash table/set
+template	<typename	KeyT,	typename	HashT,	typename	EqT>
+static	inline	size_t	key2pos(const	KeyT	&key,	std::vector<KeyT>	&keys,	std::vector<bool>	&used,	size_t	size){
+	HashT	hasher;		EqT	equaler;	size_t	h=hasher(key),	p=(((__uint128_t)h)*size)>>64;
+	for(size_t	j=1;	j;	j++,	p=(((__uint128_t)wyhash64(h,j))*size)>>64)	if(equaler(key,keys[p])||!used[p])	return	p;
+	return	size;
+}
+#endif
+/*	hashmap/hashset example
+#include	<iostream>
+#include	"wyhash.h"
+using	namespace	std;
+struct	hasher{	size_t	operator()(const	string	&s)const{	return	wyhash(s.c_str(),s.size(),0);	}};
+int	main(void){
+	size_t	size=0x200000;	std::vector<string>	keys(size);	std::vector<bool>	used(size);	std::vector<unsigned>	values(size);
+	string	s;	size_t	pos=0;
+	for(cin>>s;	!cin.eof();	cin>>s){
+		pos=key2pos<string,	hasher,	std::equal_to<string>	>(s,keys,used,size);
+		if(!used[pos]){	keys[pos]=s;	used[pos]=true;	values[pos]=0;	}
+		else	values[pos]++;
+	}
+	return	pos;
+}*/
 #endif

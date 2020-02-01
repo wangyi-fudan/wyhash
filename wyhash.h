@@ -74,14 +74,13 @@ static	inline	uint64_t	wyrand(uint64_t	*seed) {	*seed+=_wyp0;	return	_wymum(*see
 static	inline	double	wy2u01(uint64_t	r) {	const	double	_wynorm=1.0/(1ull<<52);	return	(r>>11)*_wynorm;	}
 static	inline	double	wy2gau(uint64_t	r) {	const	double	_wynorm=1.0/(1ull<<20);	return	((r&0x1fffff)+((r>>21)&0x1fffff)+((r>>42)&0x1fffff))*_wynorm-3.0;	}
 #ifdef __cplusplus
-#include	<vector>	//	the minimum fast hash table/set
-template	<typename	KeyT,	typename	HashT,	typename	EqT>
+#include	<vector>
+template	<typename	KeyT,	typename	HashT,	typename	EqT>	//  the minimum fast hash table/set
 static	inline	size_t	key2pos(const	KeyT	&key,	std::vector<KeyT>	&keys,	std::vector<bool>	&used,	size_t	size){
 	HashT	hasher;		EqT	equaler;	size_t	h=hasher(key),	p=(((__uint128_t)h)*size)>>64;
 	for(size_t	j=1;	j;	j++,	p=(((__uint128_t)wyhash64(h,j))*size)>>64)	if(equaler(key,keys[p])||!used[p])	return	p;
 	return	size;
 }
-#endif
 /*	hashmap/hashset example
 #include	<iostream>
 #include	"wyhash.h"
@@ -97,4 +96,23 @@ int	main(void){
 	}
 	return	pos;
 }*/
+//  the minimum bloom filter
+static	inline	void	bfpush(uint64_t	hash_of_key,	std::vector<bool>	&bitset,	size_t	size,	size_t	round){
+	for(size_t	i=0;	i<round;	i++)	bitset[(((__uint128_t)hash_of_key)*size)>>64]=true;
+}
+static	inline	size_t	bftest(uint64_t	hash_of_key,	std::vector<bool>	&bitset,	size_t	size,	size_t	round){
+	for(size_t	i=0;	i<round;	i++)	if(!bitset[(((__uint128_t)hash_of_key)*size)>>64])	return	false;
+	return	true;
+}
+/*bloom filter example
+#include	<iostream>
+#include	"wyhash.h"
+using	namespace	std;
+int	main(void){
+	size_t	size=0x200000;	std::vector<bool>	bits(size);
+	string	s;
+	for(cin>>s;	!cin.eof();	cin>>s)		bfpush(wyhash(s.c_str(),s.size(),0),bits,size,4);
+	cout<<bftest(wyhash("abc",3,0),bits,size,4)<<'\n';
+}*/
+#endif
 #endif

@@ -75,10 +75,12 @@ static	inline	double	wy2u01(uint64_t	r) {	const	double	_wynorm=1.0/(1ull<<52);	r
 static	inline	double	wy2gau(uint64_t	r) {	const	double	_wynorm=1.0/(1ull<<20);	return	((r&0x1fffff)+((r>>21)&0x1fffff)+((r>>42)&0x1fffff))*_wynorm-3.0;	}
 #ifdef __cplusplus
 #include	<vector>
-template	<uint64_t	Bits,	typename	KeyT,	typename	HashT,	typename	EqT>	//  the minimum fast hash table/set
+template	<uint64_t	Bits,	typename	KeyT,	typename	HashT,	typename	EqT=std::equal_to<KeyT>	>	//  the minimum fast hash table/set
 static	inline	size_t	key2pos(const	KeyT	&key,	std::vector<KeyT>	&keys,	std::vector<bool>	&used){
-	HashT	hasher;		EqT	equaler;	size_t	h=hasher(key),	p=h&((1ull<<Bits)-1);
-	for(size_t	j=1;	j;	j++,	p=wyhash64(h,j)&((1ull<<Bits)-1))	if(equaler(key,keys[p])||!used[p])	return	p;
+	HashT	hasher;		EqT	equaler;	uint64_t	h=hasher(key);
+	for(uint64_t	j=1,r=h;	j;	j++,	r=wyhash64(h,j)){
+		for(size_t	j=0;	j<16;	j++){	size_t	p=_wyrotr(r,j<<2)&((1ull<<Bits)-1);	if(equaler(key,keys[p])||!used[p])	return	p;	}
+	}
 	return	~0ull;
 }
 /*	hashmap/hashset example
@@ -90,7 +92,7 @@ int	main(void){
 	std::vector<string>	keys(1ull<<20);	std::vector<bool>	used(1ull<<20);	std::vector<unsigned>	values(1ull<<20);
 	string	s;	size_t	pos=0;
 	for(cin>>s;	!cin.eof();	cin>>s){
-		pos=key2pos<20,string,	hasher,	std::equal_to<string>	>(s,keys,used);
+		pos=key2pos<20,string,	hasher>(s,keys,used);
 		if(!used[pos]){	keys[pos]=s;	used[pos]=true;	values[pos]=0;	}
 		else	values[pos]++;
 	}

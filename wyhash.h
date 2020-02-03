@@ -54,21 +54,20 @@ static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
 		#define _unlike_(x)  (x)
 	#endif
 	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t	i=len;
-	if(_unlike_(len>=64)){
-		uint64_t	see1=seed,	see2=seed,	see3=seed;
-		for(;	_like_(i>=64); i-=64,p+=64){
-			seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1);		see1=_wymum(_wyr8(p+16)^see1^_wyp2,_wyr8(p+24)^see1^_wyp3);	
-			see2=_wymum(_wyr8(p+32)^see2^_wyp1,_wyr8(p+40)^see2^_wyp2);	see3=_wymum(_wyr8(p+48)^see3^_wyp3,_wyr8(p+56)^see3^_wyp0);	
-		}
-		seed^=see1^see2^see3;
+	label:
+	if(_unlike_(i<4))	return	_like_(i)?_wymum(_wymum(_wyr3(p,i)^seed^_wyp0,seed^_wyp1),len^_wyp4):_wymum(_wymum(seed^_wyp0,seed^_wyp1),len^_wyp4);
+	else	if(_like_(i<=8))	return	_wymum(_wymum(_wyr4(p)^seed^_wyp0,_wyr4(p+i-4)^seed^_wyp1),len^_wyp4);
+	else	if(_like_(i<=16))	return	_wymum(_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+i-8)^seed^_wyp1),len^_wyp4);
+	else	if(_like_(i<=32))	return	_wymum(_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1)^_wymum(_wyr8(p+i-16)^seed^_wyp2,_wyr8(p+i-8)^seed^_wyp3),len^_wyp4);
+	else	if(_like_(i<=64))	return	_wymum(_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1)^_wymum(_wyr8(p+16)^seed^_wyp2,_wyr8(p+24)^seed^_wyp3)
+				^_wymum(_wyr8(p+i-32)^seed^_wyp1,_wyr8(p+i-24)^seed^_wyp2)^_wymum(_wyr8(p+i-16)^seed^_wyp3,_wyr8(p+i-8)^seed^_wyp0),len^_wyp4);
+	uint64_t	see1=seed,	see2=seed,	see3=seed;
+	for(;	_like_(i>=64); i-=64,p+=64){
+		seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1);		see1=_wymum(_wyr8(p+16)^see1^_wyp2,_wyr8(p+24)^see1^_wyp3);	
+		see2=_wymum(_wyr8(p+32)^see2^_wyp1,_wyr8(p+40)^see2^_wyp2);	see3=_wymum(_wyr8(p+48)^see3^_wyp3,_wyr8(p+56)^see3^_wyp0);	
 	}
-	if(_unlike_(i<4)){	if(_like_(i))	seed=_wymum(_wyr3(p,i)^seed^_wyp0,seed^_wyp1);	}
-	else	if(_like_(i<=8))	seed=_wymum(_wyr4(p)^seed^_wyp0,_wyr4(p+i-4)^seed^_wyp1);
-	else	if(_like_(i<=16))	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+i-8)^seed^_wyp1);
-	else	if(_like_(i<=32))	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1)^_wymum(_wyr8(p+i-16)^seed^_wyp2,_wyr8(p+i-8)^seed^_wyp3);
-	else	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1)^_wymum(_wyr8(p+16)^seed^_wyp2,_wyr8(p+24)^seed^_wyp3)
-				^_wymum(_wyr8(p+i-32)^seed^_wyp1,_wyr8(p+i-24)^seed^_wyp2)^_wymum(_wyr8(p+i-16)^seed^_wyp3,_wyr8(p+i-8)^seed^_wyp0);
-	return	_wymum(seed,len^_wyp4);
+	seed^=see1^see2^see3;
+	goto	label;
 }
 static	inline	uint64_t	wyhash64(uint64_t	A, uint64_t	B) {	return	_wymum(_wymum(A^_wyp0,	B^_wyp1),	_wyp2);	}
 static	inline	uint64_t	wyrand(uint64_t	*seed) {	*seed+=_wyp0;	return	_wymum(*seed^_wyp1,*seed);	}

@@ -35,10 +35,9 @@ corpus: /usr/share/dict/words
 
 |hash|short|hashmap|bulk16M|
 |----|----|----|----|
-|wyhash_v4 |266.480|46.203|17.405|
-|wyhash_v4_old|241.616|44.990|18.686|
-|wyhash_v3|248.903|46.319|17.605|
-|XXH3_scalar|187.113|44.173|13.048|
+|wyhash |265.961|49.510|17.233|
+|XXH64|106.359|34.983|14.577|
+|XXH3_scalar|186.166|43.474|13.092|
 
 **Good Boy Only Benchmark** 
 

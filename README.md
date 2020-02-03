@@ -16,13 +16,13 @@ Currently wyhash has 13 language ports and is the default hasher for a hash tabl
 Please read our ![manuscript](manuscript.docx) and help us to publish it on top journal.
 
 ```
-wyhash("",0)=bc98efd7661a7a1
-wyhash("a",1)=99782e84a7cee30
-wyhash("abc",2)=973ed17dfbe006d7
-wyhash("message digest",3)=c0189aa4012331f5
-wyhash("abcdefghijklmnopqrstuvwxyz",4)=da133f940b62e516
-wyhash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",5)=e062dfda99413626
-wyhash("12345678901234567890123456789012345678901234567890123456789012345678901234567890",6)=77092dd38803d1fa
+wyhash("",0)=e2780127bf6b4786
+wyhash("a",1)=5a1441a39e564257
+wyhash("abc",2)=880f6fbcca11187c
+wyhash("message digest",3)=9ba2eb621c2e7dfc
+wyhash("abcdefghijklmnopqrstuvwxyz",4)=74f2e1026427a009
+wyhash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",5)=bc7d4d3717bd50af
+wyhash("12345678901234567890123456789012345678901234567890123456789012345678901234567890",6)=d7c7b6b2438e7b6c
 ```
 
 ----------------------------------------

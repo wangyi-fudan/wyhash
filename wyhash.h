@@ -69,7 +69,7 @@ static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
 	else	if(_like_(i<=24))	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1)^_wymum(_wyr8(p+i-8)^seed^_wyp2,seed^_wyp3);
 	else	if(_like_(i<=32))	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1)^_wymum(_wyr8(p+16)^seed^_wyp2,_wyr8(p+i-8)^seed^_wyp3);
 	else	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1)^_wymum(_wyr8(p+16)^seed^_wyp2,_wyr8(p+24)^seed^_wyp3)
-		^_wymum(_wyr8(p+i-32)^seed^_wyp1,_wyr8(p+i-24)^seed^_wyp2)^_wymum(_wyr8(p+i-16)^seed^_wyp3,_wyr8(p+i-8)^seed^_wyp0);
+				^_wymum(_wyr8(p+i-32)^seed^_wyp1,_wyr8(p+i-24)^seed^_wyp2)^_wymum(_wyr8(p+i-16)^seed^_wyp3,_wyr8(p+i-8)^seed^_wyp0);
 	return	_wymum(seed,len^_wyp4);
 }
 static	inline	uint64_t	wyhash64(uint64_t	A, uint64_t	B) {	return	_wymum(_wymum(A^_wyp0,	B^_wyp1),	_wyp2);	}
@@ -78,7 +78,7 @@ static	inline	double	wy2u01(uint64_t	r) {	const	double	_wynorm=1.0/(1ull<<52);	r
 static	inline	double	wy2gau(uint64_t	r) {	const	double	_wynorm=1.0/(1ull<<20);	return	((r&0x1fffff)+((r>>21)&0x1fffff)+((r>>42)&0x1fffff))*_wynorm-3.0;	}
 #ifdef __cplusplus
 #include	<vector>
-template	<uint64_t	Bits,	typename	KeyT,	typename	HashT,	typename	EqT=std::equal_to<KeyT>	>	//  the minimum fast hash table/set
+template	<uint64_t	Bits,	typename	KeyT,	typename	HashT,	typename	EqT>	//  the minimum fast hash table/set
 static	inline	size_t	key2pos(const	KeyT	&key,	std::vector<KeyT>	&keys,	std::vector<bool>	&used){
 	HashT	hasher;		EqT	equaler;	uint64_t	h=hasher(key);
 	for(uint64_t	j=1,r=h;	j;	j++,	r=wyhash64(h,j)){

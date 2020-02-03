@@ -27,15 +27,16 @@ wyhash("123456789012345678901234567890123456789012345678901234567890123456789012
 
 ----------------------------------------
 
-**Version 4 is ready!**
+**Version 5 draft is out!**
 
-big endian support. half code size. faster short key hashing, faster bulk key hashing.
+allow custom _wyp as secret, thus reduces xor operations, making bulk speed extream fast.
 
 corpus: /usr/share/dict/words
 
 |hash|short|hashmap|bulk16M|
 |----|----|----|----|
-|wyhash |265.961|49.510|17.233|
+|wyhash_v5| 267.946|48.368 |21.617|
+|wyhash_v4 |265.961|49.510|17.233|
 |XXH64|106.359|34.983|14.577|
 |XXH3_scalar|186.166|43.474|13.092|
 

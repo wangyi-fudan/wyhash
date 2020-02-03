@@ -45,7 +45,7 @@ static	inline	uint64_t	_wyr4(const	uint8_t	*p)	{	unsigned	v;	memcpy(&v,  p,  4);
 	#endif
 #endif
 static	inline	uint64_t	_wyr3(const	uint8_t	*p,	unsigned	k) {	return	(((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];	}
-static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed,	const	uint64_t	*secret=_wyp) {
+static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed,	const	uint64_t	*secret) {
 #if defined(__GNUC__) || defined(__INTEL_COMPILER)
 	#define	_like_(x)	__builtin_expect(x,1)
 	#define	_unlike_(x)	__builtin_expect(x,0)
@@ -55,16 +55,16 @@ static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed,	cons
 #endif
 	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t	i=len;	seed^=secret[4];	len^=secret[4];
 	label:
-	if(_unlike_(i<4))	return	_wymum(_wymum((_like_(i)?_wyr3(p,i):0)^seed,secret[0]),len);
-	else	if(_like_(i<=8))	return	_wymum(_wymum(_wyr4(p)^seed,_wyr4(p+i-4)^secret[0]),len);
-	else	if(_like_(i<=16))	return	_wymum(_wymum(_wyr8(p)^seed,_wyr8(p+i-8)^seed^secret[0]),len);
-	else	if(_like_(i<=32))	return	_wymum(_wymum(_wyr8(p)^seed,_wyr8(p+8)^secret[0])^_wymum(_wyr8(p+i-16)^seed,_wyr8(p+i-8)^secret[1]),len);
-	else	if(_like_(i<=64))	return	_wymum(_wymum(_wyr8(p)^seed,_wyr8(p+8)^secret[0])^_wymum(_wyr8(p+16)^seed,_wyr8(p+24)^secret[1])
-				^_wymum(_wyr8(p+i-32)^seed,_wyr8(p+i-24)^secret[2])^_wymum(_wyr8(p+i-16)^seed,_wyr8(p+i-8)^secret[3]),len);
+	if(_unlike_(i<4))	return	_wymum(_wymum((_like_(i)?_wyr3(p,i):0)^secret[0],seed),len);
+	else	if(_like_(i<=8))	return	_wymum(_wymum(_wyr4(p)^seed,_wyr4(p+i-4)^secret[0]),len);	//	must be this ugly form to be fast in XXH benchmark suite
+	else	if(_like_(i<=16))	return	_wymum(_wymum(_wyr8(p)^secret[0],_wyr8(p+i-8)^seed),len);
+	else	if(_like_(i<=32))	return	_wymum(_wymum(_wyr8(p)^secret[0],_wyr8(p+8)^seed)^_wymum(_wyr8(p+i-16)^secret[1],_wyr8(p+i-8)^seed),len);
+	else	if(_like_(i<=64))	return	_wymum(_wymum(_wyr8(p)^secret[0],_wyr8(p+8)^seed)^_wymum(_wyr8(p+16)^secret[1],_wyr8(p+24)^seed)
+				^_wymum(_wyr8(p+i-32)^secret[2],_wyr8(p+i-24)^seed)^_wymum(_wyr8(p+i-16)^secret[3],_wyr8(p+i-8)^seed),len);
 	uint64_t	see1=seed,	see2=seed,	see3=seed;
 	for(;	i>=64; i-=64,p+=64){
-		seed=_wymum(_wyr8(p)^seed,_wyr8(p+8)^secret[0]);		see1=_wymum(_wyr8(p+16)^see1,_wyr8(p+24)^secret[1]);
-		see2=_wymum(_wyr8(p+32)^see2,_wyr8(p+40)^secret[2]);	see3=_wymum(_wyr8(p+48)^see3,_wyr8(p+56)^secret[3]);	
+		seed=_wymum(_wyr8(p)^secret[0],_wyr8(p+8)^seed);		see1=_wymum(_wyr8(p+16)^secret[1],_wyr8(p+24)^see1);
+		see2=_wymum(_wyr8(p+32)^secret[2],_wyr8(p+40)^see2);	see3=_wymum(_wyr8(p+48)^secret[3],_wyr8(p+56)^see3);	
 	}
 	seed^=see1^see2^see3;
 	goto	label;

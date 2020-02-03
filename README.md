@@ -16,11 +16,11 @@ Currently wyhash has 13 language ports and is the default hasher for a hash tabl
 Please read our ![manuscript](manuscript.docx) and help us to publish it on top journal.
 
 ```
-wyhash("",0)=0
+wyhash("",0)=bc98efd7661a7a1
 wyhash("a",1)=99782e84a7cee30
 wyhash("abc",2)=973ed17dfbe006d7
 wyhash("message digest",3)=c0189aa4012331f5
-wyhash("abcdefghijklmnopqrstuvwxyz",4)=6db0e773d1503fac
+wyhash("abcdefghijklmnopqrstuvwxyz",4)=da133f940b62e516
 wyhash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",5)=e062dfda99413626
 wyhash("12345678901234567890123456789012345678901234567890123456789012345678901234567890",6)=77092dd38803d1fa
 ```
@@ -35,7 +35,7 @@ corpus: /usr/share/dict/words
 
 |hash|short|hashmap|bulk16M|
 |----|----|----|----|
-|wyhash_v4 |264.111|47.523|17.348|
+|wyhash_v4 |266.480|46.203|17.405|
 |wyhash_v4_old|241.616|44.990|18.686|
 |wyhash_v3|248.903|46.319|17.605|
 |XXH3_scalar|187.113|44.173|13.048|

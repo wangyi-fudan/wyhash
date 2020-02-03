@@ -30,8 +30,15 @@ wyhash("123456789012345678901234567890123456789012345678901234567890123456789012
 **Version 4 is ready!**
 
 big endian support. half code size. faster short key hashing, faster bulk key hashing.
-![](Clipboard05.png)
-![](Clipboard06.png)
+
+corpus: /usr/share/dict/words
+
+|hash|short|hashmap|bulk16M|
+|----|----|----|----|
+|wyhash_v4 |264.111|47.523|17.348|
+|wyhash_v4_old|241.616|44.990|18.686|
+|wyhash_v3|248.903|46.319|17.605|
+|XXH3_scalar|187.113|44.173|13.048|
 
 **Good Boy Only Benchmark** 
 

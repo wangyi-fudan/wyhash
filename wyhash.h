@@ -62,8 +62,7 @@ static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
 		}
 		seed^=see1^see2^see3;
 	}
-	if(_unlike_(!i)) {	}
-	else	if(_unlike_(i<4))	seed=_wymum(_wyr3(p,i)^seed^_wyp0,seed^_wyp1);
+	if(_unlike_(i<4)){	if(_like_(i))	seed=_wymum(_wyr3(p,i)^seed^_wyp0,seed^_wyp1);	}
 	else	if(_like_(i<=8))	seed=_wymum(_wyr4(p)^seed^_wyp0,_wyr4(p+i-4)^seed^_wyp1);
 	else	if(_like_(i<=16))	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+i-8)^seed^_wyp1);
 	else	if(_like_(i<=24))	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1)^_wymum(_wyr8(p+i-8)^seed^_wyp2,seed^_wyp3);

@@ -7,7 +7,6 @@
 #include <intrin.h>
 #pragma	intrinsic(_umul128)
 #endif
-static	uint64_t	_wyp[5]={0xa0761d6478bd642full,0xe7037ed1a0b428dbull,0x8ebc6af09c88c6e3ull,0x589965cc75374cc3ull,0x1d8e4e27c47d124full};
 static	inline	uint64_t	_wyrotr(uint64_t v, unsigned k) {	return	(v>>k)|(v<<(64-k));	}
 static	inline	uint64_t	_wymum(uint64_t	A,	uint64_t	B) {
 #ifdef	WYHASH32
@@ -25,6 +24,7 @@ static	inline	uint64_t	_wymum(uint64_t	A,	uint64_t	B) {
 	#endif
 #endif
 }
+static	inline	uint64_t	wyrand(uint64_t	*seed) {	*seed+=0xa0761d6478bd642full;	return	_wymum(*seed^0xe7037ed1a0b428dbull,*seed);	}
 #ifndef WYHASH_LITTLE_ENDIAN
 	#if	defined(_WIN32) || defined(__LITTLE_ENDIAN__) || (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)		
 		#define WYHASH_LITTLE_ENDIAN 1
@@ -45,7 +45,7 @@ static	inline	uint64_t	_wyr4(const	uint8_t	*p)	{	unsigned	v;	memcpy(&v,  p,  4);
 	#endif
 #endif
 static	inline	uint64_t	_wyr3(const	uint8_t	*p,	unsigned	k) {	return	(((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];	}
-static	inline	uint64_t	wyhash_with_secret(const void* key,	uint64_t	len,	uint64_t	seed,	const	uint64_t	*secret) {
+static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed,	const	uint64_t	secret[6]) {
 #if defined(__GNUC__) || defined(__INTEL_COMPILER)
 	#define	_like_(x)	__builtin_expect(x,1)
 	#define	_unlike_(x)	__builtin_expect(x,0)
@@ -53,7 +53,7 @@ static	inline	uint64_t	wyhash_with_secret(const void* key,	uint64_t	len,	uint64_
 	#define _like_(x)  (x)
 	#define _unlike_(x)  (x)
 #endif
-	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t	i=len;	seed^=secret[4];	len^=secret[4];
+	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t	i=len;	seed^=secret[4];	len^=secret[5];
 	label:
 	if(_unlike_(i<4))	return	_wymum(_wymum((_like_(i)?_wyr3(p,i):0)^secret[0],seed),len);
 	else	if(_like_(i<=8))	return	_wymum(_wymum(_wyr4(p)^seed,_wyr4(p+i-4)^secret[0]),len);	//	must be this ugly form to be fast in XXH benchmark suite
@@ -64,14 +64,21 @@ static	inline	uint64_t	wyhash_with_secret(const void* key,	uint64_t	len,	uint64_
 	uint64_t	see1=seed,	see2=seed,	see3=seed;
 	for(;	i>=64; i-=64,p+=64){
 		seed=_wymum(_wyr8(p)^secret[0],_wyr8(p+8)^seed);		see1=_wymum(_wyr8(p+16)^secret[1],_wyr8(p+24)^see1);
-		see2=_wymum(_wyr8(p+32)^secret[2],_wyr8(p+40)^see2);	see3=_wymum(_wyr8(p+48)^secret[3],_wyr8(p+56)^see3);	
+		see2=_wymum(_wyr8(p+32)^secret[2],_wyr8(p+40)^see2);	see3=_wymum(_wyr8(p+48)^secret[3],_wyr8(p+56)^see3);
 	}
 	seed^=see1^see2^see3;
 	goto	label;
 }
-static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {	return	wyhash_with_secret(key,len,seed,_wyp);	}
+static	inline	void	make_secret(uint64_t	seed,	uint64_t	secret[6]){
+	for(size_t	i=0;	i<6;	i++){
+		uint8_t	ok;
+		do{	ok=1;	secret[i]=wyrand(&seed);
+			if(__builtin_popcountll(secret[i])!=32){	ok=0;	continue;	}
+			for(size_t	j=0;	j<i;	j++)	if(__builtin_popcountll(secret[i]^secret[j])!=32)	ok=0;
+		}while(!ok);
+	}
+}
 static	inline	uint64_t	wyhash64(uint64_t	A, uint64_t	B) {	return	_wymum(_wymum(A^0xa0761d6478bd642full,B^0xe7037ed1a0b428dbull),0x8ebc6af09c88c6e3ull);	}
-static	inline	uint64_t	wyrand(uint64_t	*seed) {	*seed+=0xa0761d6478bd642full;	return	_wymum(*seed^0xe7037ed1a0b428dbull,*seed);	}
 static	inline	double	wy2u01(uint64_t	r) {	const	double	_wynorm=1.0/(1ull<<52);	return	(r>>11)*_wynorm;	}
 static	inline	double	wy2gau(uint64_t	r) {	const	double	_wynorm=1.0/(1ull<<20);	return	((r&0x1fffff)+((r>>21)&0x1fffff)+((r>>42)&0x1fffff))*_wynorm-3.0;	}
 #ifdef __cplusplus

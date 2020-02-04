@@ -15,21 +15,11 @@ Currently wyhash has 13 language ports and is the default hasher for a hash tabl
 
 Please read our ![manuscript](manuscript.docx) and help us to publish it on top journal.
 
-```
-wyhash("",0)=e2780127bf6b4786
-wyhash("a",1)=5a1441a39e564257
-wyhash("abc",2)=880f6fbcca11187c
-wyhash("message digest",3)=9ba2eb621c2e7dfc
-wyhash("abcdefghijklmnopqrstuvwxyz",4)=74f2e1026427a009
-wyhash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",5)=bc7d4d3717bd50af
-wyhash("12345678901234567890123456789012345678901234567890123456789012345678901234567890",6)=d7c7b6b2438e7b6c
-```
-
 ----------------------------------------
 
-**Version 5 draft is out!**
+**Version 5 draft is out!  call make_secret function first before hashing**
 
-allow custom _wyp as secret, thus reduces xor operations, making bulk speed extream fast.
+allow custom parameters as secret, thus reduces one xor operations, making bulk speed extream fast.
 
 corpus: /usr/share/dict/words
 

@@ -70,12 +70,11 @@ static	inline	uint64_t	wyhash_part(const void* key,	uint64_t	len,	uint64_t	seed,
 	seed^=see1^see2^see3;
 	goto	label;
 }
-static	inline	uint64_t	wyhash_finish(uint64_t	part,	size_t	len,	const	uint64_t	secret[6]){	return	_wymum(part,len^secret[5]);	}
 static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed,	const	uint64_t	secret[6]) {
 #ifdef	WYHASH_PART
 	return	wyhash_part(key,len,seed,secret);
 #else
-	return	wyhash_finish(wyhash_part(key,len,seed,secret),len,secret);
+	return	_wymum(wyhash_part(key,len,seed,secret),len^secret[5]);
 #endif
 }
 static	inline	void	make_secret(uint64_t	seed,	uint64_t	secret[6]){

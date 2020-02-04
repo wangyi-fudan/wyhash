@@ -30,6 +30,7 @@ Benchmark /usr/share/dict/words
 Benchmark enwik8
 
 |HashFunction|Plain|Hashmap|64KB|16MB|
+|----|----|----|----|----|
 |std::hash|70.27|23.63|7.28|7.36|
 |wyhash|148.43|26.12|26.03|21.88|
 |xxHash64|91.02|23.13|14.65|14.55|

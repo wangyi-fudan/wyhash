@@ -15,33 +15,17 @@ Currently wyhash has 13 language ports and is the default hasher for a hash tabl
 
 Please read our ![manuscript](manuscript.docx) and help us to publish it on top journal.
 
-----------------------------------------
+**Version 5 is ready. call make_secret function first before hashing**
 
-**Version 5 draft is out!  call make_secret function first before hashing**
+Benchmark /usr/share/dict/words
 
-allow custom parameters as secret, thus reduces one xor operations, making bulk speed extream fast.
-
-corpus: /usr/share/dict/words
-
-|hash|short|hashmap|bulk16M|
-|----|----|----|----|
-|wyhash_v5| 261.182|47.883 |22.102|
-|wyhash_v4 |265.961|49.510|17.233|
-|XXH64|106.359|34.983|14.577|
-|XXH3_scalar|186.166|43.474|13.092|
-
-**Good Boy Only Benchmark** 
-
-XXH3 was not included as it fails two tests according to SMHasher.
-
-```C
-#define XXH_INLINE_ALL
-#define XXH_FORCE_MEMORY_ACCESS 0
-```
-![](Clipboard03.png)
-![](Clipboard04.png)
-![](Clipboard01.png)
-![](Clipboard02.png)
+|HashFunction|Plain|Hashmap|64KB|16MB|
+|----|----|----|----|----|
+|std::hash|97.08|37.05|7.33|7.37|
+|wyhash|260.69|45.25|26.37|21.86|
+|xxHash64|109.37|35.69|14.71|14.59|
+|XXH3_scalar|191.42|43.51|13.11|13.11|
+|t1ha2_atonce|127.26|36.17|16.59|16.29|
 
 ----------------------------------------
 

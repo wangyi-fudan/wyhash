@@ -45,7 +45,7 @@ static	inline	uint64_t	_wyr4(const	uint8_t	*p)	{	unsigned	v;	memcpy(&v,  p,  4);
 	#endif
 #endif
 static	inline	uint64_t	_wyr3(const	uint8_t	*p,	unsigned	k) {	return	(((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];	}
-static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed,	const	uint64_t	secret[6]) {
+static	inline	uint64_t	wyhash_part(const void* key,	uint64_t	len,	uint64_t	seed,	const	uint64_t	secret[6]) {
 #if defined(__GNUC__) || defined(__INTEL_COMPILER)
 	#define	_like_(x)	__builtin_expect(x,1)
 	#define	_unlike_(x)	__builtin_expect(x,0)
@@ -53,22 +53,30 @@ static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed,	cons
 	#define _like_(x)  (x)
 	#define _unlike_(x)  (x)
 #endif
-	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t	i=len;	seed^=secret[4];	len^=secret[5];
+	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t	i=len;	seed^=secret[4];
 	if(_like_(i<=64)){
 		label:
-		if(_unlike_(i<4))	return	_wymum(_wymum((_like_(i)?_wyr3(p,i):0)^secret[0],seed),len);
-		else	if(_like_(i<=8))	return	_wymum(_wymum(_wyr4(p)^secret[0],_wyr4(p+i-4)^seed),len);
-		else	if(_like_(i<=16))	return	_wymum(_wymum(_wyr8(p)^secret[0],_wyr8(p+i-8)^seed),len);
-		else	if(_like_(i<=32))	return	_wymum(_wymum(_wyr8(p)^secret[0],_wyr8(p+8)^seed)^_wymum(_wyr8(p+i-16)^secret[1],_wyr8(p+i-8)^seed),len);
-		else	return	_wymum(_wymum(_wyr8(p)^secret[0],_wyr8(p+8)^seed)^_wymum(_wyr8(p+16)^secret[1],_wyr8(p+24)^seed)^_wymum(_wyr8(p+i-32)^secret[2],_wyr8(p+i-24)^seed)^_wymum(_wyr8(p+i-16)^secret[3],_wyr8(p+i-8)^seed),len);
+		if(_unlike_(i<4))	return	_wymum((_like_(i)?_wyr3(p,i):0)^secret[0],seed);
+		else	if(_like_(i<=8))	return	_wymum(_wyr4(p)^secret[0],_wyr4(p+i-4)^seed);
+		else	if(_like_(i<=16))	return	_wymum(_wyr8(p)^secret[0],_wyr8(p+i-8)^seed);
+		else	if(_like_(i<=32))	return	_wymum(_wyr8(p)^secret[0],_wyr8(p+8)^seed)^_wymum(_wyr8(p+i-16)^secret[1],_wyr8(p+i-8)^seed);
+		else	return	_wymum(_wyr8(p)^secret[0],_wyr8(p+8)^seed)^_wymum(_wyr8(p+16)^secret[1],_wyr8(p+24)^seed)^_wymum(_wyr8(p+i-32)^secret[2],_wyr8(p+i-24)^seed)^_wymum(_wyr8(p+i-16)^secret[3],_wyr8(p+i-8)^seed);
 	}
 	uint64_t	see1=seed,	see2=seed,	see3=seed;
-	for(;	i>=64; i-=64,p+=64){
+	for(;	_like_(i>=64); i-=64,p+=64){
 		seed=_wymum(_wyr8(p)^secret[0],_wyr8(p+8)^seed);		see1=_wymum(_wyr8(p+16)^secret[1],_wyr8(p+24)^see1);
 		see2=_wymum(_wyr8(p+32)^secret[2],_wyr8(p+40)^see2);	see3=_wymum(_wyr8(p+48)^secret[3],_wyr8(p+56)^see3);
 	}
 	seed^=see1^see2^see3;
 	goto	label;
+}
+static	inline	uint64_t	wyhash_finish(uint64_t	part,	size_t	len,	const	uint64_t	secret[6]){	return	_wymum(part,len^secret[5]);	}
+static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed,	const	uint64_t	secret[6]) {
+#ifdef	WYHASH_PART
+	return	wyhash_part(key,len,seed,secret);
+#else
+	return	wyhash_finish(wyhash_part(key,len,seed,secret),len,secret);
+#endif
 }
 static	inline	void	make_secret(uint64_t	seed,	uint64_t	secret[6]){
 	uint8_t	c[]={15,23,27,29,30,39,43,45,46,51,53,54,57,58,60,71,75,77,78,83,85,86,89,90,92,99,101,102,105,106,108,113,114,116,120,135,139,141,142,147,149,150,153,154,156,163,165,166,169,170,172,177,178,180,184,195,197,198,201,202,204,209,210,212,216,225,226,228,232,240};
@@ -76,7 +84,12 @@ static	inline	void	make_secret(uint64_t	seed,	uint64_t	secret[6]){
 		uint8_t	ok;
 		do{	ok=1;	secret[i]=0;
 			for(size_t	j=0;	j<64;	j+=8)	secret[i]|=((uint64_t)c[wyrand(&seed)%sizeof(c)])<<j;
-			for(size_t	j=0;	j<i;	j++)	if(__builtin_popcountll(secret[i]^secret[j])!=32)	ok=0;
+			for(size_t	j=0;	j<i;	j++)	
+	#if defined(__GNUC__) || defined(__INTEL_COMPILER)
+				if(__builtin_popcountll(secret[i]^secret[j])!=32)	ok=0;
+	#elif	defined(_MSC_VER)
+				if(_mm_popcnt_u64(secret[i]^secret[j])!=32)	ok=0;
+	#endif	
 		}while(!ok);
 	}
 }

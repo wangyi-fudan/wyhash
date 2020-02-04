@@ -36,7 +36,7 @@ static	inline	uint64_t	wyrand(uint64_t	*seed) {	*seed+=0xa0761d6478bd642full;	re
 static	inline	uint64_t	_wyr8(const	uint8_t	*p)	{	uint64_t	v;	memcpy(&v,  p,  8);	return  v;	}	
 static	inline	uint64_t	_wyr4(const	uint8_t	*p)	{	unsigned	v;	memcpy(&v,  p,  4);	return  v;	}	
 #else
-	#if defined(__GNUC__) || defined(__INTEL_COMPILER)
+	#if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
 static	inline	uint64_t	_wyr8(const	uint8_t	*p)	{	uint64_t	v;	memcpy(&v,  p,  8);	return   __builtin_bswap64(v);	}	
 static	inline	uint64_t	_wyr4(const	uint8_t	*p)	{	unsigned	v;	memcpy(&v,  p,  4);	return   __builtin_bswap32(v);	}	
 	#elif	defined(_MSC_VER)
@@ -46,7 +46,7 @@ static	inline	uint64_t	_wyr4(const	uint8_t	*p)	{	unsigned	v;	memcpy(&v,  p,  4);
 #endif
 static	inline	uint64_t	_wyr3(const	uint8_t	*p,	unsigned	k) {	return	(((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];	}
 static	inline	uint64_t	wyhash_part(const void* key,	uint64_t	len,	uint64_t	seed,	const	uint64_t	secret[6]) {
-#if defined(__GNUC__) || defined(__INTEL_COMPILER)
+#if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
 	#define	_like_(x)	__builtin_expect(x,1)
 	#define	_unlike_(x)	__builtin_expect(x,0)
 #else
@@ -84,7 +84,7 @@ static	inline	void	make_secret(uint64_t	seed,	uint64_t	secret[6]){
 		do{	ok=1;	secret[i]=0;
 			for(size_t	j=0;	j<64;	j+=8)	secret[i]|=((uint64_t)c[wyrand(&seed)%sizeof(c)])<<j;
 			for(size_t	j=0;	j<i;	j++)	
-	#if defined(__GNUC__) || defined(__INTEL_COMPILER)
+	#if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
 				if(__builtin_popcountll(secret[i]^secret[j])!=32)	ok=0;
 	#elif	defined(_MSC_VER)
 				if(_mm_popcnt_u64(secret[i]^secret[j])!=32)	ok=0;

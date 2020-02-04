@@ -56,7 +56,7 @@ static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed,	cons
 	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t	i=len;	seed^=secret[4];	len^=secret[5];
 	label:
 	if(_unlike_(i<4))	return	_wymum(_wymum((_like_(i)?_wyr3(p,i):0)^secret[0],seed),len);
-	else	if(_like_(i<=8))	return	_wymum(_wymum(_wyr4(p)^seed,_wyr4(p+i-4)^secret[0]),len);	//	must be this ugly form to be fast in XXH benchmark suite
+	else	if(_like_(i<=8))	return	_wymum(_wymum(_wyr4(p)^secret[0],_wyr4(p+i-4)^seed),len);
 	else	if(_like_(i<=16))	return	_wymum(_wymum(_wyr8(p)^secret[0],_wyr8(p+i-8)^seed),len);
 	else	if(_like_(i<=32))	return	_wymum(_wymum(_wyr8(p)^secret[0],_wyr8(p+8)^seed)^_wymum(_wyr8(p+i-16)^secret[1],_wyr8(p+i-8)^seed),len);
 	else	if(_like_(i<=64))	return	_wymum(_wymum(_wyr8(p)^secret[0],_wyr8(p+8)^seed)^_wymum(_wyr8(p+16)^secret[1],_wyr8(p+24)^seed)

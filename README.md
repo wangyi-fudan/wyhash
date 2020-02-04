@@ -27,6 +27,15 @@ Benchmark /usr/share/dict/words
 |XXH3_scalar|191.42|43.51|13.11|13.11|
 |t1ha2_atonce|127.26|36.17|16.59|16.29|
 
+Benchmark enwik8
+
+|HashFunction|Plain|Hashmap|64KB|16MB|
+|std::hash|70.27|23.63|7.28|7.36|
+|wyhash|148.43|26.12|26.03|21.88|
+|xxHash64|91.02|23.13|14.65|14.55|
+|XXH3_scalar|122.93|25.73|13.12|13.05|
+|t1ha2_atonce|128.41|23.49|16.59|16.14|
+
 ----------------------------------------
 
 Language Ports:

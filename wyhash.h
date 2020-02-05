@@ -45,7 +45,6 @@ static	inline	uint64_t	_wyr4(const	uint8_t	*p)	{	unsigned	v;	memcpy(&v,  p,  4);
 	#endif
 #endif
 static	inline	uint64_t	_wyr3(const	uint8_t	*p,	unsigned	k) {	return	(((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];	}
-// we can directly use _wyhash for hash table for speed
 static	inline	uint64_t	_wyhash(const void* key,	uint64_t	len,	uint64_t	seed,	const	uint64_t	secret[6]) {
 #if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
 	#define	_like_(x)	__builtin_expect(x,1)

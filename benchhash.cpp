@@ -46,18 +46,16 @@ uint64_t	bench_hash(vector<string>	&v,	string	name){
 
 int	main(int	ac,	char	**av){
 	make_secret(time(NULL),secret);
-	if(ac!=2){	cout<<"benchmark corpus\n";	return	0;	}
 	vector<string>	v;	string	s;
-	ifstream	fi(av[1]);
+	ifstream	fi("/usr/share/dict/words");
 	for(fi>>s;	!fi.eof();	fi>>s)	v.push_back(s);
 	fi.close();
 	uint64_t	r=0;
-	cout<<"Benchmark\t"<<av[1]<<'\n';
-	cout<<"HashFunction\tPlain\tHashmap\t64KB\t16MB\n";
+	cout<<"HashFunction\tWords\tHashmap\tBulk64K\tBulk16M\n";
 	r+=bench_hash<std::hash<string>	>(v,"std::hash");
 	r+=bench_hash<wy>(v,"wyhash");
 	r+=bench_hash<xx>(v,"xxHash64");
-	r+=bench_hash<xx3>(v,"XXH3");
+	r+=bench_hash<xx3>(v,"XXH3_scalar");
 	r+=bench_hash<t1ha2>(v,"t1ha2_atonce");
 	return	r;
 }

@@ -28,7 +28,7 @@ Benchmark /usr/share/dict/words
 |XXH3_scalar|191.42|43.51|13.11|13.11|Moment Chi2 14974, BIC,unaligned memory access|
 |XXH3_SSE2|191.50|42.61|23.44|22.07|Moment Chi2 14974, BIC,SSE2,unaligned memory access|
 |XXH3_AVX2|190.70|43.97|28.08|25.20|Moment Chi2 14974, BIC,AVX2,unaligned memory access|
-|t1ha2_atonce|127.26|36.17|16.59|16.29|unaligned memory access (configubale),one-shot read (configubale)|
+|t1ha2_atonce|127.26|36.17|16.59|16.29|unaligned memory access(default),one-shot read(default)|
 
 ----------------------------------------
 

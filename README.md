@@ -19,16 +19,16 @@ Please read our ![manuscript](manuscript.docx) and help us to publish it on top 
 
 Benchmark /usr/share/dict/words
 
-|HashFunction|Plain(h/us)|Hashmap(h/us)|64KB(GB/s)|16MB(GB/s)|size|Limitations|
-|----|----|----|----|----|----|----|
-|std::hash|97.08|37.05|7.33|7.37||fail many tests|
-|wyhash|260.69|45.25|26.37|21.86|2104||
-|_wyhash|278.10|49.41|26.86|22.33|2104|fail many tests|
-|xxHash64|109.37|35.69|14.71|14.59|4928||
-|XXH3_scalar|191.42|43.51|13.11|13.11|10552|Moment Chi2 14974, BIC,unaligned memory access|
-|XXH3_SSE2|191.50|42.61|23.44|22.07|8760|Moment Chi2 14974, BIC,SSE2,unaligned memory access|
-|XXH3_AVX2|190.70|43.97|28.08|25.20|17592|Moment Chi2 14974, BIC,AVX2,unaligned memory access|
-|t1ha2_atonce|127.26|36.17|16.59|16.29|1360|unaligned memory access(default),one-shot read(default)|
+|HashFunction|Plain(h/us)|Hashmap(h/us)|64KB(GB/s)|16MB(GB/s)|Limitations|
+|----|----|----|----|----|----|
+|std::hash|97.08|37.05|7.33|7.37|fail many tests|
+|wyhash|260.69|45.25|26.37|21.86||
+|_wyhash|278.10|49.41|26.86|22.33|fail many tests|
+|xxHash64|109.37|35.69|14.71|14.59||
+|XXH3_scalar|191.42|43.51|13.11|13.11|Moment Chi2 14974, BIC,unaligned memory access|
+|XXH3_SSE2|191.50|42.61|23.44|22.07|Moment Chi2 14974, BIC,SSE2,unaligned memory access|
+|XXH3_AVX2|190.70|43.97|28.08|25.20|Moment Chi2 14974, BIC,AVX2,unaligned memory access|
+|t1ha2_atonce|127.26|36.17|16.59|16.29|unaligned memory access(default),one-shot read(default)|
 
 ----------------------------------------
 

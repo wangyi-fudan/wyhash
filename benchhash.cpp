@@ -9,7 +9,7 @@
 #include	<vector>
 using	namespace	std;
 uint64_t	secret[6];
-struct	wy{	size_t	operator()(const	string	&s)const{	return	_wyhash(s.c_str(),s.size(),34432,secret);	}};
+struct	wy{	size_t	operator()(const	string	&s)const{	return	wyhash(s.c_str(),s.size(),34432,secret);	}};
 struct	xx{	size_t	operator()(const	string	&s)const{	return	XXH64(s.c_str(),s.size(),34432);	}};
 struct	xx3{	size_t	operator()(const	string	&s)const{	return	XXH3_64bits_withSeed(s.c_str(),s.size(),34432);	}};
 struct	t1ha2{	size_t	operator()(const	string	&s)const{	return	t1ha2_atonce(s.c_str(),s.size(),34432);	}};
@@ -54,7 +54,7 @@ int	main(int	ac,	char	**av){
 	for(size_t	i=v.size();	i;	i--)	swap(v[i],v[wyrand(&r)%(i+1)]);
 	cout<<"HashFunction\tWords\tHashmap\tBulk64K\tBulk16M\n";
 	r+=bench_hash<std::hash<string>	>(v,"std::hash");
-	r+=bench_hash<wy>(v,"_wyhash");
+	r+=bench_hash<wy>(v,"wyhash");
 	r+=bench_hash<xx>(v,"xxHash64");
 	r+=bench_hash<xx3>(v,"XXH3_scalar");
 	r+=bench_hash<t1ha2>(v,"t1ha2_atonce");

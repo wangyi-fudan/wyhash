@@ -63,7 +63,7 @@ static	inline	uint64_t	_wyhash(const void* key,	uint64_t	len,	uint64_t	seed,	con
 		else	return	_wymum(_wyr8(p)^secret[0],_wyr8(p+8)^seed)^_wymum(_wyr8(p+16)^secret[1],_wyr8(p+24)^seed)^_wymum(_wyr8(p+i-32)^secret[2],_wyr8(p+i-24)^seed)^_wymum(_wyr8(p+i-16)^secret[3],_wyr8(p+i-8)^seed);
 	}
 	uint64_t	see1=seed,	see2=seed,	see3=seed;
-	for(;	_like_(i>=64); i-=64,p+=64){
+	for(;	i>=64; i-=64,p+=64){
 		seed=_wymum(_wyr8(p)^secret[0],_wyr8(p+8)^seed);		see1=_wymum(_wyr8(p+16)^secret[1],_wyr8(p+24)^see1);
 		see2=_wymum(_wyr8(p+32)^secret[2],_wyr8(p+40)^see2);	see3=_wymum(_wyr8(p+48)^secret[3],_wyr8(p+56)^see3);
 	}

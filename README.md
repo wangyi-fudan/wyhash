@@ -22,8 +22,8 @@ Benchmark /usr/share/dict/words
 |HashFunction|Plain(h/us)|Hashmap(h/us)|64KB(GB/s)|16MB(GB/s)|Limitations|
 |----|----|----|----|----|----|
 |std::hash|75.21|34.84|7.33|7.37|fail many tests|
-|wyhash|200.39|43.45|26.37|21.86||
-|_wyhash|209.75|47.00|26.86|22.33|fail many tests|
+|wyhash|202.63|45.08|26.02|23.01||
+|_wyhash|214.42|47.59|26.03|21.53|fail many tests|
 |xxHash64|95.28|34.55|14.71|14.59||
 |XXH3_scalar|152.23|42.34|13.11|13.11|Moment Chi2 14974, BIC,unaligned memory access|
 |XXH3_SSE2|150.42|42.04|23.44|22.07|Moment Chi2 14974, BIC,SSE2,unaligned memory access|

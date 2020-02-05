@@ -21,7 +21,7 @@ Benchmark /usr/share/dict/words
 
 |HashFunction|Plain(h/us)|Hashmap(h/us)|64KB(GB/s)|16MB(GB/s)|Limitations|
 |----|----|----|----|----|----|
-|FastestHash|335.47|50.79|14198.24|3435973.84|fail many tests|
+|FastestHash|287.09|51.06|14198.24|3435973.84|fail many tests|
 |std::hash|74.80|35.36|7.33|7.37|fail many tests|
 |_wyhash|210.86|48.01|26.03|21.53|fail many tests|
 |wyhash|202.01|44.04|26.02|23.01||

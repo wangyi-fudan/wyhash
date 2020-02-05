@@ -57,8 +57,7 @@ static	inline	uint64_t	_wyr4(const	uint8_t	*p)	{	unsigned	v;	memcpy(&v,  p,  4);
 static	inline	uint64_t	_wyr3(const	uint8_t	*p,	unsigned	k) {	return	(((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];	}
 static	inline	uint64_t	FastestHash(const	void	*key,	size_t	len){
 	const	uint8_t	*p=(const	uint8_t*)key;
-	if(len>=16)	return	 _wymum(_wyr8(p+(len>>2)),_wyr8(p+(len>>1)));
-	else	if(_like_(len>=8))	return	_wymum(_wyr8(p),_wyr8(p+len-8));
+	if(_like_(len>=8))	return	_wymum(_wyr8(p),_wyr8(p+len-8));
 	else	if(_like_(len>=4))	return	_wymum(_wyr4(p),_wyr4(p+len-4));
 	else	if(_like_(len))	return	_wymum(_wyr3(p,len),_wyr3(p,len));
 	else	return	0;

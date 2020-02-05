@@ -54,24 +54,28 @@ static	inline	uint64_t	_wyr4(const	uint8_t	*p)	{	unsigned	v;	memcpy(&v,  p,  4);
 static	inline	uint64_t	_wyr3(const	uint8_t	*p,	unsigned	k) {	return	(((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];	}
 static	inline	uint64_t	madhash(const	void	*key,	size_t	len){
 	const	uint8_t	*p=(const	uint8_t*)key;	const	uint64_t	p0=0xa0761d6478bd642full,	p1=0xe7037ed1a0b428dbull;
-	return	
-	_like_(len>=8)?
-		(_like_(len<=16)?
-			_wymum(_wyr8(p)^p0,_wyr8(p+len-8)^p1)
-			:_wymum(_wyr8(p)^p0,_wyr8(p+(len>>2))^p1)^_wymum(_wyr8(p+(len>>1))^p1,_wyr8(p+len-8)^p0))
-		:(_like_(len>=4)?
-			_wymum(_wyr4(p)^p0,_wyr4(p+len-4)^p1)
-			:_wymum((_like_(len)?_wyr3(p,len):0)^p0,p1));
+	if(_like_(len>=8)){
+		if(_like_(len<=16))	return	_wymum(_wyr8(p)^p0,_wyr8(p+len-8)^p1);
+		else	return	_wymum(_wyr8(p)^p0,_wyr8(p+(len>>2))^p1)^_wymum(_wyr8(p+(len>>1))^p1,_wyr8(p+len-8)^p0);
+	}
+	else{
+		if(_like_(len>=4))	return	_wymum(_wyr4(p)^p0,_wyr4(p+len-4)^p1);
+		else	return	_wymum((_like_(len)?_wyr3(p,len):0)^p0,p1);
+	}
 }
 static	inline	uint64_t	_wyhash(const void* key,	uint64_t	len,	uint64_t	seed,	const	uint64_t	secret[6]) {
 	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t	i=len;	seed^=secret[4];
 	if(_like_(i<=64)){
 		label:
-		if(_unlike_(i<4))	return	_wymum((_like_(i)?_wyr3(p,i):0)^secret[0],seed);
-		else	if(_like_(i<=8))	return	_wymum(_wyr4(p)^secret[0],_wyr4(p+i-4)^seed);
-		else	if(_like_(i<=16))	return	_wymum(_wyr8(p)^secret[0],_wyr8(p+i-8)^seed);
-		else	if(_like_(i<=32))	return	_wymum(_wyr8(p)^secret[0],_wyr8(p+8)^seed)^_wymum(_wyr8(p+i-16)^secret[1],_wyr8(p+i-8)^seed);
-		else	return	_wymum(_wyr8(p)^secret[0],_wyr8(p+8)^seed)^_wymum(_wyr8(p+16)^secret[1],_wyr8(p+24)^seed)^_wymum(_wyr8(p+i-32)^secret[2],_wyr8(p+i-24)^seed)^_wymum(_wyr8(p+i-16)^secret[3],_wyr8(p+i-8)^seed);
+		if(_like_(i>=8)){
+			if(_like_(i<=16))	return  _wymum(_wyr8(p)^secret[0],_wyr8(p+i-8)^seed);
+			else	if(_like_(i<=32))	return  _wymum(_wyr8(p)^secret[0],_wyr8(p+8)^seed)^_wymum(_wyr8(p+i-16)^secret[1],_wyr8(p+i-8)^seed);
+			else	return	_wymum(_wyr8(p)^secret[0],_wyr8(p+8)^seed)^_wymum(_wyr8(p+16)^secret[1],_wyr8(p+24)^seed)^_wymum(_wyr8(p+i-32)^secret[2],_wyr8(p+i-24)^seed)^_wymum(_wyr8(p+i-16)^secret[3],_wyr8(p+i-8)^seed);
+		}
+		else{
+			if(_like_(i>=4))	return  _wymum(_wyr4(p)^secret[0],_wyr4(p+i-4)^seed);
+			else	return	_wymum((_like_(i)?_wyr3(p,i):0)^secret[0],seed);
+		}
 	}
 	uint64_t	see1=seed,	see2=seed,	see3=seed;
 	for(;	i>=64; i-=64,p+=64){

@@ -19,7 +19,7 @@ struct	t1ha2{	size_t	operator()(const	string	&s)const{	return	t1ha2_atonce(s.c_s
 template	<typename	Hasher>
 uint64_t	bench_hash(vector<string>	&v,	string	name){
 	Hasher	h;
-	timeval	beg,	end;	uint64_t	dummy=0,	N=v.size(),	R=0x10000000ull/N;
+	timeval	beg,	end;	uint64_t	dummy=0,	N=v.size(),	R=0x100000000ull/N;
 	cout.precision(2);	cout.setf(ios::fixed);	cout<<name<<(name.size()<8?"\t\t":"\t");
 	for(size_t  i=0;    i<N;    i++)    dummy+=h(v[i]);
 	gettimeofday(&beg,NULL);

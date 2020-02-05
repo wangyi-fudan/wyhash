@@ -31,7 +31,10 @@ static	inline	uint64_t	_wymum(uint64_t	A,	uint64_t	B) {
 	#endif
 #endif
 }
-static	inline	uint64_t	wyrand(uint64_t	*seed) {	*seed+=0xa0761d6478bd642full;	return	_wymum(*seed^0xe7037ed1a0b428dbull,*seed);	}
+static	inline	uint64_t	wyrand(uint64_t	*seed) {	
+	const	uint64_t	_wyp0=0xa0761d6478bd642full,	_wyp1=0xe7037ed1a0b428dbull;
+	*seed+=_wyp0;	return	_wymum(*seed^_wyp1,*seed);	
+}
 #ifndef WYHASH_LITTLE_ENDIAN
 	#if	defined(_WIN32) || defined(__LITTLE_ENDIAN__) || (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)		
 		#define WYHASH_LITTLE_ENDIAN 1
@@ -53,14 +56,14 @@ static	inline	uint64_t	_wyr4(const	uint8_t	*p)	{	unsigned	v;	memcpy(&v,  p,  4);
 #endif
 static	inline	uint64_t	_wyr3(const	uint8_t	*p,	unsigned	k) {	return	(((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];	}
 static	inline	uint64_t	madhash(const	void	*key,	size_t	len){
-	const	uint8_t	*p=(const	uint8_t*)key;	const	uint64_t	p0=0xa0761d6478bd642full,	p1=0xe7037ed1a0b428dbull;
+	const	uint8_t	*p=(const	uint8_t*)key;	const	uint64_t	_wyp0=0xa0761d6478bd642full;
 	if(_like_(len>=8)){
-		if(_like_(len<=16))	return	_wymum(_wyr8(p)^p0,_wyr8(p+len-8)^p1);
-		else	return	_wymum(_wyr8(p)^p0,_wyr8(p+(len>>2))^p1)^_wymum(_wyr8(p+(len>>1))^p1,_wyr8(p+len-8)^p0);
+		if(_like_(len<=16))	return	_wymum(_wyr8(p),_wyr8(p+len-8));
+		else	return	_wymum(_wyr8(p),_wyr8(p+(len>>2)))^_wymum(_wyr8(p+(len>>1)),_wyr8(p+len-8));
 	}
 	else{
-		if(_like_(len>=4))	return	_wymum(_wyr4(p)^p0,_wyr4(p+len-4)^p1);
-		else	return	_wymum((_like_(len)?_wyr3(p,len):0)^p0,p1);
+		if(_like_(len>=4))	return	_wymum(_wyr4(p),_wyr4(p+len-4));
+		else	return	_wymum((_like_(len)?_wyr3(p,len):0),_wyp0);
 	}
 }
 static	inline	uint64_t	_wyhash(const void* key,	uint64_t	len,	uint64_t	seed,	const	uint64_t	secret[6]) {

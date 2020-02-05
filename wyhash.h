@@ -7,6 +7,13 @@
 #include <intrin.h>
 #pragma	intrinsic(_umul128)
 #endif
+#if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
+	#define	_like_(x)	__builtin_expect(x,1)
+	#define	_unlike_(x)	__builtin_expect(x,0)
+#else
+	#define _like_(x)  (x)
+	#define _unlike_(x)  (x)
+#endif
 static	inline	uint64_t	_wyrotr(uint64_t v, unsigned k) {	return	(v>>k)|(v<<(64-k));	}
 static	inline	uint64_t	_wymum(uint64_t	A,	uint64_t	B) {
 #ifdef	WYHASH32
@@ -45,14 +52,18 @@ static	inline	uint64_t	_wyr4(const	uint8_t	*p)	{	unsigned	v;	memcpy(&v,  p,  4);
 	#endif
 #endif
 static	inline	uint64_t	_wyr3(const	uint8_t	*p,	unsigned	k) {	return	(((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];	}
+static	inline	uint64_t	madhash(const	void	*key,	size_t	len){
+	const	uint8_t	*p=(const	uint8_t*)key;	const	uint64_t	p0=0xa0761d6478bd642full,	p1=0xe7037ed1a0b428dbull;
+	return	
+	_like_(len>=8)?
+		(_like_(len<=16)?
+			_wymum(_wyr8(p)^p0,_wyr8(p+len-8)^p1)
+			:_wymum(_wyr8(p)^p0,_wyr8(p+(len>>2))^p1)^_wymum(_wyr8(p+(len>>1))^p1,_wyr8(p+len-8)^p0))
+		:(_like_(len>=4)?
+			_wymum(_wyr4(p)^p0,_wyr4(p+len-4)^p1)
+			:_wymum((_like_(len)?_wyr3(p,len):0)^p0,p1));
+}
 static	inline	uint64_t	_wyhash(const void* key,	uint64_t	len,	uint64_t	seed,	const	uint64_t	secret[6]) {
-#if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
-	#define	_like_(x)	__builtin_expect(x,1)
-	#define	_unlike_(x)	__builtin_expect(x,0)
-#else
-	#define _like_(x)  (x)
-	#define _unlike_(x)  (x)
-#endif
 	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t	i=len;	seed^=secret[4];
 	if(_like_(i<=64)){
 		label:

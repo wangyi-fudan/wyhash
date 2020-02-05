@@ -10,7 +10,7 @@
 using	namespace	std;
 uint64_t	secret[6];
 
-struct	mad{	size_t	operator()(const	string	&s)const{	return	madhash(s.c_str(),s.size());	}};
+struct	fh{	size_t	operator()(const	string	&s)const{	return	FastestHash(s.c_str(),s.size());	}};
 struct	wy{	size_t	operator()(const	string	&s)const{	return	wyhash(s.c_str(),s.size(),34432,secret);	}};
 struct	xx{	size_t	operator()(const	string	&s)const{	return	XXH64(s.c_str(),s.size(),34432);	}};
 struct	xx3{	size_t	operator()(const	string	&s)const{	return	XXH3_64bits_withSeed(s.c_str(),s.size(),34432);	}};
@@ -57,7 +57,7 @@ int	main(int	ac,	char	**av){
 	uint64_t	r=0;
 	cout<<"Benchmarking\t"<<file<<'\n';
 	cout<<"HashFunction\tWords\tHashmap\tBulk64K\tBulk16M\n";
-	r+=bench_hash<mad>(v,"madhash");
+	r+=bench_hash<fh>(v,"FastestHash");
 	r+=bench_hash<std::hash<string>	>(v,"std::hash");
 	r+=bench_hash<wy>(v,"wyhash");
 	r+=bench_hash<xx>(v,"xxHash64");

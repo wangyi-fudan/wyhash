@@ -55,16 +55,12 @@ static	inline	uint64_t	_wyr4(const	uint8_t	*p)	{	unsigned	v;	memcpy(&v,  p,  4);
 	#endif
 #endif
 static	inline	uint64_t	_wyr3(const	uint8_t	*p,	unsigned	k) {	return	(((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];	}
-static	inline	uint64_t	madhash(const	void	*key,	size_t	len){
-	const	uint8_t	*p=(const	uint8_t*)key;	const	uint64_t	_wyp0=0xa0761d6478bd642full;
-	if(_like_(len>=8)){
-		if(_like_(len<=16))	return	_wymum(_wyr8(p),_wyr8(p+len-8));
-		else	return	_wymum(_wyr8(p),_wyr8(p+(len>>2)))^_wymum(_wyr8(p+(len>>1)),_wyr8(p+len-8));
-	}
-	else{
-		if(_like_(len>=4))	return	_wymum(_wyr4(p),_wyr4(p+len-4));
-		else	return	_wymum((_like_(len)?_wyr3(p,len):0),_wyp0);
-	}
+static	inline	uint64_t	FastestHash(const	void	*key,	size_t	len){
+	const	uint8_t	*p=(const	uint8_t*)key;
+	if(_like_(len>=8))	return	_wymum(_wyr8(p),_wyr8(p+len-8));
+	else	if(_like_(len>=4))	return	_wymum(_wyr4(p),_wyr4(p+len-4));
+	else	if(_like_(len))	return	_wymum(_wyr3(p,len),_wyr3(p,len));
+	else	return	0;
 }
 static	inline	uint64_t	_wyhash(const void* key,	uint64_t	len,	uint64_t	seed,	const	uint64_t	secret[6]) {
 	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t	i=len;	seed^=secret[4];

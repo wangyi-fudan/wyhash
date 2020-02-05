@@ -21,14 +21,14 @@ Benchmark /usr/share/dict/words
 
 |HashFunction|Plain(h/us)|Hashmap(h/us)|64KB(GB/s)|16MB(GB/s)|Limitations|
 |----|----|----|----|----|----|
-|std::hash|75.21|34.84|7.33|7.37|fail many tests|
-|wyhash|202.63|45.08|26.02|23.01||
-|_wyhash|214.42|47.59|26.03|21.53|fail many tests|
-|xxHash64|95.28|34.55|14.71|14.59||
-|XXH3_scalar|152.23|42.34|13.11|13.11|Moment Chi2 14974, BIC,unaligned memory access|
-|XXH3_SSE2|150.42|42.04|23.44|22.07|Moment Chi2 14974, BIC,SSE2,unaligned memory access|
-|XXH3_AVX2|151.71|42.21|28.08|25.20|Moment Chi2 14974, BIC,AVX2,unaligned memory access|
-|t1ha2_atonce|107.12|35.09|16.59|16.29|unaligned memory access(default),one-shot read(default)|
+|std::hash|74.80|35.36|7.33|7.37|fail many tests|
+|wyhash|202.01|44.04|26.02|23.01||
+|_wyhash|210.86|48.01|26.03|21.53|fail many tests|
+|xxHash64|92.74|35.00|14.71|14.59||
+|XXH3_scalar|152.29|42.42|13.11|13.11|Moment Chi2 14974, BIC,unaligned memory access|
+|XXH3_SSE2|150.94|42.26|23.44|22.07|Moment Chi2 14974, BIC,SSE2,unaligned memory access|
+|XXH3_AVX2|152.37|42.24|28.08|25.20|Moment Chi2 14974, BIC,AVX2,unaligned memory access|
+|t1ha2_atonce|106.08|35.19|16.59|16.29|unaligned memory access(default),one-shot read(default)|
 
 ----------------------------------------
 

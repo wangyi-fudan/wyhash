@@ -19,7 +19,7 @@ Please read our ![manuscript](manuscript.docx) and help us to publish it on top 
 
 Benchmark /usr/share/dict/words
 
-|HashFunction|Plain(hashes/us)|Hashmap(hashes/us)|64KB(GB/s)|16MB(GB/s)|size|Limitations|
+|HashFunction|Plain(h/us)|Hashmap(h/us)|64KB(GB/s)|16MB(GB/s)|size|Limitations|
 |----|----|----|----|----|----|----|
 |std::hash|97.08|37.05|7.33|7.37||fail many tests|
 |wyhash|260.69|45.25|26.37|21.86|2104||

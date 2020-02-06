@@ -24,7 +24,7 @@ Benchmark /usr/share/dict/words
 |FastestHash|287.09|51.06|14198.24|3435973.84|fail many tests|
 |std::hash|74.80|35.36|7.33|7.37|fail many tests|
 |_wyhash|210.86|48.01|26.03|21.53|fail many tests|
-|**wyhash**|202.01|44.04|26.02|23.01|62 bit uniqueness strength, loss entropy after 8 million TB data|
+|**wyhash**|202.01|44.04|26.02|23.01|62 bit uniqueness strength, loss entropy after 65,536 PB data|
 |xxHash64|92.74|35.00|14.71|14.59||
 |XXH3_scalar|152.29|42.42|13.11|13.11|Moment Chi2 14974, BIC,unaligned memory access|
 |XXH3_SSE2|150.94|42.26|23.44|22.07|Moment Chi2 14974, BIC,SSE2,unaligned memory access|

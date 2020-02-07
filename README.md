@@ -18,18 +18,19 @@ Please read our ![manuscript](manuscript.docx) and help us to publish it on top 
 **Version 5 is ready. call make_secret function first before hashing**
 
 Benchmark /usr/share/dict/words
+**no hash is perfect, but some are useful**
 
 |HashFunction|Plain(h/us)|Hashmap(h/us)|64KB(GB/s)|16MB(GB/s)|Limitations|
 |----|----|----|----|----|----|
-|FastestHash|287.09|51.06|14198.24|3435973.84|fail many tests|
-|std::hash|74.80|35.36|7.33|7.37|fail many tests|
-|_wyhash|210.86|48.01|26.03|21.53|fail many tests|
-|**wyhash**|202.01|44.04|26.02|23.01|no hash is perfect, but some are useful|
+|FastestHash|287.09|51.06|14198.24|3435973.84|
+|std::hash|74.80|35.36|7.33|7.37|
+|_wyhash|210.86|48.01|26.03|21.53|
+|**wyhash**|202.01|44.04|26.02|23.01|
 |xxHash64|92.74|35.00|14.71|14.59||
-|XXH3_scalar|152.29|42.42|13.11|13.11|Moment Chi2 14974, BIC,unaligned memory access|
-|XXH3_SSE2|150.94|42.26|23.44|22.07|Moment Chi2 14974, BIC,SSE2,unaligned memory access|
-|XXH3_AVX2|152.37|42.24|28.08|25.20|Moment Chi2 14974, BIC,AVX2,unaligned memory access|
-|t1ha2_atonce|106.08|35.19|16.59|16.29|unaligned memory access(default),one-shot read(default)|
+|XXH3_scalar|152.29|42.42|13.11|13.11|
+|XXH3_SSE2|150.94|42.26|23.44|22.07|
+|XXH3_AVX2|152.37|42.24|28.08|25.20|
+|t1ha2_atonce|106.08|35.19|16.59|16.29|
 
 ----------------------------------------
 

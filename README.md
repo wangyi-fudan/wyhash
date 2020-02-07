@@ -19,7 +19,7 @@ Please read our ![manuscript](manuscript.docx) and help us to publish it on top 
 
 Benchmark /usr/share/dict/words
 
-**no hash is perfect, but some are useful**
+**no hash is perfect, but some are useful!**
 
 |HashFunction|Plain(h/us)|Hashmap(h/us)|64KB(GB/s)|16MB(GB/s)|
 |----|----|----|----|----|

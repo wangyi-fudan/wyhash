@@ -20,7 +20,7 @@ Please read our ![manuscript](manuscript.docx) and help us to publish it on top 
 Benchmark /usr/share/dict/words
 **no hash is perfect, but some are useful**
 
-|HashFunction|Plain(h/us)|Hashmap(h/us)|64KB(GB/s)|16MB(GB/s)|Limitations|
+|HashFunction|Plain(h/us)|Hashmap(h/us)|64KB(GB/s)|16MB(GB/s)|
 |----|----|----|----|----|----|
 |FastestHash|287.09|51.06|14198.24|3435973.84|
 |std::hash|74.80|35.36|7.33|7.37|

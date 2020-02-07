@@ -39,6 +39,7 @@ static	inline	uint64_t	_wymum(uint64_t	A,	uint64_t	B) {
 	#endif
 #endif
 #if(WYHASH_LITTLE_ENDIAN)	
+static	inline	__uint128_t	_wyr16(const	uint8_t	*p)	{	__uint128_t	v;	memcpy(&v,  p,  16);	return  v;	}	
 static	inline	uint64_t	_wyr8(const	uint8_t	*p)	{	uint64_t	v;	memcpy(&v,  p,  8);	return  v;	}	
 static	inline	uint64_t	_wyr4(const	uint8_t	*p)	{	unsigned	v;	memcpy(&v,  p,  4);	return  v;	}	
 #else
@@ -72,12 +73,14 @@ static	inline	uint64_t	_wyhash(const void* key,	uint64_t	len,	uint64_t	seed,	con
 			else	return	_wymum((_like_(i)?_wyr3(p,i):0)^secret[0],seed);
 		}
 	}
-	uint64_t	see1=seed,	see2=seed,	see3=seed;
+	uint64_t	see[5]={seed^secret[1],seed^secret[2],seed^secret[3],seed^secret[0],seed^secret[5]};
 	for(;	i>=64; i-=64,p+=64){
-		seed=_wymum(_wyr8(p)^secret[0],_wyr8(p+8)^seed);		see1=_wymum(_wyr8(p+16)^secret[1],_wyr8(p+24)^see1);
-		see2=_wymum(_wyr8(p+32)^secret[2],_wyr8(p+40)^see2);	see3=_wymum(_wyr8(p+48)^secret[3],_wyr8(p+56)^see3);
+		see[0]=_wymum(_wyr8(p)^secret[(_wyr8(p)==secret[0])+0],_wyr8(p+8)^see[(_wyr8(p+8)==see[0])+0]);		
+		see[1]=_wymum(_wyr8(p+16)^secret[(_wyr8(p+16)==secret[1])+1],_wyr8(p+24)^see[(_wyr8(p+24)==see[1])+1]);
+		see[2]=_wymum(_wyr8(p+32)^secret[(_wyr8(p+32)==secret[2])+2],_wyr8(p+40)^see[(_wyr8(p+40)==see[2])+2]);	
+		see[3]=_wymum(_wyr8(p+48)^secret[(_wyr8(p+48)==secret[3])+3],_wyr8(p+56)^see[(_wyr8(p+56)==see[3])+3]);
 	}
-	seed^=see1^see2^see3;
+	seed^=see[1]^see[2]^see[3];
 	goto	label;
 }
 static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed,	const	uint64_t	secret[6]) {

@@ -1,4 +1,4 @@
-Simple Is Best. Every hash function is born equal. No hash is perfect, but some are useful.
+Every hash function is born equal. No hash function is perfect, but some are useful.
 ====
 
 wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively: 

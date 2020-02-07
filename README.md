@@ -1,4 +1,4 @@
-Simple Is Best
+Simple Is Best. Every hash function is born equal. No hash is perfect, but some are useful.
 ====
 
 wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively: 
@@ -19,14 +19,12 @@ Please read our ![manuscript](manuscript.docx) and help us to publish it on top 
 
 Benchmark /usr/share/dict/words
 
-**no hash is perfect, but some are useful!**
-
 |HashFunction|Plain(h/us)|Hashmap(h/us)|64KB(GB/s)|16MB(GB/s)|
 |----|----|----|----|----|
 |FastestHash|287.09|51.06|14198.24|3435973.84|
 |std::hash|74.80|35.36|7.33|7.37|
 |_wyhash|210.86|48.01|26.03|21.53|
-|**wyhash**|202.01|44.04|26.02|23.01|
+|wyhash|202.01|44.04|26.02|23.01|
 |xxHash64|92.74|35.00|14.71|14.59||
 |XXH3_scalar|152.29|42.42|13.11|13.11|
 |XXH3_SSE2|150.94|42.26|23.44|22.07|

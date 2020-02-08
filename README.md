@@ -43,7 +43,7 @@ wyhash is the default hasher for a hash table of the great Zig and V language.
 
 **Swift**  https://github.com/lemire/SwiftWyhashBenchmark
 
-**Swift**  https://github.com/jeudesprits/SwiftWyhash
+**Swift**  https://github.com/jeudesprits/PSWyhash
 
 **V** https://github.com/vlang/v/tree/master/vlib/hash/wyhash (v4)
 

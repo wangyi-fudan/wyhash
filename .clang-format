@@ -1,0 +1,8 @@
+---
+BasedOnStyle: Google
+ColumnLimit: '80'
+UseTab: Never
+IndentWidth: '4'
+TabWidth: '4'
+IndentPPDirectives: AfterHash
+...

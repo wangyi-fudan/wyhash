@@ -11,7 +11,7 @@ wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively:
   
 **simplest**: In the sense of code size.
 
-Please read our ![manuscript](manuscript.docx) and help us to publish it on top journal.
+Please read our ![manuscript](wyhash.docx) and help us to publish it on top journal.
 
 **Version 5 is ready. call make_secret function first before hashing**
 

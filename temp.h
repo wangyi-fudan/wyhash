@@ -1,4 +1,3 @@
-```C
 static inline uint64_t _wyhash(const void* key, uint64_t len, uint64_t seed, const uint64_t s[6]) {
  const uint8_t *p=(const uint8_t*)key; uint64_t i=len; seed^=s[4];
  if(_like_(i<=64)){
@@ -26,5 +25,3 @@ static inline uint64_t _wyhash(const void* key, uint64_t len, uint64_t seed, con
 static inline uint64_t wyhash(const void* key, uint64_t len, uint64_t seed, const uint64_t s[6]) {
  return _wymum(_wyhash(key,len,seed,s),len^s[5]);
 }
-```
-

@@ -15,6 +15,9 @@ Please read our ![manuscript](manuscript.docx) and help us to publish it on top 
 
 **Version 5 is ready. call make_secret function first before hashing**
 
+![](Clipboard01.png)
+![](Clipboard02.png)
+
 ----------------------------------------
 wyhash is the default hasher for a hash table of the great Zig and V language.
 

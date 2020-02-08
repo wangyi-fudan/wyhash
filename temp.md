@@ -5,7 +5,8 @@ static inline uint64_t _wyhash(const void* key, uint64_t len, uint64_t seed, con
   label:
   if(_like_(i>=8)){
    if(_like_(i<=16)) return  _wymum(_wyr8(p)^s[0],_wyr8(p+i-8)^seed);
-   else if(_like_(i<=32)) return  _wymum(_wyr8(p)^s[0],_wyr8(p+8)^seed)^_wymum(_wyr8(p+i-16)^s[1],_wyr8(p+i-8)^seed);
+   else if(_like_(i<=32)) 
+    return  _wymum(_wyr8(p)^s[0],_wyr8(p+8)^seed)^_wymum(_wyr8(p+i-16)^s[1],_wyr8(p+i-8)^seed);
    else return _wymum(_wyr8(p)^s[0],_wyr8(p+8)^seed)^_wymum(_wyr8(p+16)^s[1],_wyr8(p+24)^seed)
    ^_wymum(_wyr8(p+i-32)^s[2],_wyr8(p+i-24)^seed)^_wymum(_wyr8(p+i-16)^s[3],_wyr8(p+i-8)^seed);
   }

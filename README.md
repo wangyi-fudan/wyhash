@@ -7,7 +7,7 @@ wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively:
 
 **portable**: 64-bit/32-bit system, big/little endian.
   
-**fastest**:  Effecient on all machines, exspecially for short keys.
+**fastest**:  Effecient on 64-bit machines, especially for short keys.
   
 **simplest**: In the sense of code size.
 

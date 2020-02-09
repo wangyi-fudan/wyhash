@@ -9,14 +9,12 @@
 #endif
 #if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
 #define _likely_(x) __builtin_expect(x,1)
-#define _unlikely_(x) __builtin_expect(x,0)
 #else
 #define _likely_(x) (x)
-#define _unlikely_(x) (x)
 #endif
 static inline uint64_t _wyrotr(uint64_t v, unsigned k){ return (v>>k)|(v<<(64-k)); }
 static inline uint64_t _wymum(uint64_t A, uint64_t B){
-// faster on 32 bit system but the return is different
+// faster on 32 bit system but the return is different, for expert only
 // uint64_t  hh=(A>>32)*(B>>32), hl=(A>>32)*(unsigned)B, lh=(unsigned)A*(B>>32), ll=(uint64_t)(unsigned)A*(unsigned)B;
 // return _wyrotr(hl,32)^_wyrotr(lh,32)^hh^ll;
 #ifdef __SIZEOF_INT128__

@@ -16,15 +16,8 @@
 #endif
 static inline uint64_t _wyrotr(uint64_t v, unsigned k){ return (v>>k)|(v<<(64-k)); }
 static inline uint64_t _wymum(uint64_t A, uint64_t B){
-#ifdef __SIZEOF_INT128__
- __uint128_t r=A; r*=B; return (r>>64)^r;
-#elif defined(_MSC_VER) && defined(_M_X64)
- A=_umul128(A, B, &B); return A^B;
-#else
- uint64_t ha=A>>32, hb=B>>32, la=(uint32_t)A, lb=(uint32_t)B, hi, lo;
- uint64_t rh=ha*hb, rm0=ha*lb, rm1=hb*la, rl=la*lb, t=rl+(rm0<<32), c=t<rl;
- lo=t+(rm1<<32); c+=lo<t; hi=rh+(rm0>>32)+(rm1>>32)+c; return hi^lo;
-#endif
+ uint64_t  hh=(A>>32)*(B>>32), hl=(A>>32)*(unsigned)B, lh=(unsigned)A*(B>>32), ll=(uint64_t)(unsigned)A*(unsigned)B;
+ return _wyrotr(hl,32)^_wyrotr(lh,32)^hh^ll;
 }
 static inline uint64_t wyrand(uint64_t *seed){ *seed+=0xa0761d6478bd642full; return _wymum(*seed^0xe7037ed1a0b428dbull,*seed); }
 static inline double wy2u01(uint64_t r){ const double _wynorm=1.0/(1ull<<52); return (r>>11)*_wynorm; }

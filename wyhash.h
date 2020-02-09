@@ -16,6 +16,9 @@
 #endif
 static inline uint64_t _wyrotr(uint64_t v, unsigned k){ return (v>>k)|(v<<(64-k)); }
 static inline uint64_t _wymum(uint64_t A, uint64_t B){
+// faster on 32 bit system but the return is different
+// uint64_t  hh=(A>>32)*(B>>32), hl=(A>>32)*(unsigned)B, lh=(unsigned)A*(B>>32), ll=(uint64_t)(unsigned)A*(unsigned)B;
+// return _wyrotr(hl,32)^_wyrotr(lh,32)^hh^ll;
 #ifdef __SIZEOF_INT128__
  __uint128_t r=A; r*=B; return (r>>64)^r;
 #elif defined(_MSC_VER) && defined(_M_X64)

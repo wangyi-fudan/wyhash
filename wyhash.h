@@ -26,6 +26,7 @@ static inline uint64_t _wymum(uint64_t A, uint64_t B){
  lo=t+(rm1<<32); c+=lo<t; hi=rh+(rm0>>32)+(rm1>>32)+c; return hi^lo;
 #endif
 }
+static inline uint64_t _wymix(uint64_t A, uint64_t B){	return	A^B^_wymum(A,B);	}
 static inline uint64_t wyrand(uint64_t *seed){ *seed+=0xa0761d6478bd642full; return _wymum(*seed^0xe7037ed1a0b428dbull,*seed); }
 static inline double wy2u01(uint64_t r){ const double _wynorm=1.0/(1ull<<52); return (r>>11)*_wynorm; }
 static inline double wy2gau(uint64_t r){ const double _wynorm=1.0/(1ull<<20); return ((r&0x1fffff)+((r>>21)&0x1fffff)+((r>>42)&0x1fffff))*_wynorm-3.0; }
@@ -61,25 +62,25 @@ static inline uint64_t _wyhash(const void* key, uint64_t len, uint64_t seed, con
  if(_likely_(i<=64)){
   label:
   if(_likely_(i>=8)){
-   if(_likely_(i<=16)) return _wymum(_wyr8(p)^secret[0],_wyr8(p+i-8)^seed);
-   else if(_likely_(i<=32)) return _wymum(_wyr8(p)^secret[0],_wyr8(p+8)^seed)^_wymum(_wyr8(p+i-16)^secret[1],_wyr8(p+i-8)^seed);
-   else return _wymum(_wyr8(p)^secret[0],_wyr8(p+8)^seed)^_wymum(_wyr8(p+16)^secret[1],_wyr8(p+24)^seed)
-    ^_wymum(_wyr8(p+i-32)^secret[2],_wyr8(p+i-24)^seed)^_wymum(_wyr8(p+i-16)^secret[3],_wyr8(p+i-8)^seed);
+   if(_likely_(i<=16)) return _wymix(_wyr8(p)^secret[0],_wyr8(p+i-8)^seed);
+   else if(_likely_(i<=32)) return _wymix(_wyr8(p)^secret[0],_wyr8(p+8)^seed)^_wymix(_wyr8(p+i-16)^secret[1],_wyr8(p+i-8)^seed);
+   else return _wymix(_wyr8(p)^secret[0],_wyr8(p+8)^seed)^_wymix(_wyr8(p+16)^secret[1],_wyr8(p+24)^seed)
+    ^_wymix(_wyr8(p+i-32)^secret[2],_wyr8(p+i-24)^seed)^_wymix(_wyr8(p+i-16)^secret[3],_wyr8(p+i-8)^seed);
   } 
   else {
-   if(_likely_(i>=4)) return _wymum(_wyr4(p)^secret[0],_wyr4(p+i-4)^seed);
-   else return _wymum((_likely_(i)?_wyr3(p,i):0)^secret[0],seed);
+   if(_likely_(i>=4)) return _wymix(_wyr4(p)^secret[0],_wyr4(p+i-4)^seed);
+   else return _wymix((_likely_(i)?_wyr3(p,i):0)^secret[0],seed);
   }
  }
  uint64_t see1=seed, see2=seed, see3=seed;
  for(; i>=64; i-=64,p+=64){
-  seed=_wymum(_wyr8(p)^secret[0],_wyr8(p+8)^seed);  see1=_wymum(_wyr8(p+16)^secret[1],_wyr8(p+24)^see1);
-  see2=_wymum(_wyr8(p+32)^secret[2],_wyr8(p+40)^see2); see3=_wymum(_wyr8(p+48)^secret[3],_wyr8(p+56)^see3);
+  seed=_wymix(_wyr8(p)^secret[0],_wyr8(p+8)^seed);  see1=_wymix(_wyr8(p+16)^secret[1],_wyr8(p+24)^see1);
+  see2=_wymix(_wyr8(p+32)^secret[2],_wyr8(p+40)^see2); see3=_wymix(_wyr8(p+48)^secret[3],_wyr8(p+56)^see3);
  }
  seed^=see1^see2^see3;
  goto label;
 }
-static inline uint64_t wyhash(const void* key, uint64_t len, uint64_t seed, const uint64_t secret[6]){ return _wymum(_wyhash(key,len,seed,secret),len^secret[5]); }
+static inline uint64_t wyhash(const void* key, uint64_t len, uint64_t seed, const uint64_t secret[6]){ return _wymix(_wyhash(key,len,seed,secret),len^secret[5]); }
 static inline void make_secret(uint64_t seed, uint64_t secret[6]){
  uint8_t c[]= {15,23,27,29,30,39,43,45,46,51,53,54,57,58,60,71,75,77,78,83,85,86,89,90,92,99,101,102,105,106,108,113,114,116,120,135,139,141,142,147,149,150,153,154,156,163,165,166,169,170,172,177,178,180,184,195,197,198,201,202,204,209,210,212,216,225,226,228,232,240};
  for(size_t i=0; i<6; i++){

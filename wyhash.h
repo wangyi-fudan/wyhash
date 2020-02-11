@@ -60,9 +60,9 @@ static inline uint64_t FastestHash(const void *key, size_t len){
  else return 0;
 }
 static inline uint64_t _wyhash(const void* key, const uint64_t len, uint64_t seed, const uint64_t secret[6]){
- const uint8_t *p=(const uint8_t*)key; uint64_t i=len; seed^=secret[4];
+ const uint8_t *p=(const uint8_t*)key; uint64_t i=len; seed^=secret[4]; int loop=0;
  if(_unlike_(i>64)){
-  uint64_t see1=seed, see2=seed, see3=seed;
+  uint64_t see1=seed, see2=seed, see3=seed; loop=1;
   for(; _likely_(i>=64); i-=64,p+=64){
    seed=_wymix(_wyr8(p)^secret[0],_wyr8(p+8)^seed);  see1=_wymix(_wyr8(p+16)^secret[1],_wyr8(p+24)^see1);
    see2=_wymix(_wyr8(p+32)^secret[2],_wyr8(p+40)^see2); see3=_wymix(_wyr8(p+48)^secret[3],_wyr8(p+56)^see3);
@@ -78,7 +78,8 @@ static inline uint64_t _wyhash(const void* key, const uint64_t len, uint64_t see
  else {
   if(_likely_(i>=4)) return _wymix(_wyr4(p)^secret[0],_wyr4(p+i-4)^seed);
   else if (_likely_(i)) return _wymix(_wyr3(p,i)^secret[0],seed);
-  else return seed;
+  else if (_likely_(loop)) return seed;
+  else return _wymix(secret[0],seed);
  }
 }
 static inline uint64_t wyhash(const void* key, uint64_t len, uint64_t seed, const uint64_t secret[6]){ return _wymum(_wyhash(key,len,seed,secret), (len^secret[5])|(uint32_t)0x80000000u); }

@@ -14,8 +14,8 @@
 #endif
 static inline uint64_t _wyrotr(uint64_t v, unsigned k){ return (v>>k)|(v<<(64-k)); }
 static inline uint64_t _wymum(uint64_t A, uint64_t B){
-// uint64_t  hh=(A>>32)*(B>>32), hl=(A>>32)*(unsigned)B, lh=(unsigned)A*(B>>32), ll=(uint64_t)(unsigned)A*(unsigned)B;
-// return _wyrotr(hl,32)^_wyrotr(lh,32)^hh^ll;
+ uint64_t  hh=(A>>32)*(B>>32), hl=(A>>32)*(unsigned)B, lh=(unsigned)A*(B>>32), ll=(uint64_t)(unsigned)A*(unsigned)B;
+ return _wyrotr(hl,32)^_wyrotr(lh,32)^hh^ll;
 #ifdef __SIZEOF_INT128__
  __uint128_t r=A; r*=B; return (r>>64)^r;
 #elif defined(_MSC_VER) && defined(_M_X64)
@@ -80,7 +80,7 @@ static inline uint64_t _wyhash(const void* key, uint64_t len, uint64_t seed, con
  seed^=see1^see2^see3;
  goto label;
 }
-static inline uint64_t wyhash(const void* key, uint64_t len, uint64_t seed, const uint64_t secret[6]){ return _wymix(_wyhash(key,len,seed,secret),len^secret[5]); }
+static inline uint64_t wyhash(const void* key, uint64_t len, uint64_t seed, const uint64_t secret[6]){ return _wymix(_wyhash(key,len,seed,secret)^len,secret[5]); }
 static inline void make_secret(uint64_t seed, uint64_t secret[6]){
  uint8_t c[]= {15,23,27,29,30,39,43,45,46,51,53,54,57,58,60,71,75,77,78,83,85,86,89,90,92,99,101,102,105,106,108,113,114,116,120,135,139,141,142,147,149,150,153,154,156,163,165,166,169,170,172,177,178,180,184,195,197,198,201,202,204,209,210,212,216,225,226,228,232,240};
  for(size_t i=0; i<6; i++){

@@ -78,7 +78,7 @@ static inline uint64_t _wyhash(const void* key, uint64_t len, uint64_t seed, con
  seed^=see1^see2^see3;
  goto label;
 }
-static inline uint64_t wyhash(const void* key, uint64_t len, uint64_t seed, const uint64_t secret[5]){ return _wymix(_wyhash(key,len,seed,secret)^len,secret[4]); }
+static inline uint64_t wyhash(const void* key, uint64_t len, uint64_t seed, const uint64_t secret[5]){ return _wymum(_wyhash(key,len,seed,secret)^len,secret[4]); }
 static inline void make_secret(uint64_t seed, uint64_t secret[5]){
  uint8_t c[]= {15,23,27,29,30,39,43,45,46,51,53,54,57,58,60,71,75,77,78,83,85,86,89,90,92,99,101,102,105,106,108,113,114,116,120,135,139,141,142,147,149,150,153,154,156,163,165,166,169,170,172,177,178,180,184,195,197,198,201,202,204,209,210,212,216,225,226,228,232,240};
  for(size_t i=0; i<5; i++){
@@ -139,6 +139,6 @@ static inline void wyhash_update(wyhash_context_t *const __restrict ctx, const v
 }
 static inline uint64_t wyhash_final(wyhash_context_t *const __restrict ctx){
   if(_likely_(ctx->loop)) ctx->seed ^= ctx->see1 ^ ctx->see2 ^ ctx->see3;
-  return _wymix(_wyhash(ctx->buffer, ctx->left, ctx->seed ^ ctx->secret[4], ctx->secret)^ctx->total,ctx->secret[4]);
+  return _wymum(_wyhash(ctx->buffer, ctx->left, ctx->seed ^ ctx->secret[4], ctx->secret)^ctx->total,ctx->secret[4]);
 }
 #endif

@@ -64,7 +64,7 @@ static inline uint64_t _wyhash(const void* key, uint64_t len, uint64_t seed, con
    else if(_likely_(i<=32)) return _wymix(_wyr8(p)^secret[0],_wyr8(p+8)^seed)^_wymix(_wyr8(p+i-16)^secret[1],_wyr8(p+i-8)^seed);
    else return _wymix(_wyr8(p)^secret[0],_wyr8(p+8)^seed)^_wymix(_wyr8(p+16)^secret[1],_wyr8(p+24)^seed)
     ^_wymix(_wyr8(p+i-32)^secret[2],_wyr8(p+i-24)^seed)^_wymix(_wyr8(p+i-16)^secret[3],_wyr8(p+i-8)^seed);
-  } 
+  }
   else {
    if(_likely_(i>=4)) return _wymix(_wyr4(p)^secret[0],_wyr4(p+i-4)^seed);
    else return _wymix((_likely_(i)?_wyr3(p,i):0)^secret[0],seed);
@@ -98,4 +98,47 @@ static inline void make_secret(uint64_t seed, uint64_t secret[5]){
  }
 }
 static inline uint64_t wyhash64(uint64_t A, uint64_t B){ return _wymum(_wymum(A^_wyp[0],B^_wyp[1]),_wyp[2]); }
+typedef struct wyhash_context {
+ uint64_t secret[5];
+ uint64_t seed, see1, see2, see3;
+ uint8_t buffer[64];
+ uint8_t left; // always in [0, 64]
+ int loop;
+ uint64_t total;
+} wyhash_context_t;
+static inline void wyhash_init(wyhash_context_t *const __restrict ctx, const uint64_t seed, const uint64_t secret[5]){
+ memcpy(ctx->secret, secret, sizeof(ctx->secret));
+ ctx->seed=seed^secret[4]; ctx->see1=ctx->seed; ctx->see2=ctx->seed; ctx->see3=ctx->seed;
+ ctx->left=0; ctx->total=0; ctx->loop=0;
+}
+static inline uint64_t _wyhash_loop(wyhash_context_t *const __restrict ctx, const uint8_t *p, const uint64_t len){
+ uint64_t i = len; ctx->loop|=(i>64);
+ for(; i>64; i-=64,p+=64){
+  ctx->seed=_wymix(_wyr8(p)^ctx->secret[0],_wyr8(p+8)^ctx->seed);
+  ctx->see1=_wymix(_wyr8(p+16)^ctx->secret[1],_wyr8(p+24)^ctx->see1);
+  ctx->see2=_wymix(_wyr8(p+32)^ctx->secret[2],_wyr8(p+40)^ctx->see2);
+  ctx->see3=_wymix(_wyr8(p+48)^ctx->secret[3],_wyr8(p+56)^ctx->see3);
+ }
+ return len - i;
+}
+static inline void wyhash_update(wyhash_context_t *const __restrict ctx, const void* const key, uint64_t len){
+ ctx->total += len; // overflow for total length is ok
+ const uint8_t* p = (const uint8_t*)key;
+ uint8_t slots = 64 - ctx->left; // assert left <= 64
+ slots = len <= slots ? len : slots;
+ memcpy(ctx->buffer + ctx->left, p, slots);
+ p += slots;
+ len -= slots;
+ ctx->left += slots;
+ ctx->left -= _wyhash_loop(ctx, ctx->buffer, ctx->left + (len > 0));
+ const uint64_t consumed = _wyhash_loop(ctx, p, len);
+ p += consumed;
+ len -= consumed; // assert len <= 64
+ ctx->left = ctx->left > len ? ctx->left : (uint8_t)len;
+ memcpy(ctx->buffer, p, len);
+}
+static inline uint64_t wyhash_final(wyhash_context_t *const __restrict ctx){
+  if(_likely_(ctx->loop)) ctx->seed ^= ctx->see1 ^ ctx->see2 ^ ctx->see3;
+  return _wymix(_wyhash(ctx->buffer, ctx->left, ctx->seed ^ ctx->secret[4], ctx->secret)^ctx->total,ctx->secret[4]);
+}
 #endif

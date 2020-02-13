@@ -16,6 +16,13 @@ struct	xx{	size_t	operator()(const	string	&s)const{	return	XXH64(s.c_str(),s.siz
 struct	xx3{	size_t	operator()(const	string	&s)const{	return	XXH3_64bits_withSeed(s.c_str(),s.size(),34432);	}};
 struct	t1ha2{	size_t	operator()(const	string	&s)const{	return	t1ha2_atonce(s.c_str(),s.size(),34432);	}};
 
+struct	wys{	size_t	operator()(const	string	&s)const{
+	wyhash_context_t ctx;
+	wyhash_init(&ctx,34432,secret);
+	wyhash_update(&ctx,s.c_str(),s.size());
+	return wyhash_final(&ctx);
+}};
+
 template	<typename	Hasher>
 uint64_t	bench_hash(vector<string>	&v,	string	name){
 	Hasher	h;
@@ -46,7 +53,35 @@ uint64_t	bench_hash(vector<string>	&v,	string	name){
 	return	dummy;
 }
 
+bool	validate_streaming() {
+	uint64_t data[1], seed=time(NULL);
+	for (size_t i = 0; i < sizeof(data) / sizeof(*data); ++i)	data[i] = wyrand(&seed);
+	for (size_t i = 0; i <= sizeof(data); ++i) {
+		const uint64_t expected = wyhash(data, i, seed, _wyp);
+		wyhash_context_t ctx;
+		wyhash_init(&ctx, seed, _wyp);
+		uint8_t *p = (uint8_t*)data;
+		const uint64_t l1 = i / 4, l2 = i / 2, l3 = i - i / 4, l4 = i;
+		wyhash_update(&ctx, p + 0, 0);
+		wyhash_update(&ctx, p + 0, l1-0);
+		wyhash_update(&ctx, p + l1, 0);
+		wyhash_update(&ctx, p + l1, l2-l1);
+		wyhash_update(&ctx, p + l2, 0);
+		wyhash_update(&ctx, p + l2, l3-l2);
+		wyhash_update(&ctx, p + l3, 0);
+		wyhash_update(&ctx, p + l3, l4-l3);
+		wyhash_update(&ctx, p + l4, 0);
+		const uint64_t actual = wyhash_final(&ctx);
+		if (expected != actual) return false;
+	}
+	return true;
+}
+
 int	main(int	ac,	char	**av){
+	if (!validate_streaming()) {
+		cout<<"streaming version is not valid!"<<endl;
+		return 1;
+	}
 	string	file="/usr/share/dict/words";
 	if(ac>1)	file=av[1];
 	make_secret(time(NULL),secret);
@@ -60,6 +95,7 @@ int	main(int	ac,	char	**av){
 	r+=bench_hash<fh>(v,"FastestHash");
 	r+=bench_hash<std::hash<string>	>(v,"std::hash");
 	r+=bench_hash<wy>(v,"wyhash");
+	r+=bench_hash<wys>(v,"wyhash streaming");
 	r+=bench_hash<xx>(v,"xxHash64");
 	r+=bench_hash<xx3>(v,"XXH3_scalar");
 	r+=bench_hash<t1ha2>(v,"t1ha2_atonce");

@@ -60,9 +60,9 @@ static inline uint64_t _wyr4(const uint8_t *p){ unsigned v; memcpy(&v, p, 4); re
 #endif
 #endif
 static inline uint64_t _wyr3(const uint8_t *p, unsigned k){ return (((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1]; }
-static inline uint64_t FastestHash(const void *key, size_t len){
+static inline uint64_t FastestHash(const void *key, size_t len, uint64_t seed){
  const uint8_t *p=(const uint8_t*)key;
- return _likely_(len>=4)?(_wyr4(p)+_wyr4(p+len-4))*_wyr4(p+(len>>1)-2):(_likely_(len)?_wyr3(p,len)*_wyp[0]:0);
+ return _likely_(len>=4)?(_wyr4(p)+_wyr4(p+len-4))*(_wyr4(p+(len>>1)-2)^seed):(_likely_(len)?_wyr3(p,len)*(_wyp[0]^seed):seed);
 }
 static inline uint64_t _wyhash(const void* key, uint64_t len, uint64_t seed, const uint64_t secret[6]){
  const uint8_t *p=(const uint8_t*)key; uint64_t i=len; seed^=secret[4];

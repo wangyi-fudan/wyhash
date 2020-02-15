@@ -8,10 +8,9 @@
 #include	<sstream>
 #include	<vector>
 using	namespace	std;
-uint64_t	secret[6];
 
-struct	fh{	size_t	operator()(const	string	&s)const{	return	FastestHash(s.c_str(),s.size());	}};
-struct	wy{	size_t	operator()(const	string	&s)const{	return	wyhash(s.c_str(),s.size(),34432,secret);	}};
+struct	fh{	size_t	operator()(const	string	&s)const{	return	FastestHash(s.c_str(),s.size(),34432);	}};
+struct	wy{	size_t	operator()(const	string	&s)const{	return	wyhash(s.c_str(),s.size(),34432,_wyp);	}};
 struct	xx{	size_t	operator()(const	string	&s)const{	return	XXH64(s.c_str(),s.size(),34432);	}};
 struct	xx3{	size_t	operator()(const	string	&s)const{	return	XXH3_64bits_withSeed(s.c_str(),s.size(),34432);	}};
 struct	t1ha2{	size_t	operator()(const	string	&s)const{	return	t1ha2_atonce(s.c_str(),s.size(),34432);	}};
@@ -84,7 +83,6 @@ int	main(int	ac,	char	**av){
 	}
 	string	file="/usr/share/dict/words";
 	if(ac>1)	file=av[1];
-	make_secret(time(NULL),secret);
 	vector<string>	v;	string	s;
 	ifstream	fi(file.c_str());
 	for(fi>>s;	!fi.eof();	fi>>s)	if(s.size())	v.push_back(s);

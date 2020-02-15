@@ -15,8 +15,10 @@
 const uint64_t _wyp[5]={0xa0761d6478bd642full,0xe7037ed1a0b428dbull,0x8ebc6af09c88c6e3ull,0x589965cc75374cc3ull,0x1d8e4e27c47d124full};//default secret
 static inline uint64_t _wyrotr(uint64_t v, unsigned k){ return (v>>k)|(v<<(64-k)); }
 static inline uint64_t _wymum(uint64_t A, uint64_t B){
-// uint64_t  hh=(A>>32)*(B>>32), hl=(A>>32)*(unsigned)B, lh=(unsigned)A*(B>>32), ll=(uint64_t)(unsigned)A*(unsigned)B;
-// return _wyrotr(hl,32)^_wyrotr(lh,32)^hh^ll;
+#ifdef UNOFFICIAL_WYHASH_32BIT	//	fast on 32 bit system
+ uint64_t  hh=(A>>32)*(B>>32), hl=(A>>32)*(unsigned)B, lh=(unsigned)A*(B>>32), ll=(uint64_t)(unsigned)A*(unsigned)B;
+ return _wyrotr(hl,32)^_wyrotr(lh,32)^hh^ll;
+#else
 #ifdef __SIZEOF_INT128__
  __uint128_t r=A; r*=B; return (r>>64)^r;
 #elif defined(_MSC_VER) && defined(_M_X64)
@@ -26,8 +28,15 @@ static inline uint64_t _wymum(uint64_t A, uint64_t B){
  uint64_t rh=ha*hb, rm0=ha*lb, rm1=hb*la, rl=la*lb, t=rl+(rm0<<32), c=t<rl;
  lo=t+(rm1<<32); c+=lo<t; hi=rh+(rm0>>32)+(rm1>>32)+c; return hi^lo;
 #endif
+#endif
 }
-static inline uint64_t _wymix(uint64_t A, uint64_t B){	return	A^B^_wymum(A,B);	}
+static inline uint64_t _wymix(uint64_t A, uint64_t B){	
+#ifdef UNOFFICIAL_WYHASH_FAST //lose entropy with probability 2^-66 per byte
+ return	_wymum(A,B);	
+#else
+ return	A^B^_wymum(A,B);	
+#endif
+}
 static inline uint64_t wyrand(uint64_t *seed){ *seed+=_wyp[0]; return _wymum(*seed^_wyp[1],*seed); }
 static inline double wy2u01(uint64_t r){ const double _wynorm=1.0/(1ull<<52); return (r>>11)*_wynorm; }
 static inline double wy2gau(uint64_t r){ const double _wynorm=1.0/(1ull<<20); return ((r&0x1fffff)+((r>>21)&0x1fffff)+((r>>42)&0x1fffff))*_wynorm-3.0; }

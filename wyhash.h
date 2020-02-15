@@ -12,7 +12,7 @@
 #else
 #define _likely_(x) (x)
 #endif
-const uint64_t _wyp[5]={0xa0761d6478bd642full,0xe7037ed1a0b428dbull,0x8ebc6af09c88c6e3ull,0x589965cc75374cc3ull,0x1d8e4e27c47d124full};//default secret
+const uint64_t _wyp[6]={0xa0761d6478bd642full,0xe7037ed1a0b428dbull,0x8ebc6af09c88c6e3ull,0x589965cc75374cc3ull,0x1d8e4e27c47d124full,0x72b22b96e169b471ull};//default secret
 static inline uint64_t _wyrotr(uint64_t v, unsigned k){ return (v>>k)|(v<<(64-k)); }
 static inline uint64_t _wymum(uint64_t A, uint64_t B){
 #ifdef UNOFFICIAL_WYHASH_32BIT	//	fast on 32 bit system
@@ -64,7 +64,7 @@ static inline uint64_t FastestHash(const void *key, size_t len){
  const uint8_t *p=(const uint8_t*)key;
  return _likely_(len>=4)?(_wyr4(p)+_wyr4(p+len-4))*_wyr4(p+(len>>1)-2):(_likely_(len)?_wyr3(p,len)*_wyp[0]:0);
 }
-static inline uint64_t _wyhash(const void* key, uint64_t len, uint64_t seed, const uint64_t secret[5]){
+static inline uint64_t _wyhash(const void* key, uint64_t len, uint64_t seed, const uint64_t secret[6]){
  const uint8_t *p=(const uint8_t*)key; uint64_t i=len; seed^=secret[4];
  if(_likely_(i<=64)){
   label:
@@ -87,10 +87,10 @@ static inline uint64_t _wyhash(const void* key, uint64_t len, uint64_t seed, con
  seed^=see1^see2^see3;
  goto label;
 }
-static inline uint64_t wyhash(const void* key, uint64_t len, uint64_t seed, const uint64_t secret[5]){ return _wymum(_wyhash(key,len,seed,secret)^len,secret[4]); }
-static inline void make_secret(uint64_t seed, uint64_t secret[5]){
+static inline uint64_t wyhash(const void* key, uint64_t len, uint64_t seed, const uint64_t secret[6]){ return _wymum(_wyhash(key,len,seed,secret)^len,secret[5]); }
+static inline void make_secret(uint64_t seed, uint64_t secret[6]){
  uint8_t c[]= {15,23,27,29,30,39,43,45,46,51,53,54,57,58,60,71,75,77,78,83,85,86,89,90,92,99,101,102,105,106,108,113,114,116,120,135,139,141,142,147,149,150,153,154,156,163,165,166,169,170,172,177,178,180,184,195,197,198,201,202,204,209,210,212,216,225,226,228,232,240};
- for(size_t i=0; i<5; i++){
+ for(size_t i=0; i<6; i++){
   uint8_t ok;
   do{
    ok=1; secret[i]=0;
@@ -101,8 +101,8 @@ static inline void make_secret(uint64_t seed, uint64_t secret[5]){
 #elif defined(_MSC_VER)
    if(_mm_popcnt_u64(secret[i]^secret[j])!=32) ok=0;
 #endif
-//	if(!ok)	continue;
-//	for(size_t	j=2;	j<0x100000000ull;	j++)	if(secret[i]%j==0){	ok=0;	break;	}
+	if(!ok)	continue;
+	for(size_t	j=2;	j<0x100000000ull;	j++)	if(secret[i]%j==0){	ok=0;	break;	}
   }while(!ok);
  }
 }

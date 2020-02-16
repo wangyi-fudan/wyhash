@@ -77,12 +77,12 @@ static inline uint64_t _wyhash(const void* key, uint64_t len, uint64_t seed, con
   }
  }
 #if defined(__AVX2__)
- __m256i se[4]={ {seed,seed,seed,seed}, {seed,seed,seed,seed}, {seed,seed,seed,seed}, {seed,seed,seed,seed}},
+ __m256i se[4]={ {(int64_t)seed,(int64_t)seed,(int64_t)seed,(int64_t)seed}, {(int64_t)seed,(int64_t)seed,(int64_t)seed,(int64_t)seed}, {(int64_t)seed,(int64_t)seed,(int64_t)seed,(int64_t)seed}, {(int64_t)seed,(int64_t)seed,(int64_t)seed,(int64_t)seed}},
   ma[4]={
-  {secret[0]^secret[4],secret[0]^secret[5],secret[0]^secret[6],secret[0]^secret[7]},
-  {secret[1]^secret[4],secret[1]^secret[5],secret[1]^secret[6],secret[1]^secret[7]},
-  {secret[2]^secret[4],secret[2]^secret[5],secret[2]^secret[6],secret[2]^secret[7]},
-  {secret[3]^secret[4],secret[3]^secret[5],secret[3]^secret[6],secret[3]^secret[7]}};
+  {(int64_t)secret[0]^(int64_t)secret[4],(int64_t)secret[0]^(int64_t)secret[5],(int64_t)secret[0]^(int64_t)secret[6],(int64_t)secret[0]^(int64_t)secret[7]},
+  {(int64_t)secret[1]^(int64_t)secret[4],(int64_t)secret[1]^(int64_t)secret[5],(int64_t)secret[1]^(int64_t)secret[6],(int64_t)secret[1]^(int64_t)secret[7]},
+  {(int64_t)secret[2]^(int64_t)secret[4],(int64_t)secret[2]^(int64_t)secret[5],(int64_t)secret[2]^(int64_t)secret[6],(int64_t)secret[2]^(int64_t)secret[7]},
+  {(int64_t)secret[3]^(int64_t)secret[4],(int64_t)secret[3]^(int64_t)secret[5],(int64_t)secret[3]^(int64_t)secret[6],(int64_t)secret[3]^(int64_t)secret[7]}};
  for(; i>128; i-=128,p+=128){
   __m256i d[4]={_mm256_loadu_si256((__m256i*)p),_mm256_loadu_si256((__m256i*)(p+32)),_mm256_loadu_si256((__m256i*)(p+64)),_mm256_loadu_si256((__m256i*)(p+96))};
   for(size_t j=0; j<4; j++){
@@ -92,12 +92,12 @@ static inline uint64_t _wyhash(const void* key, uint64_t len, uint64_t seed, con
  }
  for(size_t	j=0; j<4; j++){ uint64_t *s=(uint64_t*)&se[j]; seed^=s[0]^s[1]^s[2]^s[3];}
 #elif defined(__SSE2__)
- __m128i se[8]={ {seed,seed},{seed,seed}, {seed,seed},{seed,seed}, {seed,seed},{seed,seed}, {seed,seed},{seed,seed}},
+ __m128i se[8]={ {(int64_t)seed,(int64_t)seed},{(int64_t)seed,(int64_t)seed}, {(int64_t)seed,(int64_t)seed},{(int64_t)seed,(int64_t)seed}, {(int64_t)seed,(int64_t)seed},{(int64_t)seed,(int64_t)seed}, {(int64_t)seed,(int64_t)seed},{(int64_t)seed,(int64_t)seed}},
   ma[8]={
-  {secret[0]^secret[4],secret[0]^secret[5]},{secret[0]^secret[6],secret[0]^secret[7]},
-  {secret[1]^secret[4],secret[1]^secret[5]},{secret[1]^secret[6],secret[1]^secret[7]},
-  {secret[2]^secret[4],secret[2]^secret[5]},{secret[2]^secret[6],secret[2]^secret[7]},
-  {secret[3]^secret[4],secret[3]^secret[5]},{secret[3]^secret[6],secret[3]^secret[7]}};
+  {(int64_t)secret[0]^(int64_t)secret[4],(int64_t)secret[0]^(int64_t)secret[5]},{(int64_t)secret[0]^(int64_t)secret[6],(int64_t)secret[0]^(int64_t)secret[7]},
+  {(int64_t)secret[1]^(int64_t)secret[4],(int64_t)secret[1]^(int64_t)secret[5]},{(int64_t)secret[1]^(int64_t)secret[6],(int64_t)secret[1]^(int64_t)secret[7]},
+  {(int64_t)secret[2]^(int64_t)secret[4],(int64_t)secret[2]^(int64_t)secret[5]},{(int64_t)secret[2]^(int64_t)secret[6],(int64_t)secret[2]^(int64_t)secret[7]},
+  {(int64_t)secret[3]^(int64_t)secret[4],(int64_t)secret[3]^(int64_t)secret[5]},{(int64_t)secret[3]^(int64_t)secret[6],(int64_t)secret[3]^(int64_t)secret[7]}};
  for(; i>128; i-=128,p+=128){
   __m128i d[8]={_mm_loadu_si128((__m128i*)p),_mm_loadu_si128((__m128i*)(p+16)),_mm_loadu_si128((__m128i*)(p+32)),_mm_loadu_si128((__m128i*)(p+48)),
   _mm_loadu_si128((__m128i*)(p+64)),_mm_loadu_si128((__m128i*)(p+80)),_mm_loadu_si128((__m128i*)(p+96)),_mm_loadu_si128((__m128i*)(p+112))};

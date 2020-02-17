@@ -32,7 +32,7 @@ static inline uint64_t _wymum(uint64_t A, uint64_t B){
 #endif
 #endif
 }
-static inline uint64_t _wymix(uint64_t A, uint64_t B){ return _wymum(A,B)^(A^B); }
+static inline uint64_t _wymix(uint64_t A, uint64_t B){ return (A^B)^_wymum(A,B); }
 static inline uint64_t _wymix32(uint64_t A){ return A^((A>>32)*(uint32_t)A); }
 static inline uint64_t wyhash64(uint64_t A, uint64_t B){ return _wymum(_wymum(A^_wyp[0],B^_wyp[1]),_wyp[2]); }
 static inline uint64_t wyrand(uint64_t *seed){ *seed+=_wyp[0]; return _wymum(*seed^_wyp[1],*seed); }
@@ -62,19 +62,18 @@ static inline uint64_t FastestHash(const void *key, size_t len, uint64_t seed){
  const uint8_t *p=(const uint8_t*)key;
  return _likely_(len>=4)?(_wyr4(p)+_wyr4(p+len-4))*(_wyr4(p+(len>>1)-2)^seed):(_likely_(len)?_wyr3(p,len)*(_wyp[0]^seed):seed);
 }
+
 static inline uint64_t _wyhash(const void* key, uint64_t len, uint64_t seed, const uint64_t secret[10]){
  const uint8_t *p=(const uint8_t*)key; uint64_t i=len; seed^=secret[8];
  if(_likely_(i<=128)){
-  label:
+  finalization:
   if(_likely_(i>=8)){
    if(_likely_(i<=16)) return _wymix(_wyr8(p)^secret[0],_wyr8(p+i-8)^seed);
-   else if(_likely_(i<=32)) return _wymix(_wyr8(p)^secret[0],_wyr8(p+8)^seed)^_wymix(_wyr8(p+i-16)^secret[1],_wyr8(p+i-8)^seed);
-   else{ seed=_wymix(_wyr8(p)^secret[0],_wyr8(p+8)^seed)^_wymix(_wyr8(p+16)^secret[1],_wyr8(p+24)^seed); i-=32; p+=32; goto label; }
+   else{ seed=_wymix(_wyr8(p)^secret[0],_wyr8(p+8)^seed); i-=16; p+=16; goto finalization; }
   }
-  else {
-   if(_likely_(i>=4)) return _wymix(_wyr4(p)^secret[0],_wyr4(p+i-4)^seed);
-   else return _wymix((_likely_(i)?_wyr3(p,i):0)^secret[0],seed);
-  }
+  else if(_likely_(i>=4)) return _wymix(_wyr4(p)^secret[0],_wyr4(p+i-4)^seed);
+  else if(_likely_(i))	return _wymix(_wyr3(p,i)^secret[0],seed);
+  else return _wymum(secret[0],seed);
  }
 #if defined(__AVX2__)
  __m256i se[4]={ {(int64_t)seed,(int64_t)seed,(int64_t)seed,(int64_t)seed}, {(int64_t)seed,(int64_t)seed,(int64_t)seed,(int64_t)seed}, {(int64_t)seed,(int64_t)seed,(int64_t)seed,(int64_t)seed}, {(int64_t)seed,(int64_t)seed,(int64_t)seed,(int64_t)seed}},
@@ -117,9 +116,9 @@ static inline uint64_t _wyhash(const void* key, uint64_t len, uint64_t seed, con
  for(; i>128; i-=128,p+=128) for(size_t j=0; j<4; j++) for(size_t k=0; k<4; k++) se[j][k]=_wymix32(_wyr8(p+(j*4+k)*8)^se[j][k]^ma[j][k]);
  for(size_t	j=0; j<4; j++) for(size_t k=0; k<4; k++) seed^=se[j][k];
 #endif
- goto label;
+ goto finalization;
 }
-static inline uint64_t wyhash(const void* key, uint64_t len, uint64_t seed, const uint64_t secret[10]){  uint64_t h=_wyhash(key,len,seed,secret)^len; return _wymum(h,h^secret[9]);}
+static inline uint64_t wyhash(const void* key, uint64_t len, uint64_t seed, const uint64_t secret[10]){  uint64_t h=_wyhash(key,len,seed,secret); return _wymum(h^len,h^secret[9]);}
 
 static inline void make_secret(uint64_t seed, uint64_t secret[10]){
  uint8_t c[]= {15,23,27,29,30,39,43,45,46,51,53,54,57,58,60,71,75,77,78,83,85,86,89,90,92,99,101,102,105,106,108,113,114,116,120,135,139,141,142,147,149,150,153,154,156,163,165,166,169,170,172,177,178,180,184,195,197,198,201,202,204,209,210,212,216,225,226,228,232,240};

@@ -13,14 +13,14 @@ wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively:
 
 Please read our ![manuscript](wyhash.docx) and help us to publish it on top journal.
 
-Also I would like to introduce a new hash function "**FastestHash**" which is fastest in hashmap.
+Also I would like to introduce a new hash function "**FastestHash**" which is fastest in hashmap but not secure. It is used in V language now.
 
 | Benchmarking | /usr/share/dict/words |         |       |          |         |       |
 | ------------ | --------------------- | ------- | ----- | -------- | ------- | ----- |
 | HashFunction | Words                 | Hashmap | 1K    | 256K     | 16M     | 1G    |
 | std::hash    | 96.72                 | 35.43   | 6.89  | 7.38     | 7.36    | 6.49  |
 | FastestHash  | 725.33                | 51.76   | 209.8 | 53771.11 | 3435974 | inf   |
-| wyhash       | 268.39                | 45.95   | 24.33 | 24.33    | 22.31   | 10.96 |
+| wyhash       | 271.84                | 46.64   | 24.93 | 24.76    | 22.58   | 11.11 |
 
 **FastestHash offical code**:
 ```C

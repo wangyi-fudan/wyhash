@@ -9,8 +9,10 @@
 #endif
 #if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
 #define _likely_(x) __builtin_expect(x, 1)
+#define _unlikely_(x) __builtin_expect(x, 0)
 #else
 #define _likely_(x) (x)
+#define _unlikely_(x) (x)
 #endif
 const uint64_t _wyp[6] = { 0xa0761d6478bd642full, 0xe7037ed1a0b428dbull, 0x8ebc6af09c88c6e3ull, 0x589965cc75374cc3ull, 0x1d8e4e27c47d124full, 0x72b22b96e169b471ull};
 static inline uint64_t _wyrotr(uint64_t v, unsigned k) {
@@ -115,18 +117,17 @@ static inline uint64_t _wyhash(const void *key, uint64_t len, uint64_t seed, con
   uint64_t i = len;
   seed ^= secret[4];
   if (_likely_(i <= 64)) {
-finalization:
-    if (_likely_(i >= 8)) {
-      if (_likely_(i <= 16)) return _wymix(_wyr8(p) ^ secret[0], _wyr8(p + i - 8) ^ seed);
-      else {
+	finalization:
+	if(_likely_(i<=8)){
+		if(_likely_(i>=4))	return _wymix(_wyr4(p) ^ secret[0], _wyr4(p + i - 4) ^ seed);
+    	else if (_likely_(i)) return _wymix(_wyr3(p, i) ^ secret[0], seed);
+    	else return _wymum(secret[0], seed);
+	}
+    else if(_likely_(i <= 16)) return _wymix(_wyr8(p) ^ secret[0], _wyr8(p + i - 8) ^ seed);
+    else {
         seed = _wymix(_wyr8(p) ^ secret[0], _wyr8(p + 8) ^ seed);
-        i -= 16;
-        p += 16;
-        goto finalization;
-      }
-    } else if (_likely_(i >= 4)) return _wymix(_wyr4(p) ^ secret[0], _wyr4(p + i - 4) ^ seed);
-    else if (_likely_(i)) return _wymix(_wyr3(p, i) ^ secret[0], seed);
-    else return _wymum(secret[0], seed);
+        i -= 16; p += 16; goto finalization;
+    } 
   }
   uint64_t see1 = seed, see2 = seed, see3 = seed;
   for (; i > 64; i -= 64, p += 64) {
@@ -139,8 +140,7 @@ finalization:
   goto finalization;
 }
 static inline uint64_t wyhash(const void *key, uint64_t len, uint64_t seed, const uint64_t secret[6]) {
-  uint64_t h=_wyhash(key, len, seed, secret);
-  return _wymum(h ^ len, h ^ secret[5]);
+  return _wymum(_wyhash(key, len, seed, secret) ^ len, secret[5]);
 }
 static inline void make_secret(uint64_t seed, uint64_t secret[6]) {
   uint8_t c[] = {15, 23, 27, 29, 30, 39, 43, 45, 46, 51, 53, 54, 57, 58, 60, 71, 75, 77, 78, 83, 85, 86, 89, 90, 92, 99, 101, 102, 105, 106, 108, 113, 114, 116, 120, 135, 139, 141, 142, 147, 149, 150, 153, 154, 156, 163, 165, 166, 169, 170, 172, 177, 178, 180, 184, 195, 197, 198, 201, 202, 204, 209, 210, 212, 216, 225, 226, 228, 232, 240 };
@@ -167,7 +167,7 @@ static inline void make_secret(uint64_t seed, uint64_t secret[6]) {
 }
 /*
 typedef struct wyhash_context {
-  uint64_t secret[5];
+  uint64_t secret[6];
   uint64_t seed, see1, see2, see3;
   uint8_t buffer[64];
   uint8_t left; // always in [0, 64]
@@ -191,12 +191,9 @@ static inline uint64_t _wyhash_loop(wyhash_context_t *const __restrict ctx,
   ctx->loop |= (i > 64);
   for (; i > 64; i -= 64, p += 64) {
     ctx->seed = _wymix(_wyr8(p) ^ ctx->secret[0], _wyr8(p + 8) ^ ctx->seed);
-    ctx->see1 =
-      _wymix(_wyr8(p + 16) ^ ctx->secret[1], _wyr8(p + 24) ^ ctx->see1);
-    ctx->see2 =
-      _wymix(_wyr8(p + 32) ^ ctx->secret[2], _wyr8(p + 40) ^ ctx->see2);
-    ctx->see3 =
-      _wymix(_wyr8(p + 48) ^ ctx->secret[3], _wyr8(p + 56) ^ ctx->see3);
+    ctx->see1 = _wymix(_wyr8(p + 16) ^ ctx->secret[1], _wyr8(p + 24) ^ ctx->see1);
+    ctx->see2 = _wymix(_wyr8(p + 32) ^ ctx->secret[2], _wyr8(p + 40) ^ ctx->see2);
+    ctx->see3 = _wymix(_wyr8(p + 48) ^ ctx->secret[3], _wyr8(p + 56) ^ ctx->see3);
   }
   return len - i;
 }

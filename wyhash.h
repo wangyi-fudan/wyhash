@@ -42,7 +42,7 @@ static inline uint64_t _wymix(uint64_t A, uint64_t B) {
 }
 static inline uint64_t wyhash64(uint64_t A, uint64_t B) { return _wymum(_wymum(A ^ *_wyp, B ^ _wyp[1]), *_wyp);}
 static inline uint64_t wyrand(uint64_t *seed) { *seed += *_wyp; return _wymum(*seed ^ _wyp[1], *seed);}
-static inline double wy2u01(uint64_t r) { const double _wynorm = 1.0 / (1ull << 52); return (r >> 11) * _wynorm;}
+static inline double wy2u01(uint64_t r) { const double _wynorm = 1.0 / (1ull << 52); return (r >> 12) * _wynorm;}
 static inline double wy2gau(uint64_t r) { const double _wynorm = 1.0 / (1ull << 20); return ((r & 0x1fffff) + ((r >> 21) & 0x1fffff) + ((r >> 42) & 0x1fffff)) * _wynorm - 3.0;}
 #ifndef WYHASH_LITTLE_ENDIAN
 #if defined(_WIN32) || defined(__LITTLE_ENDIAN__) || (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)

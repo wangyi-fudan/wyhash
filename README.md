@@ -22,7 +22,7 @@ Also I would like to introduce a new hash function "**FastestHash**" which is fa
 | FastestHash  | 725.33                | 51.76   | 209.8 | 53771.11 | 3435974 | inf   |
 | wyhash       | 277.49                | 46.71   | 23.36 | 23.98    | 21.23   | 10.63 |
 
-**FastestHash offical code**:
+**FastestHash official code**:
 ```C
 static inline uint64_t _wyr4(const uint8_t *p){ unsigned v; memcpy(&v, p, 4); return v; }
 static inline uint64_t _wyr3(const uint8_t *p, unsigned k){ return (((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1]; }

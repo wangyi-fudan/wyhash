@@ -6,7 +6,7 @@
 #if defined(_MSC_VER) && defined(_M_X64)
 #    include <intrin.h>
 #    pragma intrinsic(_umul128)
-#elif defined(__GNUC__)
+#elif defined(__GNUC__) && defined(__SSE2__)
 #    include <x86intrin.h>
 #endif
 #if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)

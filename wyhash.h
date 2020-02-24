@@ -111,7 +111,7 @@ static inline void make_secret(uint64_t seed, uint64_t secret[2]) {
           break;
         }
 #endif
-      if (!ok) continue;
+      if (!ok||secret[i]%2==0) continue;
       for (uint64_t j = 3; j < 0x100000000ull; j += 2) if (secret[i] % j == 0) { ok = 0; break;}
     } while (!ok);
   }

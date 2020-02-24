@@ -98,14 +98,21 @@ static inline void make_secret(uint64_t seed, uint64_t secret[2]) {
     do {
       ok = 1; secret[i] = 0;
       for (size_t j = 0; j < 64; j += 8) secret[i] |= ((uint64_t)c[wyrand(&seed) % sizeof(c)]) << j;
+      if (secret[i] % 2 == 0) { ok = 0; continue; }
       for (size_t j = 0; j < i; j++)
 #if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
-        if (__builtin_popcountll(secret[i] ^ secret[j]) != 32) ok = 0;
+        if (__builtin_popcountll(secret[i] ^ secret[j]) != 32) {
+          ok = 0;
+          break;
+        }
 #elif defined(_MSC_VER)
-        if (_mm_popcnt_u64(secret[i] ^ secret[j]) != 32) ok = 0;
+        if (_mm_popcnt_u64(secret[i] ^ secret[j]) != 32) {
+          ok = 0;
+          break;
+        }
 #endif
       if (!ok) continue;
-      for (size_t j = 2; j < 0x100000000ull; j++) if (secret[i] % j == 0) { ok = 0; break;}
+      for (uint64_t j = 3; j < 0x100000000ull; j += 2) if (secret[i] % j == 0) { ok = 0; break;}
     } while (!ok);
   }
 }

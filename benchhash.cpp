@@ -33,7 +33,7 @@ uint64_t	bench_hash(vector<string>	&v,	string	name){
 	char	temp[128];
 	gettimeofday(&beg,NULL);
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Modify here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	for(size_t  r=0;    r<R;    r++)	for(size_t	i=0;	i<N;	i++){	dummy+=f(temp,dummy&31,i);	(*temp)++;	}
+	for(size_t  r=0;    r<R;    r++)	for(size_t	i=0;	i<N;	i++){	dummy+=f(temp,(dummy&31)+1,i);	(*temp)++;	}
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	gettimeofday(&end,NULL);
 	cout<<1e-6*R*N/(end.tv_sec-beg.tv_sec+1e-6*(end.tv_usec-beg.tv_usec))<<"\t";

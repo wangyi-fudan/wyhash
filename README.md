@@ -1,103 +1,74 @@
-Simple Is Best
-========
+Every hash function is born equal. No hash function is perfect, but some are useful.
+====
 
-wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively: solid, portable, fastest, simplest. wyhash passed SMHasher, wyrand passed BigCrush, practrand and designed to drop-in replace C rand(). See our [manuscript](manuscript.md).
+wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively: 
 
-Updated to version 2
-----
-Dear user and developers, based on recent discussions with @leo-yuriev on issue 15, I decide to upgrade wyhash to version 2 draft. Version 2 provide better security against intended attacks without obvious compromise of speed.  
+**solid**:  wyhash passed SMHasher, wyrand passed BigCrush, practrand.
 
-My deep worry on this upgrade is the split of wyhash ecosystem since many language binding have been developed. However, my goal is to build an ultimate hash function for human. Come on with me, we are young!
+**portable**: 64-bit/32-bit system, big/little endian.
+  
+**fastest**:  Effecient on 64-bit machines, especially for short keys.
+  
+**simplest**: In the sense of code size.
+
+Please read our ![manuscript](wyhash.docx) and help us to publish it on top journal.
+
+**Version Beta** is ready. This version solve the problem of 62 bit uniqueness strength mentioned by Yann Collet.
+
+![](Clipboard01.png)
+![](Clipboard02.png)
+
+----------------------------------------
+wyhash is the default hasher for a hash table of the great Zig and V language.
+
+**C#**  https://github.com/cocowalla/wyhash-dotnet
+
+**C++**  https://github.com/tommyettinger/waterhash
+
+**GO**  https://github.com/dgryski/go-wyhash
+
+**GO**  https://github.com/orisano/wyhash
+
+**GO** https://github.com/littleli/go-wyhash16
+
+**GO** https://github.com/zeebo/wyhash
+
+**GO** https://github.com/lonewolf3739/wyhash-go
+
+**Java** https://github.com/OpenHFT/Zero-Allocation-Hashing
+
+**Rust**  https://github.com/eldruin/wyhash-rs
+
+**Swift** https://github.com/lemire/SwiftWyhash
+
+**Swift**  https://github.com/lemire/SwiftWyhashBenchmark
+
+**Swift**  https://github.com/jeudesprits/PSWyhash
+
+**V** https://github.com/vlang/v/tree/master/vlib/hash/wyhash (v4)
+
+**Zig** https://github.com/ManDeJan/zig-wyhash
 
 ----------------------------------------
 
-wyrand code:
+Also I would like to introduce a new hash function "**FastestHash**" which is fastest in hashmap but not secure. It is used in V language now.
+
+| Benchmarking | /usr/share/dict/words |         |       |          |         |       |
+| ------------ | --------------------- | ------- | ----- | -------- | ------- | ----- |
+| HashFunction | Words                 | Hashmap | 1K    | 256K     | 16M     | 1G    |
+| std::hash    | 96.72                 | 35.43   | 6.89  | 7.38     | 7.36    | 6.49  |
+| FastestHash  | 725.33                | 51.76   | 209.8 | 53771.11 | 3435974 | inf   |
+| wyhash       | 277.49                | 46.71   | 23.36 | 23.98    | 21.23   | 10.63 |
+
+**FastestHash official code**:
 ```C
-inline	uint64_t	wyrand(uint64_t	*seed){    
-	*seed+=0xa0761d6478bd642full;    
-	__uint128_t	t=(__uint128_t)(*seed^0xe7037ed1a0b428dbull)*(*seed);    
-	return	(t>>64)^t;    
+static inline uint64_t _wyr4(const uint8_t *p){ unsigned v; memcpy(&v, p, 4); return v; }
+static inline uint64_t _wyr3(const uint8_t *p, unsigned k){ return (((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1]; }
+static inline uint64_t FastestHash(const void *key, size_t len, uint64_t seed){
+ const uint8_t *p=(const uint8_t*)key;
+ return _likely_(len>=4)?(_wyr4(p)+_wyr4(p+len-4))*(_wyr4(p+(len>>1)-2)^seed):(_likely_(len)?_wyr3(p,len)*(_wyp[0]^seed):seed);
 }
 ```
-
-The speed benchmarks are as follow:
-
-https://github.com/rurban/smhasher
-
-| key/cycles | wyhash | XXH3 | t1ha2_atonce | t1ha1_64le | t1ha0_aes_noavx | speedup |
-| ---- | ---- | ---- | ---- | ---- | ---- | ---- |
-| 1-byte | 16.00 | 19.00 | 29.00 | 30.64 | 29.28 | 18.75% |
-| 2-byte | 16.00 | 19.00 | 29.00 | 30.67 | 29.00 | 18.75% |
-| 3-byte | 17.00 | 19.00 | 29.00 | 30.65 | 29.00 | 11.76% |
-| 4-byte | 16.00 | 17.00 | 29.00 | 30.65 | 29.41 | 6.25% |
-| 5-byte | 17.00 | 24.00 | 29.00 | 30.69 | 29.33 | 41.18% |
-| 6-byte | 17.00 | 24.00 | 29.00 | 30.71 | 29.28 | 41.18% |
-| 7-byte | 18.00 | 24.00 | 29.00 | 30.65 | 29.33 | 33.33% |
-| 8-byte | 17.00 | 17.00 | 29.00 | 30.32 | 29.00 | 0.00% |
-| 9-byte | 17.00 | 25.00 | 32.00 | 30.00 | 32.00 | 47.06% |
-| 10-byte | 17.00 | 25.00 | 32.58 | 30.55 | 32.26 | 47.06% |
-| 11-byte | 17.00 | 25.00 | 32.52 | 30.00 | 32.00 | 47.06% |
-| 12-byte | 17.00 | 25.00 | 32.40 | 26.99 | 32.70 | 47.06% |
-| 13-byte | 17.00 | 25.00 | 32.59 | 26.99 | 32.79 | 47.06% |
-| 14-byte | 17.15 | 25.00 | 32.53 | 26.99 | 32.70 | 45.77% |
-| 15-byte | 17.00 | 25.00 | 32.41 | 26.99 | 32.73 | 47.06% |
-| 16-byte | 17.00 | 25.00 | 32.00 | 26.66 | 32.27 | 47.06% |
-| 17-byte | 18.00 | 28.00 | 36.80 | 34.00 | 36.00 | 55.56% |
-| 18-byte | 18.00 | 28.00 | 36.78 | 34.00 | 36.00 | 55.56% |
-| 19-byte | 18.00 | 28.00 | 36.98 | 34.00 | 36.58 | 55.56% |
-| 20-byte | 18.00 | 27.00 | 37.03 | 34.00 | 37.25 | 50.00% |
-| 21-byte | 18.00 | 27.31 | 37.07 | 34.11 | 37.21 | 51.72% |
-| 22-byte | 18.00 | 27.60 | 36.93 | 34.00 | 36.63 | 53.33% |
-| 23-byte | 18.00 | 27.51 | 36.71 | 34.00 | 36.00 | 52.83% |
-| 24-byte | 18.00 | 27.00 | 36.34 | 34.00 | 36.00 | 50.00% |
-| 25-byte | 18.00 | 27.62 | 40.77 | 27.11 | 40.97 | 50.61% |
-| 26-byte | 18.00 | 27.79 | 40.51 | 27.00 | 40.97 | 50.00% |
-| 27-byte | 18.00 | 27.78 | 40.54 | 27.00 | 40.99 | 50.00% |
-| 28-byte | 18.00 | 27.58 | 40.00 | 27.00 | 40.98 | 50.00% |
-| 29-byte | 18.00 | 27.57 | 40.72 | 27.00 | 40.87 | 50.00% |
-| 30-byte | 18.00 | 27.66 | 40.56 | 27.00 | 40.96 | 50.00% |
-| 31-byte | 18.00 | 27.69 | 40.61 | 27.00 | 40.87 | 50.00% |
-
-----------------------------------------
-
-https://github.com/lemire/testingRNG
-
-| PRNG |  cycles per byte |
-| ---- | ---- |
-| xorshift_k4 | 1.60 |
-| xorshift_k5 | 1.77 |
-| mersennetwister | 2.41 |
-| mitchellmoore | 3.12 |
-| widynski | 1.88 |
-| xorshift32 | 2.07 |
-| pcg32 | 1.72 |
-| rand | 5.04 |
-| aesdragontamer | 0.71 |
-| aesctr | 0.83 |
-| lehmer64 | 0.86 |
-| xorshift128plus | 0.85 |
-| xoroshiro128plus | 0.96 |
-| splitmix64 | 0.85 |
-| pcg64 | 1.16 |
-| xorshift1024star | 1.28 |
-| xorshift1024plus | 0.91 |
-| wyrand | 0.67 |
-
-----------------------------------------
-
-Lemire:[The fastest conventional random number generator that can pass Big Crush?](https://lemire.me/blog/2019/03/19/the-fastest-conventional-random-number-generator-that-can-pass-big-crush/)
-
-
-| PRNG | ns/rand | vs wyrand |
-| ---- | ---- | ---- |
-| wyrand | 0.792 | 100.000% |
-| lehmer64 | 1.219 | 153.858% |
-| 3-lehmer64 | 0.816 | 103.010% |
-| splitmix64 | 1.220 | 154.059% |
-| 3-splitmix64 | 1.134 | 143.214% |
-| xoshiro256 | 3.069 | 387.460% |
-| pcg64 | 2.559 | 323.004% |
-| pcg32 | 1.320 | 166.617% |
 
 ----------------------------------------
 
@@ -124,3 +95,14 @@ Diego Barrios Romero
 paulie-g 
 
 dumblob
+
+Yann Collet
+
+ivte-ms
+
+hyb
+
+James Z.M. Gao
+
+easyaspi314 (Devin)
+

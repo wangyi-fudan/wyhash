@@ -62,11 +62,20 @@ Also I would like to introduce a new hash function "**FastestHash**" which is fa
 
 **FastestHash official code**:
 ```C
-static inline uint64_t _wyr4(const uint8_t *p){ unsigned v; memcpy(&v, p, 4); return v; }
-static inline uint64_t _wyr3(const uint8_t *p, unsigned k){ return (((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1]; }
-static inline uint64_t FastestHash(const void *key, size_t len, uint64_t seed){
- const uint8_t *p=(const uint8_t*)key;
- return _likely_(len>=4)?(_wyr4(p)+_wyr4(p+len-4))*(_wyr4(p+(len>>1)-2)^seed):(_likely_(len)?_wyr3(p,len)*(_wyp[0]^seed):seed);
+// Author: Wang Yi <godspeed_china@yeah.net>
+#include <stdint.h>
+#include <string.h>
+static inline uint64_t FastestHash(const void *key, size_t len) {
+    const uint8_t *p = (const uint8_t *)key;
+    if(len>=4) {
+        unsigned	first,	middle,	last;
+        memcpy(&first,p,4);
+        memcpy(&middle,p+(len>>1)-2,4);
+        memcpy(&last,p+len-4,4);
+        return	(first+last)*middle;
+    }
+    if(len)	return	((((unsigned)p[0])<<16) | (((unsigned)p[len>>1])<<8) | p[len-1])*0xa0761d6478bd642full;
+    return	0;
 }
 ```
 

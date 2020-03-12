@@ -64,7 +64,8 @@ Also I would like to introduce a new hash function "**FastestHash**" which is fa
 ```C
 /*
   Author: Wang Yi <godspeed_china@yeah.net>
-  This is a dirty hash function designed for O(1) speed.
+  This is a quick and dirty hash function designed for O(1) speed.
+  It makes your hash table application fly in most cases.
   It samples first, middle and last 4 bytes to produce the hash.
   Do not use it in any serious applications as it's not secure.
 */

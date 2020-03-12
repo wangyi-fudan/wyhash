@@ -62,13 +62,6 @@ Also I would like to introduce a new hash function **o1hash** (aka. FastestHash)
 
 **o1hash official code**:
 ```C
-/*
-  Author: Wang Yi <godspeed_china@yeah.net>
-  This is a quick and dirty hash function designed for O(1) speed.
-  It makes your hash table application fly in most cases.
-  It samples first, middle and last 4 bytes to produce the hash.
-  Do not use it in any serious applications as it's not secure.
-*/
 static inline uint64_t o1hash(const void *key, size_t len) {
   const uint8_t *p=(const uint8_t*)key;
   if(len>=4) {

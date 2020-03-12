@@ -57,7 +57,7 @@ Also I would like to introduce a new hash function **o1hash** (aka. FastestHash)
 | ------------ | --------------------- | ------- | ----- | -------- | ------- | ----- |
 | HashFunction | Words                 | Hashmap | 1K    | 256K     | 16M     | 1G    |
 | std::hash    | 96.72                 | 35.43   | 6.89  | 7.38     | 7.36    | 6.49  |
-| o1hash       | 725.33                | 52.76   | 209.8 | 53771.11 | 3435974 | inf   |
+| o1hash       | 725.33                | 53.60   | 209.8 | 53771.11 | 3435974 | inf   |
 | wyhash       | 277.49                | 46.71   | 23.36 | 23.98    | 21.23   | 10.63 |
 
 **o1hash official code**:

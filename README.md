@@ -13,7 +13,7 @@ wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively:
 
 Please read our ![manuscript](wyhash.docx) and help us to publish it on top journal.
 
-**Version Gamma** is ready. Don't trust benchmark, try it yourself!
+**Version Gamma** is ready. Don't trust benchmark, try it yourself! No longer portable.
 
 /usr/share/dict/words
 |hash function  |short hash/us  |bulk_1MB GB/s  |hashmap hash/us|
@@ -55,36 +55,6 @@ wyhash is the default hasher for a hash table of the great Zig and V language.
 **V** https://github.com/vlang/v/tree/master/vlib/hash/wyhash (v4)
 
 **Zig** https://github.com/ManDeJan/zig-wyhash
-
-----------------------------------------
-
-Also I would like to introduce a new hash function **o1hash** (aka. FastestHash) which is fastest in hashmap but not secure. It is used in V language now.
-
-| Benchmarking | /usr/share/dict/words |         |       |          |         |       |
-| ------------ | --------------------- | ------- | ----- | -------- | ------- | ----- |
-| HashFunction | Words                 | Hashmap | 1K    | 256K     | 16M     | 1G    |
-| std::hash    | 96.72                 | 35.43   | 6.89  | 7.38     | 7.36    | 6.49  |
-| o1hash       | 725.33                | 53.60   | 209.8 | 53771.11 | 3435974 | inf   |
-| wyhash       | 277.49                | 46.71   | 23.36 | 23.98    | 21.23   | 10.63 |
-
-**o1hash official code**:
-```C
-static inline uint64_t o1hash(const void *key, size_t len) {
-  const uint8_t *p=(const uint8_t*)key;
-  if(len>=4) {
-    unsigned first, middle, last;
-    memcpy(&first,p,4);
-    memcpy(&middle,p+(len>>1)-2,4);
-    memcpy(&last,p+len-4,4);
-    return  (uint64_t)(first+last)*middle;
-  }
-  if(len){
-    uint64_t tail=((((unsigned)p[0])<<16) | (((unsigned)p[len>>1])<<8) | p[len-1]);
-    return tail*0xa0761d6478bd642full;
-  }
-  return  0;
-}
-```
 
 ----------------------------------------
 

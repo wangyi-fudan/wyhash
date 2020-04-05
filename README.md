@@ -13,10 +13,17 @@ wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively:
 
 Please read our ![manuscript](wyhash.docx) and help us to publish it on top journal.
 
-**Version Beta** is ready. This version solve the problem of 62 bit uniqueness strength mentioned by Yann Collet.
+**Version Gamma** is ready. Don't trust benchmark, try it yourself!
 
-![](Clipboard01.png)
-![](Clipboard02.png)
+/usr/share/dict/words
+|hash function  |short hash/us  |bulk_1MB GB/s  |hashmap hash/us|
+|----           |----           |----           |----           |
+|o1hash         |698.46         |inf            |54.37          |
+|wyhash         |327.69         |11.11          |44.43          |
+|xxh3           |141.43         |12.02          |42.84          |
+|xxHash64       |91.35          |13.80          |33.71          |
+|t1ha2_atonce   |100.53         |15.90          |35.31          |
+
 
 ----------------------------------------
 wyhash is the default hasher for a hash table of the great Zig and V language.

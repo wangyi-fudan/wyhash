@@ -19,9 +19,11 @@ Please read our ![manuscript](wyhash.docx) and help us to publish it on top jour
 |hash function  |short hash/us  |bulk_256B GB/s |bulk_64KB GB/s |
 |----           |----           |----           |----           |
 |wyhash         |326.53         |14.07          |11.68          |
-|xxh3           |151.35         |7.08           |12.68          |
+|xxh3_scalar    |151.35         |7.08           |12.68          |
+|xxh3_avx2      |136.03         |8.71           |30.37          |
 |xxHash64       |99.12          |11.40          |14.65          |
 |t1ha2_atonce   |106.19         |12.94          |17.03          |
+
 
 ----------------------------------------
 wyhash is the default hasher for a hash table of the great Zig and V language.

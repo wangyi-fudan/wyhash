@@ -13,7 +13,7 @@ wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively:
 
 Please read our ![manuscript](wyhash.docx) and help us to publish it on top journal.
 
-**Version Gamma** is ready. Don't trust benchmark, try it yourself!
+**Version Gamma** is ready. Don't trust benchmark, try it yourself! -Ofast -march=native
 
 /usr/share/dict/words
 |hash function  |short hash/us  |bulk_256B GB/s |bulk_64KB GB/s |

@@ -16,14 +16,12 @@ Please read our ![manuscript](wyhash.docx) and help us to publish it on top jour
 **Version Gamma** is ready. Don't trust benchmark, try it yourself! No longer portable.
 
 /usr/share/dict/words
-|hash function  |short hash/us  |bulk_1MB GB/s  |hashmap hash/us|
+|hash function  |short hash/us  |bulk_256B GB/s |bulk_64KB GB/s |
 |----           |----           |----           |----           |
-|o1hash         |698.46         |inf            |54.37          |
-|wyhash         |327.69         |11.11          |44.43          |
-|xxh3           |141.43         |12.02          |42.84          |
-|xxHash64       |91.35          |13.80          |33.71          |
-|t1ha2_atonce   |100.53         |15.90          |35.31          |
-
+|wyhash         |326.53         |14.07          |11.68          |
+|xxh3           |151.35         |7.08           |12.68          |
+|xxHash64       |99.12          |11.40          |14.65          |
+|t1ha2_atonce   |106.19         |12.94          |17.03          |
 
 ----------------------------------------
 wyhash is the default hasher for a hash table of the great Zig and V language.

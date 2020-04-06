@@ -13,17 +13,16 @@ wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively:
 
 Please read our ![manuscript](wyhash.docx) and help us to publish it on top journal.
 
-**Version Gamma** is ready. Don't trust benchmark, try it yourself! No longer portable.
+**Version Gamma** is ready. Don't trust benchmark, try it yourself!
 
 /usr/share/dict/words
 |hash function  |short hash/us  |bulk_256B GB/s |bulk_64KB GB/s |
 |----           |----           |----           |----           |
-|wyhash         |326.53         |14.07          |11.68          |
-|xxh3_scalar    |151.35         |7.08           |12.68          |
-|xxh3_avx2      |136.03         |8.71           |30.37          |
-|xxHash64       |99.12          |11.40          |14.65          |
-|t1ha2_atonce   |106.19         |12.94          |17.03          |
-
+|wyhash         |325.26         |12.94          |11.76          |
+|xxh3_scalar    |152.70         |7.08           |12.68          |
+|xxh3_avx2      |137.51         |8.71           |30.36          |
+|xxHash64       |99.82          |7.43           |14.65          |
+|t1ha2_atonce   |107.90         |12.94          |17.02          |
 
 ----------------------------------------
 wyhash is the default hasher for a hash table of the great Zig and V language.

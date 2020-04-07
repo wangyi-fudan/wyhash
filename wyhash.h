@@ -46,7 +46,7 @@ static inline uint64_t _wyhash16(const uint8_t *p, uint64_t i, uint64_t len, uin
 		else if (_likely_(i))
 			seed=_wymix64(_wyr3(p,i)^seed^_wyp0);
 		else
-			 seed=_wymix64(seed^_wyp0);
+			seed=_wymix64(seed^_wyp0);
 	} 
   	else{
 		seed=_wymix64(_wyr8(p)^seed^_wyp0);

@@ -34,55 +34,35 @@ static inline uint64_t _wyrot32(uint64_t x){ return (x>>32)|(x<<32); }
 
 static inline uint64_t _wymix64(uint64_t x){ return x*_wyrot32(x); }
 
-static inline uint64_t _wyhash16(const uint8_t *p, uint64_t i, uint64_t len, uint64_t seed, uint64_t see1){
-#ifndef	WYHASH_CONDOM
-	uint64_t shift=(i<8)*((8-i)<<3);
-	seed=_wymix64((_wyr8(p)<<shift)^seed^_wyp0); 
-	see1=_wymix64((_wyr8(p+i-8)>>shift)^see1^_wyp1);
-#else
-	if(_likely_(i<=8)){
-		if(_likely_(i>=4))
-			seed=_wymix64(((_wyr4(p)<<32)|_wyr4(p+i-4))^seed^_wyp0);
-		else if (_likely_(i))
-			seed=_wymix64(_wyr3(p,i)^seed^_wyp0);
-		else
-			seed=_wymix64(seed^_wyp0);
-	} 
-  	else{
-		seed=_wymix64(_wyr8(p)^seed^_wyp0);
-		see1=_wymix64(_wyr8(p+i-8)^see1^_wyp1);
-	}
-#endif
-	return	
-		_wyrot32(_wymix64(len^seed^see1)) 
-		^_wymix64(_wyp1^_wyrot32(seed)^see1);
-}
-
 static inline uint64_t wyhash(const void *key, uint64_t len, uint64_t seed){
 	const uint8_t *p=(const uint8_t *)key;
 	uint64_t i=len, see1=seed; 
+	loop:
 	if(_likely_(i<=16)){
-		finish:
-		return	_wyhash16(p,i,len,seed,see1);
-	}
-	if(_likely_(i<=128)){
-		start:
-		for(;_likely_(i>16);i-=16,p+=16){
+	#ifndef	WYHASH_CONDOM
+		uint64_t shift=(i<8)*((8-i)<<3);
+		seed=_wymix64(((_wyr8(p)<<shift)^_wyp0)^seed); 
+		see1=_wymix64(((_wyr8(p+i-8)>>shift)^_wyp1)^see1);
+	#else
+		if(_likely_(i<=8)){
+			if(_likely_(i>=4))
+				seed=_wymix64(((_wyr4(p)<<32)|_wyr4(p+i-4))^seed^_wyp0);
+			else if (_likely_(i))
+				seed=_wymix64(_wyr3(p,i)^seed^_wyp0);
+			else
+				seed=_wymix64(seed^_wyp0);
+		} 
+  		else{
 			seed=_wymix64(_wyr8(p)^seed^_wyp0);
-			see1=_wymix64(_wyr8(p+8)^see1^_wyp1); 
+			see1=_wymix64(_wyr8(p+i-8)^see1^_wyp1);
 		}
-		goto finish;
+	#endif
+		return	_wyrot32(_wymix64(len^seed^see1)) ^ _wymix64(_wyp1^_wyrot32(seed)^see1);
 	}
-	uint64_t see2, see3;
-	see2=see3=_wymix64(seed^_wyp0^_wyp1);
-	for(;_likely_(i>32);i-=32,p+=32){
-		seed=_wymix64(_wyr8(p)^seed^_wyp0);
-		see1=_wymix64(_wyr8(p+8)^see1^_wyp1); 
-		see2=_wymix64(_wyr8(p+16)^see2^_wyp0);
-		see3=_wymix64(_wyr8(p+24)^see3^_wyp1); 
-	}
-	seed^=see2;	see1^=see3;
-	goto start;
+	seed=_wymix64((_wyr8(p)^_wyp0)^seed);
+	see1=_wymix64((_wyr8(p+8)^_wyp1)^see1);
+	i-=16;	p+=16;
+	goto loop;
 }
 
 static inline unsigned wyhash2(unsigned A,	unsigned	B){ 

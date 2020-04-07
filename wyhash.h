@@ -4,6 +4,11 @@
 #include <stdint.h>
 #include <string.h>
 const uint64_t _wyp0=0xa0761d6478bd642full, _wyp1=0xe7037ed1a0b428dbull;
+#if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
+#define _likely_(x) __builtin_expect(x, 1)
+#else
+#define _likely_(x) (x)
+#endif
 #ifndef WYHASH_LITTLE_ENDIAN
 #if defined(_WIN32) || defined(__LITTLE_ENDIAN__) || (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
 #define WYHASH_LITTLE_ENDIAN 1
@@ -12,34 +17,72 @@ const uint64_t _wyp0=0xa0761d6478bd642full, _wyp1=0xe7037ed1a0b428dbull;
 #endif
 #endif
 #if (WYHASH_LITTLE_ENDIAN)
-static inline uint64_t _wyread64(const uint8_t *p){ uint64_t v; memcpy(&v, p, 8); return v;}
+static inline uint64_t _wyr8(const uint8_t *p) { uint64_t v; memcpy(&v, p, 8); return v;}
+static inline uint64_t _wyr4(const uint8_t *p) { unsigned v; memcpy(&v, p, 4); return v;}
 #else
 #if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
-static inline uint64_t _wyread64(const uint8_t *p){ uint64_t v; memcpy(&v, p, 8); return __builtin_bswap64(v);}
+static inline uint64_t _wyr8(const uint8_t *p) { uint64_t v; memcpy(&v, p, 8); return __builtin_bswap64(v);}
+static inline uint64_t _wyr4(const uint8_t *p) { unsigned v; memcpy(&v, p, 4); return __builtin_bswap32(v);}
 #elif defined(_MSC_VER)
-static inline uint64_t _wyread64(const uint8_t *p){ uint64_t v; memcpy(&v, p, 8); return _byteswap_uint64(v);}
+static inline uint64_t _wyr8(const uint8_t *p) { uint64_t v; memcpy(&v, p, 8); return _byteswap_uint64(v);}
+static inline uint64_t _wyr4(const uint8_t *p) { unsigned v; memcpy(&v, p, 4); return _byteswap_ulong(v);}
 #endif
 #endif
+static inline uint64_t _wyr3(const uint8_t *p, unsigned k) { return (((uint64_t)p[0]) << 16) | (((uint64_t)p[k >> 1]) << 8) | p[k - 1];}
 
 static inline uint64_t _wyrot32(uint64_t x){ return (x>>32)|(x<<32); }
 
 static inline uint64_t _wymix64(uint64_t x){ return x*_wyrot32(x); }
 
+static inline uint64_t _wyhash16(const uint8_t *p, uint64_t i, uint64_t len, uint64_t seed, uint64_t see1){
+#ifndef	WYHASH_CONDOM
+	uint64_t shift=(i<8)*((8-i)<<3);
+	seed=_wymix64((_wyr8(p)<<shift)^seed^_wyp0); 
+	see1=_wymix64((_wyr8(p+i-8)>>shift)^see1^_wyp1);
+#else
+	if(_likely_(i<=8)){
+		if(_likely_(i>=4))
+			seed=_wymix64(((_wyr4(p)<<32)|_wyr4(p+i-4))^seed^_wyp0);
+		else if (_likely_(i))
+			seed=_wymix64(_wyr3(p,i)^seed^_wyp0);
+		else
+			 seed=_wymix64(seed^_wyp0);
+	} 
+  	else{
+		seed=_wymix64(_wyr8(p)^seed^_wyp0);
+		see1=_wymix64(_wyr8(p+i-8)^see1^_wyp1);
+	}
+#endif
+	return	
+		_wyrot32(_wymix64(len^seed^see1)) 
+		^_wymix64(_wyp1^_wyrot32(seed)^see1);
+}
+
 static inline uint64_t wyhash(const void *key, uint64_t len, uint64_t seed){
 	const uint8_t *p=(const uint8_t *)key;
-	uint64_t see1=seed, len0=len; 
-	for(;len>16;len-=16,p+=16){
-		seed=_wymix64(_wyread64(p)^seed^_wyp0);
-		see1=_wymix64(_wyread64(p+8)^see1^_wyp1);
+	uint64_t i=len, see1=seed; 
+	if(_likely_(i<=16)){
+		finish:
+		return	_wyhash16(p,i,len,seed,see1);
 	}
-	//intended unsafe read, trade for great speed.
-	uint64_t d0=_wyread64(p), d1=_wyread64(p+len-8);
-	len=(len<8)*((8-len)<<3);
-	d0<<=len;  d1>>=len;
-	seed=_wymix64(d0^seed^_wyp0); 
-	see1=_wymix64(d1^see1^_wyp1);
-	return	 _wyrot32(_wymix64(len0^seed^see1))
-			^_wymix64(_wyp1^_wyrot32(seed)^see1);
+	if(_likely_(i<=128)){
+		start:
+		for(;_likely_(i>16);i-=16,p+=16){
+			seed=_wymix64(_wyr8(p)^seed^_wyp0);
+			see1=_wymix64(_wyr8(p+8)^see1^_wyp1); 
+		}
+		goto finish;
+	}
+	uint64_t see2, see3;
+	see2=see3=_wymix64(seed^_wyp0^_wyp1);
+	for(;_likely_(i>32);i-=32,p+=32){
+		seed=_wymix64(_wyr8(p)^seed^_wyp0);
+		see1=_wymix64(_wyr8(p+8)^see1^_wyp1); 
+		see2=_wymix64(_wyr8(p+16)^see2^_wyp0);
+		see3=_wymix64(_wyr8(p+24)^see3^_wyp1); 
+	}
+	seed^=see2;	see1^=see3;
+	goto start;
 }
 
 static inline unsigned wyhash2(unsigned A,	unsigned	B){ 

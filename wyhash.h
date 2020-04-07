@@ -3,6 +3,10 @@
 #define wyhash_version_gamma
 #include <stdint.h>
 #include <string.h>
+#if defined(_MSC_VER) && defined(_M_X64)
+#include <intrin.h>
+#pragma intrinsic(_umul128)
+#endif
 const uint64_t _wyp0=0xa0761d6478bd642full, _wyp1=0xe7037ed1a0b428dbull;
 #if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
 #define _likely_(x) __builtin_expect(x, 1)

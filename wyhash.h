@@ -62,6 +62,7 @@ static inline uint64_t wyhash(const void *key, uint64_t len, uint64_t seed){
 	if(_likely_(i<=16)){
 	#ifndef	WYHASH_CONDOM
 		uint64_t shift=(i<8)*((8-i)<<3);
+		//WARNING: intended reading outside buffer, trading for speed.
 		_wymix128((_wyr8(p)<<shift)^_wyp0,(_wyr8(p+i-8)>>shift)^_wyp1, &seed, &see1);
 	#else
 		if(_likely_(i<=8)){

@@ -16,7 +16,9 @@ Please read our ![manuscript](wyhash.docx) and help us to publish it on top jour
 **Version Gamma** is ready. Don't trust benchmark, try it yourself!
 
 g++-9 benchmark.cpp t1ha/src/t1ha2.c -o benchmark -Ofast -s  -Wall -march=native
+
 /usr/share/dict/words
+
 |hash function  |short hash/us  |bulk_256B GB/s |bulk_64KB GB/s |
 |----           |----           |----           |----           |
 |wyhash         |398.53         |19.16          |25.80          |

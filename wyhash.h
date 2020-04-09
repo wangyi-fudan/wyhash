@@ -2,8 +2,8 @@
 #ifndef wyhash_version_gamma
 #define wyhash_version_gamma
 //defines that change behavior
+#define WYHASH_SAFE_READ 0	//may read up to 8 bytes before/after
 #define WYHASH_SAFE_MUM  0	//loss of entroy every 2^66 bytes
-#define WYHASH_SAFE_READ 0	//may read up to 8 bytes before/after if len<8
 #define WYHASH_32BIT_MUM 0	//faster on 32 bit system
 //includes
 #include <stdint.h>
@@ -53,6 +53,7 @@ static inline void _wymum(uint64_t *A, uint64_t *B){
   #endif
 #endif
 }
+static inline uint64_t _wymix(uint64_t A, uint64_t B){ _wymum(&A,&B); return A^B; }
 //read functions
 #ifndef WYHASH_LITTLE_ENDIAN
   #if defined(_WIN32) || defined(__LITTLE_ENDIAN__) || (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
@@ -76,29 +77,47 @@ static inline uint64_t _wyr3(const uint8_t *p, unsigned k) { return (((uint64_t)
 static inline uint64_t wyhash(const void *key, uint64_t len, uint64_t seed, const uint64_t *secret){
   const uint8_t *p=(const uint8_t *)key;
   uint64_t i=len, see1=seed; 
-  start:
-  if(_likely_(i<=16)){
-    #if(WYHASH_SAFE_READ)
-    if(_likely_(i<=8)){
-      if(_likely_(i>=4)){ seed^=_wyr4(p)^secret[0]; see1^=_wyr4(p+i-4)^secret[1];}
-      else if (_likely_(i)){ seed^=_wyr3(p,i)^secret[0]; see1^=secret[1];}
-      else{ seed^=secret[0]; see1^=secret[1];}
-    } 
-    else{ seed^=_wyr8(p)^secret[0];  see1^=_wyr8(p+i-8)^secret[1];}
-	#else
-    uint64_t shift=(i<8)*((8-i)<<3);  
-    seed^=(_wyr8(p)<<shift)^secret[0];  see1^=(_wyr8(p+i-8)>>shift)^secret[1];
-    #endif
-    _wymum(&seed, &see1); seed^=len; _wymum(&seed, &see1);
-    return seed^see1;
+  if(_likely_(i<=64)){
+    start:
+    if(_likely_(i<=16)){
+      uint64_t a,b;
+      #if(WYHASH_SAFE_READ)
+      if(_likely_(i<=8)){
+        if(_likely_(i>=4)){ a=_wyr4(p); b=_wyr4(p+i-4);}
+        else if (_likely_(i)){ a=_wyr3(p,i); b=0;}
+        else a=b=0;
+      } 
+      else{ a=_wyr8(p); b=_wyr8(p+i-8);}
+      #else
+      uint64_t shift=(i<8)*((8-i)<<3);  
+      a=_wyr8(p)<<shift; b=_wyr8(p+i-8)>>shift;
+      #endif
+      seed^=a^secret[0]; see1^=b^secret[1]; 
+      _wymum(&seed, &see1); 
+      return _wymix(seed^len,see1);
+    }
+    seed^=_wyr8(p)^secret[0]; 
+    see1^=_wyr8(p+8)^secret[1];
+    _wymum(&seed, &see1);
+    i-=16; p+=16; 
+    goto start;
   }
-  seed^=_wyr8(p)^secret[0]; see1^=_wyr8(p+8)^secret[1]; _wymum(&seed, &see1);
-  i-=16; p+=16; goto start;
+  const uint64_t secret2=secret[0]^secret[1];
+  const uint64_t secret3=secret[0]+secret[1];
+  uint64_t see2,see3;  
+  seed=see1=see2=see3=seed^(secret[0]-secret[1]);
+  for(;_likely_(i>64);i-=64,p+=64){
+   seed=_wymix(_wyr8(p)^seed,_wyr8(p+8)^*secret);
+   see1=_wymix(_wyr8(p+16)^see1,_wyr8(p+24)^secret[1]);
+   see2=_wymix(_wyr8(p+32)^see2,_wyr8(p+40)^secret2);
+   see3=_wymix(_wyr8(p+48)^see3,_wyr8(p+56)^secret3);
+  }
+  seed^=see2; see1^=see3; goto start;
 }
 //utility functions
-const uint64_t _wyp[2]={0xa0761d6478bd642full, 0xe7037ed1a0b428dbull};
-static inline uint64_t wyhash64(uint64_t A, uint64_t B){  A^=_wyp[0];	B^=_wyp[1];  _wymum(&A,&B);  _wymum(&A,&B);  return  A^B;}
-static inline uint64_t wyrand(uint64_t *seed){  *seed+=_wyp[0]; uint64_t  a=*seed, b=*seed^_wyp[1]; _wymum(&a,&b); return  a^b;}
+const uint64_t _wyp[2]={0xf0b21d699cd8c593ull, 0x8be22b55d84e1b55ull};
+static inline uint64_t wyhash64(uint64_t A, uint64_t B){  A^=_wyp[0];	B^=_wyp[1];  _wymum(&A,&B);  return _wymix(A,B);}
+static inline uint64_t wyrand(uint64_t *seed){  *seed+=_wyp[0]; return _wymix(*seed,*seed^_wyp[1]);}
 static inline double wy2u01(uint64_t r){ const double _wynorm=1.0/(1ull<<52); return (r>>12)*_wynorm;}
 static inline double wy2gau(uint64_t r){ const double _wynorm=1.0/(1ull<<20); return ((r&0x1fffff)+((r>>21)&0x1fffff)+((r>>42)&0x1fffff))*_wynorm-3.0;}
 static inline void make_secret(uint64_t seed, uint64_t secret[2]){
@@ -108,12 +127,15 @@ static inline void make_secret(uint64_t seed, uint64_t secret[2]){
     do{
       ok=1; secret[i]=0;
       for(size_t j=0;j<64;j+=8) secret[i]|=((uint64_t)c[wyrand(&seed)%sizeof(c)])<<j;
+      if(secret[i]%2==0){ ok=0; continue; }
       for(size_t j=0;j<i;j++)
 #if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
-        if(__builtin_popcountll(secret[i]^secret[j])!=32){ ok=0; break; }
+        if(__builtin_popcountll(secret[j]^secret[i])!=32||__builtin_popcountll(secret[j]+secret[i])!=32||__builtin_popcountll(secret[j]-secret[i])!=32){ ok=0; break; }
 #elif defined(_MSC_VER)
-        if(_mm_popcnt_u64(secret[i]^secret[j])!=32){ ok=0; break; }
+        if(_mm_popcnt_u64(secret[j]^secret[i])!=32||_mm_popcnt_u64(secret[j]-secret[i])!=32||_mm_popcnt_u64(secret[j]+secret[i])!=32){ ok=0; break; }
 #endif
+       if(!ok)continue;
+       for(uint64_t j=3;j<0x100000000ull;j+=2) if(secret[i]%j==0){ ok=0; break; }
     }while(!ok);
   }
 }

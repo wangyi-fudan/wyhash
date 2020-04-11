@@ -1,4 +1,4 @@
-Every hash function is born equal. No hash function is perfect, but some are useful.
+No hash function is perfect, but some are useful.
 ====
 
 wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively: 
@@ -11,9 +11,7 @@ wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively:
   
 **simplest**: In the sense of code size.
 
-Please read our ![manuscript](wyhash.docx) and help us to publish it on top journal.
-
-**wyhash final version** is ready. benchmark it by youself...
+----------------------------------------
 
 g++-9 benchmark.cpp t1ha/src/t1ha2.c -o benchmark -Ofast -s  -Wall -march=native
 

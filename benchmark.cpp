@@ -2,14 +2,12 @@
 #include	<iostream>
 #include	<fstream>
 #include	<vector>
-#include	"xxHash/xxhash.c"
-#include	"t1ha/t1ha.h"
 #include	"wyhash.h"
 using	namespace	std;
 struct	wy{	size_t	operator()(const	string	&s,	uint64_t seed)const{	return	wyhash(s.c_str(),s.size(),seed,_wyp);	}};
-struct	x3{	size_t	operator()(const	string	&s, uint64_t seed)const{	return	XXH3_64bits_withSeed(s.c_str(),s.size(),seed);	}};
-struct	xx{	size_t	operator()(const	string	&s, uint64_t seed)const{	return	XXH64(s.c_str(),s.size(),seed);	}};
-struct	t1{	size_t	operator()(const	string	&s, uint64_t seed)const{	return	t1ha2_atonce(s.c_str(),s.size(),seed);	}};
+//struct	x3{	size_t	operator()(const	string	&s, uint64_t seed)const{	return	XXH3_64bits_withSeed(s.c_str(),s.size(),seed);	}};
+//struct	xx{	size_t	operator()(const	string	&s, uint64_t seed)const{	return	XXH64(s.c_str(),s.size(),seed);	}};
+//struct	t1{	size_t	operator()(const	string	&s, uint64_t seed)const{	return	t1ha2_atonce(s.c_str(),s.size(),seed);	}};
 
 vector<string>	v;	
 template <class Hasher>
@@ -49,8 +47,8 @@ int	main(void){
 	cerr<<"|hash function\t|short hash/us\t|bulk_256B GB/s\t|bulk_64KB GB/s\t|\n";
 	cerr<<"|----\t\t|----\t\t|----\t\t|----\t\t|\n";
 	r+=bench_hash<wy>("wyhash");
-	r+=bench_hash<x3>("xxh3_avx2");
-	r+=bench_hash<xx>("xxHash64");
-	r+=bench_hash<t1>("t1ha2_atonce");
+	//r+=bench_hash<x3>("xxh3");
+	//r+=bench_hash<xx>("xxHash64");
+	//r+=bench_hash<t1>("t1ha2_atonce");
 	return	r;
 }

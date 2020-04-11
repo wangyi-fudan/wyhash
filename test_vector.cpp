@@ -15,7 +15,7 @@ int main(void) {
         "1234567890"};
     for (size_t i = 0; i < v.size(); i++) {
         cout << "wyhash(\"" << v[i] << "\"," << i << ")=" << hex
-             << wyhash(v[i].c_str(), v[i].size(), i) << '\n';
+             << wyhash(v[i].c_str(), v[i].size(), i, _wyp) << '\n';
     }
     return 0;
 }

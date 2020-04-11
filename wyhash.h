@@ -26,14 +26,14 @@ static inline void _wymum(uint64_t *A, uint64_t *B){
 #if(WYHASH_32BIT_MUM)
   uint64_t hh=(*A>>32)*(*B>>32), hl=(*A>>32)*(unsigned)*B, lh=(unsigned)*A*(*B>>32), ll=(uint64_t)(unsigned)*A*(unsigned)*B;
   #if(WYHASH_CONDOM>1)
-  *A|=_wyrot(hl)^hh; *B|=_wyrot(lh)^ll;
+  *A^=_wyrot(hl)^hh; *B^=_wyrot(lh)^ll;
   #else
   *A=_wyrot(hl)^hh; *B=_wyrot(lh)^ll;
   #endif
 #elif defined(__SIZEOF_INT128__)
   __uint128_t r=*A; r*=*B; 
   #if(WYHASH_CONDOM>1)
-  *A|=(uint64_t)r; *B|=(uint64_t)(r>>64);
+  *A^=(uint64_t)r; *B^=(uint64_t)(r>>64);
   #else
   *A=(uint64_t)r; *B=(uint64_t)(r>>64);
   #endif
@@ -41,7 +41,7 @@ static inline void _wymum(uint64_t *A, uint64_t *B){
   #if(WYHASH_CONDOM>1)
   uint64_t  a,  b;
   a=_umul128(*A,*B,&b);
-  *A|=a;  *B|=b;
+  *A^=a;  *B^=b;
   #else
   *A=_umul128(*A,*B,B);
   #endif
@@ -50,7 +50,7 @@ static inline void _wymum(uint64_t *A, uint64_t *B){
   uint64_t rh=ha*hb, rm0=ha*lb, rm1=hb*la, rl=la*lb, t=rl+(rm0<<32), c=t<rl;
   lo=t+(rm1<<32); c+=lo<t; hi=rh+(rm0>>32)+(rm1>>32)+c;
   #if(WYHASH_CONDOM>1)
-  *A|=lo;  *B|=hi;
+  *A^=lo;  *B^=hi;
   #else
   *A=lo;  *B=hi;
   #endif

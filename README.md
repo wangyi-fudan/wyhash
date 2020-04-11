@@ -21,7 +21,7 @@ g++-9 benchmark.cpp t1ha/src/t1ha2.c -o benchmark -Ofast -s  -Wall -march=native
 |----           |----           |----           |----           |
 |wyhash:safety=0|444.31         |18.86          |24.35          |
 |wyhash:safety=1|195.42         |17.97          |23.44          |
-|wyhash:safety=2|181.21         |14.04          |16.12          |
+|wyhash:safety=2|181.56         |14.33          |15.97          |
 |xxh3:avx2      |147.33         |9.73           |45.39          |
 |xxh3:sse2      |154.30         |11.53          |27.15          |
 |xxh3           |153.61         |8.49           |13.05          |

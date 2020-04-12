@@ -14,9 +14,9 @@ using	namespace	std;
 struct	ha{	
   size_t	operator()(const	string	&s,	uint64_t seed)const{
     #ifndef	XXH3
-    return	wyhash(s.c_str(),s.size(),seed,_wyp);	
+    return  wyhash(s.c_str(),s.size(),seed,_wyp);	
     #else
-	return	XXH3_64bits_withSeed(s.c_str(),s.size(),seed);	
+    return  XXH3_64bits_withSeed(s.c_str(),s.size(),seed);	
     #endif
   }
 };

@@ -112,6 +112,28 @@ static inline uint64_t wyhash(const void *key, uint64_t len, uint64_t seed, cons
   }
   return _wyfinish(p,len,seed,secret,i);
 }
+//wyhash32
+static inline void _wymum32(unsigned *A, unsigned *B){ 
+  uint64_t c=(uint64_t)(*A)*(*B); 
+  *A=(unsigned)c;
+  *B=(unsigned)(c>>32);
+}
+
+static inline unsigned wyhash32(const void *key, unsigned len, unsigned seed){
+  const unsigned wyp0=0x53c5ca59u, wyp1=0x74743c1bu;
+  const uint8_t *p=(const uint8_t *)key;
+  unsigned i=len, see1=seed;
+  start:
+  if(_likely_(i<=8)){
+    if(_likely_(i>=4)){ seed^=_wyr4(p); see1^=_wyr4(p+i-4); }
+    else if (_likely_(i)) seed^=_wyr3(p,i);
+    seed^=wyp0; see1^=wyp1; _wymum32(&seed,&see1);
+    seed^=len^wyp0; seed^=wyp1; _wymum32(&seed,&see1);
+    return seed^see1;
+  }
+  seed^=_wyr4(p)^wyp0; see1^=_wyr4(p+4)^wyp1; _wymum32(&seed,&see1);
+  i-=8;  p+=8; goto start;
+}
 //utility functions
 const uint64_t _wyp[5] = {0xa0761d6478bd642full, 0xe7037ed1a0b428dbull, 0x8ebc6af09c88c6e3ull, 0x589965cc75374cc3ull, 0x1d8e4e27c47d124full};
 static inline uint64_t wyhash64(uint64_t A, uint64_t B){  A^=_wyp[0]; B^=_wyp[1];  _wymum(&A,&B);  return _wymix(A^_wyp[0],B^_wyp[1]);}

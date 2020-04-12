@@ -1,13 +1,25 @@
 #include	<sys/time.h>
 #include	<iostream>
 #include	<fstream>
+#include	<cstdlib>
+#include	<stdint.h>
+#include	<cstring>
 #include	<vector>
+#ifndef	XXH3
 #include	"wyhash.h"
+#else
+#include	"../xxHash/xxh3.h"
+#endif
 using	namespace	std;
-struct	wy{	size_t	operator()(const	string	&s,	uint64_t seed)const{	return	wyhash(s.c_str(),s.size(),seed,_wyp);	}};
-//struct	x3{	size_t	operator()(const	string	&s, uint64_t seed)const{	return	XXH3_64bits_withSeed(s.c_str(),s.size(),seed);	}};
-//struct	xx{	size_t	operator()(const	string	&s, uint64_t seed)const{	return	XXH64(s.c_str(),s.size(),seed);	}};
-//struct	t1{	size_t	operator()(const	string	&s, uint64_t seed)const{	return	t1ha2_atonce(s.c_str(),s.size(),seed);	}};
+struct	ha{	
+  size_t	operator()(const	string	&s,	uint64_t seed)const{
+    #ifndef	XXH3
+    return	wyhash(s.c_str(),s.size(),seed,_wyp);	
+    #else
+	return	XXH3_64bits_withSeed(s.c_str(),s.size(),seed);	
+    #endif
+  }
+};
 
 vector<string>	v;	
 template <class Hasher>
@@ -46,9 +58,10 @@ int	main(void){
 	cerr<<file<<'\n';
 	cerr<<"|hash function\t|short hash/us\t|bulk_256B GB/s\t|bulk_64KB GB/s\t|\n";
 	cerr<<"|----\t\t|----\t\t|----\t\t|----\t\t|\n";
-	r+=bench_hash<wy>("wyhash");
-	//r+=bench_hash<x3>("xxh3");
-	//r+=bench_hash<xx>("xxHash64");
-	//r+=bench_hash<t1>("t1ha2_atonce");
+    #ifndef	XXH3
+	r+=bench_hash<ha>("wyhash");
+    #else
+	r+=bench_hash<ha>("xxh3");
+    #endif
 	return	r;
 }

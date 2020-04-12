@@ -57,6 +57,10 @@ static inline void _wymum(uint64_t *A, uint64_t *B){
 #endif
 }
 static inline uint64_t _wymix(uint64_t A, uint64_t B){ _wymum(&A,&B); return A^B; }
+static inline uint64_t _wymix32(uint64_t A, uint64_t B){
+  uint64_t hh=(A>>32)*(B>>32), hl=(A>>32)*(unsigned)B, lh=(unsigned)A*(B>>32), ll=(uint64_t)(unsigned)A*(unsigned)B;
+  return _wyrot(hl)^hh^_wyrot(lh)^ll;
+}
 //read functions
 #ifndef WYHASH_LITTLE_ENDIAN
   #if defined(_WIN32) || defined(__LITTLE_ENDIAN__) || (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
@@ -112,27 +116,25 @@ static inline uint64_t wyhash(const void *key, uint64_t len, uint64_t seed, cons
   }
   return _wyfinish(p,len,seed,secret,i);
 }
-//wyhash32
-static inline void _wymum32(unsigned *A, unsigned *B){ 
-  uint64_t c=(uint64_t)(*A)*(*B); 
-  *A=(unsigned)c;
-  *B=(unsigned)(c>>32);
-}
 
-static inline unsigned wyhash32(const void *key, unsigned len, unsigned seed){
-  const unsigned wyp0=0x53c5ca59u, wyp1=0x74743c1bu;
+static inline uint64_t wyhash_solid(const void *key, uint64_t len, uint64_t seed){
+  const uint64_t wyp0=0xa0761d6478bd642full, wyp1=0xe7037ed1a0b428dbull;
   const uint8_t *p=(const uint8_t *)key;
-  unsigned i=len, see1=seed;
+  uint64_t i=len;
   start:
-  if(_likely_(i<=8)){
-    if(_likely_(i>=4)){ seed^=_wyr4(p); see1^=_wyr4(p+i-4); }
-    else if (_likely_(i)) seed^=_wyr3(p,i);
-    seed^=wyp0; see1^=wyp1; _wymum32(&seed,&see1);
-    seed^=len^wyp0; seed^=wyp1; _wymum32(&seed,&see1);
-    return seed^see1;
+  if(_likely_(i<=16)){
+    uint64_t a, b;
+    if(_likely_(i<=8)){
+      if(_likely_(i>=4)){ a=_wyr4(p); b=_wyr4(p+i-4); }
+      else if (_likely_(i)){ a=_wyr3(p,i); b=0; }
+      else a=b=0;
+    } 
+    else{ a=_wyr8(p); b=_wyr8(p+i-8); }
+    seed=_wymix32(a^wyp0^seed, b^wyp1^seed);
+    return _wymix32(len^wyp0^seed, wyp1^seed);
   }
-  seed^=_wyr4(p)^wyp0; see1^=_wyr4(p+4)^wyp1; _wymum32(&seed,&see1);
-  i-=8;  p+=8; goto start;
+  seed=_wymix32(_wyr8(p)^wyp0^seed, _wyr8(p+8)^wyp1^seed);
+  i-=16;  p+=16; goto start;
 }
 //utility functions
 const uint64_t _wyp[5] = {0xa0761d6478bd642full, 0xe7037ed1a0b428dbull, 0x8ebc6af09c88c6e3ull, 0x589965cc75374cc3ull, 0x1d8e4e27c47d124full};

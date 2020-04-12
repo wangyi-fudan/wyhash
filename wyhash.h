@@ -81,7 +81,7 @@ static inline uint64_t _wyfinish16(const uint8_t *p, uint64_t len, uint64_t seed
 #if(WYHASH_CONDOM>0)
   uint64_t a, b;
   if(_likely_(i<=8)){
-    if(_likely_(i>=4)){ a=_wyr4(p)^secret[0]; b=_wyr4(p+i-4); }
+    if(_likely_(i>=4)){ a=_wyr4(p); b=_wyr4(p+i-4); }
     else if (_likely_(i)){ a=_wyr3(p,i); b=0; }
     else a=b=0;
   } 

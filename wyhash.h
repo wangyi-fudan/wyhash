@@ -1,4 +1,7 @@
-//Author: Wang Yi <godspeed_china@yeah.net>
+/* Copyright 2020 王一 Wang Yi <godspeed_china@yeah.net>
+   This is free and unencumbered software released into the public domain. http://unlicense.org/
+   See github.com/wangyi-fudan/wyhash/ LICENSE
+ */
 #ifndef wyhash_final_version
 #define wyhash_final_version
 //defines that change behavior

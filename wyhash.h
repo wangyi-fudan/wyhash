@@ -91,7 +91,6 @@ static inline uint64_t wyhash(const void *key, uint64_t len, uint64_t seed, cons
     } 
     else{ a=_wyr8(p); b=_wyr8(p+len-8); }
 #else
-    #define oneshot_shift ((i<8)*((8-i)<<3))
     uint64_t s=(len<8)*((8-len)<<3);
     a=_wyr8(p)<<s;	b=_wyr8(p+len-8)>>s;
 #endif

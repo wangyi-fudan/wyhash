@@ -11,6 +11,7 @@ wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively:
   
 **simplest**: In the sense of code size.
 
+wyhash is the default hasher for a hash table of the great **Zig**, **V** and **Nim** language.
 ----------------------------------------
 
 g++-9 benchmark.cpp t1ha/src/t1ha2.c -o benchmark -Ofast -s  -Wall -march=native
@@ -29,7 +30,6 @@ g++-9 benchmark.cpp t1ha/src/t1ha2.c -o benchmark -Ofast -s  -Wall -march=native
 |t1ha2_atonce   |115.12         |12.96          |17.64          |
 
 ----------------------------------------
-wyhash is the default hasher for a hash table of the great Zig, V and Nim language.
 
 **C#**  https://github.com/cocowalla/wyhash-dotnet
 

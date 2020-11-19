@@ -29,7 +29,7 @@ g++-9 benchmark.cpp t1ha/src/t1ha2.c -o benchmark -Ofast -s  -Wall -march=native
 |t1ha2_atonce   |115.12         |12.96          |17.64          |
 
 ----------------------------------------
-wyhash is the default hasher for a hash table of the great Zig and V language.
+wyhash is the default hasher for a hash table of the great Zig, V and Nim language.
 
 **C#**  https://github.com/cocowalla/wyhash-dotnet
 
@@ -46,6 +46,8 @@ wyhash is the default hasher for a hash table of the great Zig and V language.
 **GO** https://github.com/lonewolf3739/wyhash-go
 
 **Java** https://github.com/OpenHFT/Zero-Allocation-Hashing
+
+**Nim** https://github.com/nim-lang/Nim/blob/1bcc3521371ec6a8c136e42d902a0be7c50d9745/lib/pure/hashes.nim#L109
 
 **Rust**  https://github.com/eldruin/wyhash-rs
 

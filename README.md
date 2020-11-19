@@ -47,7 +47,7 @@ wyhash is the default hasher for a hash table of the great Zig, V and Nim langua
 
 **Java** https://github.com/OpenHFT/Zero-Allocation-Hashing
 
-**Nim** https://github.com/nim-lang/Nim/blob/1bcc3521371ec6a8c136e42d902a0be7c50d9745/lib/pure/hashes.nim#L109
+**Nim** https://github.com/nim-lang/Nim/blob/devel/lib/pure/hashes.nim
 
 **Rust**  https://github.com/eldruin/wyhash-rs
 
@@ -96,4 +96,3 @@ hyb
 James Z.M. Gao
 
 easyaspi314 (Devin)
-

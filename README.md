@@ -21,9 +21,8 @@ g++-9 benchmark.cpp t1ha/src/t1ha2.c -o benchmark -Ofast -s  -Wall -march=native
 
 |hash function  |short hash/us  |bulk_256B GB/s |bulk_64KB GB/s |
 |----           |----           |----           |----           |
-|wyhash:safety=0|444.31         |18.86          |24.35          |
-|wyhash:safety=1|195.42         |17.97          |23.44          |
-|wyhash:safety=2|181.56         |14.33          |15.97          |
+|wyhash_final2  |205.45         |21.09          |25.15          |
+|wyhash_final1  |195.42         |17.97          |23.44          |
 |xxh3:avx2      |147.33         |9.73           |45.39          |
 |xxh3:sse2      |154.30         |11.53          |27.15          |
 |xxh3:scalar    |153.61         |8.49           |13.05          |

@@ -1,4 +1,4 @@
-CXX=g++-9
+CXX=g++
 all:	test_vector wyhash0 wyhash1 wyhash2 xxh3scalar xxh3sse2 xxh3avx2
 test_vector:	test_vector.cpp wyhash.h makefile
 	$(CXX) test_vector.cpp -o test_vector -O3 -s  -Wall -march=native

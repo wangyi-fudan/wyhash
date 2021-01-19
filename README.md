@@ -51,6 +51,8 @@ XXH3_avx2      , 307078136, 307014216, 305839386, 219537363, 182831759, 18201844
 
 **GO** https://github.com/lonewolf3739/wyhash-go
 
+**GO** https://github.com/zhangyunhao116/wyhash (final version 1)
+
 **Java** https://github.com/OpenHFT/Zero-Allocation-Hashing
 
 **Nim** https://github.com/nim-lang/Nim/blob/devel/lib/pure/hashes.nim

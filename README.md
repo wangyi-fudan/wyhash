@@ -13,6 +13,13 @@ wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively:
 
 wyhash is the default hasher for a hash table of the great Zig, V and Nim language.
 
+**Simple Example:**
+```
+#include  "wyhash.h"
+string  s="fcdskhfjs";
+uint64_t h=wyhash(s.c_str(),s.size(),0,_wyp);
+```
+
 ----------------------------------------
 
 g++-9 benchmark.cpp t1ha/src/t1ha2.c -o benchmark -Ofast -s  -Wall -march=native

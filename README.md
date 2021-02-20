@@ -64,6 +64,8 @@ XXH3_avx2      , 307078136, 307014216, 305839386, 219537363, 182831759, 18201844
 
 **Nim** https://github.com/nim-lang/Nim/blob/devel/lib/pure/hashes.nim
 
+**Nim** https://github.com/jackhftang/wyhash.nim
+
 **Rust**  https://github.com/eldruin/wyhash-rs
 
 **Swift** https://github.com/lemire/SwiftWyhash

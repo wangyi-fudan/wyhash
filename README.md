@@ -80,6 +80,8 @@ XXH3_avx2      , 307078136, 307014216, 305839386, 219537363, 182831759, 18201844
 
 **Zig** https://github.com/ManDeJan/zig-wyhash
 
+**absl hashmap** https://github.com/abseil/abseil-cpp/blob/master/absl/hash/internal/wyhash.cc
+
 ----------------------------------------
 
 I thank these names:

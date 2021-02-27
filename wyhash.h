@@ -86,7 +86,7 @@ static inline uint64_t wyhash(const void *key, uint64_t len, uint64_t seed, cons
 #if(WYHASH_CONDOM>0)
     if(_likely_(len<=8)){
       if(_likely_(len>=4)){ a=_wyr4(p); b=_wyr4(p+len-4); }
-      else if (_likely_(len)){ a=_wyr3(p,len); b=0; }
+      else if (_likely_(len)){ a=_wyr3(p,(unsigned)len); b=0; }
       else a=b=0;
     } 
     else{ a=_wyr8(p); b=_wyr8(p+len-8); }

@@ -27,7 +27,7 @@
 static inline uint64_t _wyrot(uint64_t x) { return (x>>32)|(x<<32); }
 static inline void _wymum(uint64_t *A, uint64_t *B){
 #if(WYHASH_32BIT_MUM)
-  uint64_t hh=(*A>>32)*(*B>>32), hl=(*A>>32)*(unsigned)*B, lh=(unsigned)*A*(*B>>32), ll=(uint64_t)(unsigned)*A*(unsigned)*B;
+  uint64_t hh=(*A>>32)*(*B>>32), hl=(*A>>32)*(uint32_t)*B, lh=(uint32_t)*A*(*B>>32), ll=(uint64_t)(uint32_t)*A*(uint32_t)*B;
   #if(WYHASH_CONDOM>1)
   *A^=_wyrot(hl)^hh; *B^=_wyrot(lh)^ll;
   #else
@@ -66,17 +66,45 @@ static inline uint64_t _wymix(uint64_t A, uint64_t B){ _wymum(&A,&B); return A^B
     #define WYHASH_LITTLE_ENDIAN 1
   #elif defined(__BIG_ENDIAN__) || (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
     #define WYHASH_LITTLE_ENDIAN 0
+  #else
+    #warning could not determine endianess! Falling back to little endian.
+    #define WYHASH_LITTLE_ENDIAN 1
   #endif
 #endif
 #if (WYHASH_LITTLE_ENDIAN)
 static inline uint64_t _wyr8(const uint8_t *p) { uint64_t v; memcpy(&v, p, 8); return v;}
-static inline uint64_t _wyr4(const uint8_t *p) { unsigned v; memcpy(&v, p, 4); return v;}
+static inline uint64_t _wyr4(const uint8_t *p) { uint32_t v; memcpy(&v, p, 4); return v;}
 #elif defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
 static inline uint64_t _wyr8(const uint8_t *p) { uint64_t v; memcpy(&v, p, 8); return __builtin_bswap64(v);}
-static inline uint64_t _wyr4(const uint8_t *p) { unsigned v; memcpy(&v, p, 4); return __builtin_bswap32(v);}
+static inline uint64_t _wyr4(const uint8_t *p) { uint32_t v; memcpy(&v, p, 4); return __builtin_bswap32(v);}
 #elif defined(_MSC_VER)
 static inline uint64_t _wyr8(const uint8_t *p) { uint64_t v; memcpy(&v, p, 8); return _byteswap_uint64(v);}
-static inline uint64_t _wyr4(const uint8_t *p) { unsigned v; memcpy(&v, p, 4); return _byteswap_ulong(v);}
+static inline uint64_t _wyr4(const uint8_t *p) { uint32_t v; memcpy(&v, p, 4); return _byteswap_ulong(v);}
+#else
+static inline uint64_t _wyr8(const uint8_t *p) {
+  uint64_t v;
+  memcpy(&v, p, 8);
+  return (
+      ((v >> 56) & 0xff)
+    | ((v >> 40) & 0xff00)
+    | ((v >> 24) & 0xff0000)
+    | ((v >>  8) & 0xff000000)
+    | ((v <<  8) & 0xff00000000)
+    | ((v << 24) & 0xff0000000000)
+    | ((v << 40) & 0xff000000000000)
+    | ((v << 56) & 0xff00000000000000)
+  );
+}
+static inline uint64_t _wyr4(const uint8_t *p) {
+  uint32_t v;
+  memcpy(&v, p, 4);
+  return (
+      ((v >> 24) & 0xff)
+    | ((v >>  8) & 0xff00)
+    | ((v <<  8) & 0xff0000)
+    | ((v << 24) & 0xff000000)
+  );
+}
 #endif
 static inline uint64_t _wyr3(const uint8_t *p, unsigned k) { return (((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];}
 //wyhash function
@@ -127,12 +155,24 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
       ok=1; secret[i]=0;
       for(size_t j=0;j<64;j+=8) secret[i]|=((uint64_t)c[wyrand(&seed)%sizeof(c)])<<j;
       if(secret[i]%2==0){ ok=0; continue; }
-      for(size_t j=0;j<i;j++)
+      for(size_t j=0;j<i;j++) {
 #if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
         if(__builtin_popcountll(secret[j]^secret[i])!=32){ ok=0; break; }
 #elif defined(_MSC_VER) && defined(_M_X64)
         if(_mm_popcnt_u64(secret[j]^secret[i])!=32){ ok=0; break; }
+#else
+        uint64_t x = secret[j]^secret[i];
+        //put count of 2bit pairs into those two bits
+        x -= (x >> 1) & 0x5555555555555555;
+        //sum up to 4bit pairs
+        x = (x & 0x3333333333333333) + ((x >> 2) & 0x3333333333333333);
+        //8bit pairs
+        x = (x + (x >> 4)) & 0x0f0f0f0f0f0f0f0f;
+        //sum of all 8bit pair sums (x + (x<<8) + (x<<16) + (x<<24) + ...)
+        x = (x * 0x0101010101010101) >> 56;
+        if(x!=32){ ok=0; break; }
 #endif
+      }
        if(!ok)continue;
        for(uint64_t j=3;j<0x100000000ull;j+=2) if(secret[i]%j==0){ ok=0; break; }
     }while(!ok);

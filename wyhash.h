@@ -1,14 +1,24 @@
-/* Copyright 2020 王一 Wang Yi <godspeed_china@yeah.net>
-   This is free and unencumbered software released into the public domain. http://unlicense.org/
-   See github.com/wangyi-fudan/wyhash/LICENSE
- */
+// This is free and unencumbered software released into the public domain under The Unlicense (http://unlicense.org/)
+//   main repo: https://github.com/wangyi-fudan/wyhash
+//   author: 王一 Wang Yi <godspeed_china@yeah.net>
+
 #ifndef wyhash_final_version_2
 #define wyhash_final_version_2
-//defines that change behavior
+
 #ifndef WYHASH_CONDOM
-#define WYHASH_CONDOM 1 //0: read 8 bytes before and after boundaries, dangerous but fastest. 1: normal valid behavior 2: extra protection against entropy loss (probability=2^-63), aka. "blind multiplication"
+//pretections that produces different results
+//0: read 8 bytes before and after boundaries, dangerous but fastest. 
+//1: normal valid behavior
+//2: extra protection against entropy loss (probability=2^-63), aka. "blind multiplication"
+#define WYHASH_CONDOM 1 
 #endif
-#define WYHASH_32BIT_MUM 0	//faster on 32 bit system
+
+#ifndef WYHASH_32BIT_MUM
+//0: normal version, slow on 32 bit system
+//1: faster on 32 bit system but produces different results
+#define WYHASH_32BIT_MUM 0	
+#endif
+
 //includes
 #include <stdint.h>
 #include <string.h>
@@ -16,6 +26,8 @@
   #include <intrin.h>
   #pragma intrinsic(_umul128)
 #endif
+
+//likely and unlikely macros
 #if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
   #define _likely_(x)	__builtin_expect(x,1)
   #define _unlikely_(x)	__builtin_expect(x,0)
@@ -23,7 +35,8 @@
   #define _likely_(x) (x)
   #define _unlikely_(x) (x)
 #endif
-//mum function
+
+//128bit multiply function
 static inline uint64_t _wyrot(uint64_t x) { return (x>>32)|(x<<32); }
 static inline void _wymum(uint64_t *A, uint64_t *B){
 #if(WYHASH_32BIT_MUM)
@@ -59,8 +72,11 @@ static inline void _wymum(uint64_t *A, uint64_t *B){
   #endif
 #endif
 }
+
+//multiply and xor mix function, aka MUM
 static inline uint64_t _wymix(uint64_t A, uint64_t B){ _wymum(&A,&B); return A^B; }
-//read functions
+
+//endian macros
 #ifndef WYHASH_LITTLE_ENDIAN
   #if defined(_WIN32) || defined(__LITTLE_ENDIAN__) || (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
     #define WYHASH_LITTLE_ENDIAN 1
@@ -71,6 +87,8 @@ static inline uint64_t _wymix(uint64_t A, uint64_t B){ _wymum(&A,&B); return A^B
     #define WYHASH_LITTLE_ENDIAN 1
   #endif
 #endif
+
+//read functions
 #if (WYHASH_LITTLE_ENDIAN)
 static inline uint64_t _wyr8(const uint8_t *p) { uint64_t v; memcpy(&v, p, 8); return v;}
 static inline uint64_t _wyr4(const uint8_t *p) { uint32_t v; memcpy(&v, p, 4); return v;}
@@ -82,32 +100,17 @@ static inline uint64_t _wyr8(const uint8_t *p) { uint64_t v; memcpy(&v, p, 8); r
 static inline uint64_t _wyr4(const uint8_t *p) { uint32_t v; memcpy(&v, p, 4); return _byteswap_ulong(v);}
 #else
 static inline uint64_t _wyr8(const uint8_t *p) {
-  uint64_t v;
-  memcpy(&v, p, 8);
-  return (
-      ((v >> 56) & 0xff)
-    | ((v >> 40) & 0xff00)
-    | ((v >> 24) & 0xff0000)
-    | ((v >>  8) & 0xff000000)
-    | ((v <<  8) & 0xff00000000)
-    | ((v << 24) & 0xff0000000000)
-    | ((v << 40) & 0xff000000000000)
-    | ((v << 56) & 0xff00000000000000)
-  );
+  uint64_t v; memcpy(&v, p, 8);
+  return (((v >> 56) & 0xff)| ((v >> 40) & 0xff00)| ((v >> 24) & 0xff0000)| ((v >>  8) & 0xff000000)| ((v <<  8) & 0xff00000000)| ((v << 24) & 0xff0000000000)| ((v << 40) & 0xff000000000000)| ((v << 56) & 0xff00000000000000));
 }
 static inline uint64_t _wyr4(const uint8_t *p) {
-  uint32_t v;
-  memcpy(&v, p, 4);
-  return (
-      ((v >> 24) & 0xff)
-    | ((v >>  8) & 0xff00)
-    | ((v <<  8) & 0xff0000)
-    | ((v << 24) & 0xff000000)
-  );
+  uint32_t v; memcpy(&v, p, 4);
+  return (((v >> 24) & 0xff)| ((v >>  8) & 0xff00)| ((v <<  8) & 0xff0000)| ((v << 24) & 0xff000000));
 }
 #endif
 static inline uint64_t _wyr3(const uint8_t *p, uint64_t k) { return (((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];}
-//wyhash function
+
+//wyhash main function
 static inline uint64_t wyhash(const void *key, uint64_t len, uint64_t seed, const uint64_t *secret){
   const uint8_t *p=(const uint8_t *)key;  uint64_t a,b; seed^=*secret;
   if(_likely_(len<=16)){
@@ -140,13 +143,26 @@ static inline uint64_t wyhash(const void *key, uint64_t len, uint64_t seed, cons
   }
   return _wymix(secret[1]^len,_wymix(a^secret[1], b^seed));
 }
-//utility functions
+
+//the default secret parameters
 static const uint64_t _wyp[5] = {0xa0761d6478bd642full, 0xe7037ed1a0b428dbull, 0x8ebc6af09c88c6e3ull, 0x589965cc75374cc3ull, 0x1d8e4e27c47d124full};
+
+//a useful 64bit-64bit mix function to produce determinstic psudeo random numbers that can pass BigCrush and PractRand
 static inline uint64_t wyhash64(uint64_t A, uint64_t B){  A^=_wyp[0]; B^=_wyp[1];  _wymum(&A,&B);  return _wymix(A^_wyp[0],B^_wyp[1]);}
+
+//The wyrand PRNG that pass BigCrush and PractRand
 static inline uint64_t wyrand(uint64_t *seed){  *seed+=_wyp[0]; return _wymix(*seed,*seed^_wyp[1]);}
+
+// conver any 64 bit  psudeo random numbers to uniform distribution [0,1)
 static inline double wy2u01(uint64_t r){ const double _wynorm=1.0/(1ull<<52); return (r>>12)*_wynorm;}
+
+// conver any 64 bit  psudeo random numbers to APPROXIMATE Gaussian distribution
 static inline double wy2gau(uint64_t r){ const double _wynorm=1.0/(1ull<<20); return ((r&0x1fffff)+((r>>21)&0x1fffff)+((r>>42)&0x1fffff))*_wynorm-3.0;}
+
+// fast range integer random number generation on [0,k)
 static inline uint64_t wy2u0k(uint64_t r, uint64_t k){ _wymum(&r,&k); return k; }
+
+//make your own secret
 static inline void make_secret(uint64_t seed, uint64_t *secret){
   uint8_t c[] = {15, 23, 27, 29, 30, 39, 43, 45, 46, 51, 53, 54, 57, 58, 60, 71, 75, 77, 78, 83, 85, 86, 89, 90, 92, 99, 101, 102, 105, 106, 108, 113, 114, 116, 120, 135, 139, 141, 142, 147, 149, 150, 153, 154, 156, 163, 165, 166, 169, 170, 172, 177, 178, 180, 184, 195, 197, 198, 201, 202, 204, 209, 210, 212, 216, 225, 226, 228, 232, 240 };
   for(size_t i=0;i<5;i++){
@@ -161,14 +177,11 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
 #elif defined(_MSC_VER) && defined(_M_X64)
         if(_mm_popcnt_u64(secret[j]^secret[i])!=32){ ok=0; break; }
 #else
+        //manual popcount
         uint64_t x = secret[j]^secret[i];
-        //put count of 2bit pairs into those two bits
         x -= (x >> 1) & 0x5555555555555555;
-        //sum up to 4bit pairs
         x = (x & 0x3333333333333333) + ((x >> 2) & 0x3333333333333333);
-        //8bit pairs
         x = (x + (x >> 4)) & 0x0f0f0f0f0f0f0f0f;
-        //sum of all 8bit pair sums (x + (x<<8) + (x<<16) + (x<<24) + ...)
         x = (x * 0x0101010101010101) >> 56;
         if(x!=32){ ok=0; break; }
 #endif

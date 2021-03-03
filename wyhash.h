@@ -1,6 +1,6 @@
 // This is free and unencumbered software released into the public domain under The Unlicense (http://unlicense.org/)
 // main repo: https://github.com/wangyi-fudan/wyhash
-// author: 王一 Wang Yi <godspeed_china@yeah.net>
+// main author: 王一 Wang Yi <godspeed_china@yeah.net>
 
 /* quick example:
    string s="fjsakfdsjkf";

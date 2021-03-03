@@ -106,7 +106,7 @@ static inline uint64_t _wyr4(const uint8_t *p) {
   );
 }
 #endif
-static inline uint64_t _wyr3(const uint8_t *p, unsigned k) { return (((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];}
+static inline uint64_t _wyr3(const uint8_t *p, uint64_t k) { return (((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];}
 //wyhash function
 static inline uint64_t wyhash(const void *key, uint64_t len, uint64_t seed, const uint64_t *secret){
   const uint8_t *p=(const uint8_t *)key;  uint64_t a,b; seed^=*secret;
@@ -114,7 +114,7 @@ static inline uint64_t wyhash(const void *key, uint64_t len, uint64_t seed, cons
 #if(WYHASH_CONDOM>0)
     if(_likely_(len<=8)){
       if(_likely_(len>=4)){ a=_wyr4(p); b=_wyr4(p+len-4); }
-      else if (_likely_(len)){ a=_wyr3(p,(unsigned)len); b=0; }
+      else if (_likely_(len)){ a=_wyr3(p,len); b=0; }
       else a=b=0;
     } 
     else{ a=_wyr8(p); b=_wyr8(p+len-8); }

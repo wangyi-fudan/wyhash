@@ -2,6 +2,11 @@
 // main repo: https://github.com/wangyi-fudan/wyhash
 // author: 王一 Wang Yi <godspeed_china@yeah.net>
 
+/* quick example:
+   string s="fjsakfdsjkf";
+   uint64_t hash=wyhash(s.c_str(), s.size(), 0, _wyp);
+*/
+
 #ifndef wyhash_final_version_2
 #define wyhash_final_version_2
 

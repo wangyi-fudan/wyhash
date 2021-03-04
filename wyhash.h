@@ -21,7 +21,7 @@
 
 #ifndef WYHASH_32BIT_MUM
 //0: normal version, slow on 32 bit system
-//1: faster on 32 bit system but produces different results
+//1: faster on 32 bit system but produces different results, imcompatiable with wy2u0k function
 #define WYHASH_32BIT_MUM 0	
 #endif
 
@@ -166,7 +166,9 @@ static inline double wy2u01(uint64_t r){ const double _wynorm=1.0/(1ull<<52); re
 static inline double wy2gau(uint64_t r){ const double _wynorm=1.0/(1ull<<20); return ((r&0x1fffff)+((r>>21)&0x1fffff)+((r>>42)&0x1fffff))*_wynorm-3.0;}
 
 // fast range integer random number generation on [0,k) credit to Daniel Lemire. May not work when WYHASH_32BIT_MUM=1. It can be combined with wyrand, wyhash64 or wyhash.
+#if(!WYHASH_32BIT_MUM)
 static inline uint64_t wy2u0k(uint64_t r, uint64_t k){ _wymum(&r,&k); return k; }
+#endif
 
 //make your own secret
 static inline void make_secret(uint64_t seed, uint64_t *secret){

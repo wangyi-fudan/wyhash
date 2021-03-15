@@ -217,16 +217,14 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
 	if(idx[pos1]==0)	cout<<"object not found\n";	//	ind[pos1]==0 means an empty slot which means fail to find. because it is rare that hash==0
     free(idx);	//	free the index
 */
-/*
+
 static  inline  uint64_t  wyhashmap(uint64_t  *keys,  uint64_t  size,  const  void*  key,  uint64_t  len,  uint8_t  insert){
   uint64_t  hash=wyhash(key,len,0,_wyp),  i;
-  for(i=hash%size;keys[i]!=hash;i=(i+1)%size) if(!keys[i]){  
-    if(insert)  keys[i]=hash;  
-    return  i;  
-  }
+  for(i=hash%size;keys[i]&&keys[i]!=hash;i=(i+1)%size);  
+  if(!keys[i]&&insert)  keys[i]=hash;  
   return  i;
 }
-*/
+
 #endif
 
 /* test vectors for portability test

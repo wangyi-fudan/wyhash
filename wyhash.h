@@ -221,13 +221,6 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
     else{	idx[pos]=hash_of_key;	keys[pos]=key;	value[pos]=0;  }	//	if the key is new. you may insert the key or not if it is just a lookup
     free(idx);	//	free the index
 */
-/*
-static  inline  uint64_t  wyhashmap(uint64_t  *keys,  uint64_t  size,  uint64_t hash){
-  uint64_t  i;
-  for(i=hash%size;keys[i]&&keys[i]!=hash;i=(i+1)%size);  
-  return  i;
-}
-*/
 #if defined(__SIZEOF_INT128__) && defined(wyhashmap128)
 typedef	__uint128_t	wyhashmap_t;
 #elif defined(wyhashmap32)

@@ -199,7 +199,7 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
     }while(!ok);
   }
 }
-/*  This is world's fastest hash map: 2X~4X faster than bytell_hash_map.
+/*  This is world's fastest hash map: 2X~3X faster than bytell_hash_map.
     It is a probabilistic hashmap with very low error rate, please DO NOT use it in any serious tasks.
     It does not store the keys, but only the hash of keys.
     If hash(key1)==hash(key2), we are almost sure that key1==key2.

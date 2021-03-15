@@ -199,22 +199,22 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
     }while(!ok);
   }
 }
-/*	This is world's fastest hash map: 3X~5X faster than bytell_hash_map.
+/*  This is world's fastest hash map: 3X~5X faster than bytell_hash_map.
     It is a probabilistic hashmap with very low error rate, please DO NOT use it in any serious tasks.
     It does not store the keys, but only the hash of keys. 
     If hash(key1)==hash(key2), we are almost sure that key1==key2.
     If you store more than 1 billion objects, you should start to worry about the errors due to hash collisions.
-	Prob(Collision)=2^-64 * N * N, where N the number of objects stored. 
-
-	example code:
-	const  uint64_t  size=1ull<<20;	//	we use fixed memory unlike auto increasing ones. it thus maximize memoery usage. A power-2 size will be fastest
-	uint64_t  *idx=(uint64_t*)calloc(size,8);	//	allocate the index and set it to zero.
-	vector<value_class>	value(size);	//	we only care about the index, user should maintain his own value vectors.
-	string  s="dhskfhdsj"	//	the object to be inserted into idx
+    Prob(Collision)=2^-64 * N * N, where N the number of objects stored. 
+    
+    example code:
+    const  uint64_t  size=1ull<<20;	//	we use fixed memory unlike auto increasing ones. it thus maximize memoery usage. A power-2 size will be fastest
+    uint64_t  *idx=(uint64_t*)calloc(size,8);	//	allocate the index and set it to zero.
+    vector<value_class>	value(size);	//	we only care about the index, user should maintain his own value vectors.
+    string  s="dhskfhdsj"	//	the object to be inserted into idx
     uint64_t	pos=wyhashmap(idx,size,s.c_str(),s.size(),1);	//	insert key and get the corresponding position 
     value[pos]++;	//	update value at pos. It is a manual operation by user.
-	uint64_t	pos1=wyhashmap(idx,size,s.c_str(),s.size(),0);	//	find the position, do not insertion.
-	if(idx[pos1]==0)	cout<<"object not found\n";	//	ind[pos1]==0 means an empty slot which means fail to find. because it is rare that hash==0
+    uint64_t	pos1=wyhashmap(idx,size,s.c_str(),s.size(),0);	//	find the position, do not insertion.
+    if(idx[pos1]==0)	cout<<"object not found\n";	//	ind[pos1]==0 means an empty slot which means fail to find. because it is rare that hash==0
     free(idx);	//	free the index
 */
 

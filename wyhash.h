@@ -211,17 +211,32 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
 
     example code:
     const  uint64_t  size=1ull<<20;	//	we use fixed memory unlike auto increasing ones. it thus maximize memoery usage. A power-2 size will be fastest
-    uint64_t  *idx=(uint64_t*)calloc(size,8);	//	allocate the index and set it to zero.
+    wyhashmap_t  *idx=(wyhashmap_t*)calloc(size,sizeof(wyhashmap_t));	//	allocate the index and set it to zero.
     vector<value_class>	value(size);	//	we only care about the index, user should maintain his own value vectors.
     vector<string>	keys(size);	//	also you can maintain your own real keys
     string  key="dhskfhdsj"	//	the object to be inserted into idx
-    uint64_t hash_of_key=wyhash(key.c_str(),key.size(),0,_wyp);
+    wyhashmap_t hash_of_key=wyhash(key.c_str(),key.size(),0,_wyp);	//	use double hash if wyhashmap_t is 128 bit
     uint64_t	pos=wyhashmap(idx,size,hash_of_key);	//	get the position to insert
     if(idx[pos])	value[pos]++;	//	if the key is found
     else{	idx[pos]=hash_of_key;	keys[pos]=key;	value[pos]=0;  }	//	if the key is new. you may insert the key or not if it is just a lookup
     free(idx);	//	free the index
 */
+/*
 static  inline  uint64_t  wyhashmap(uint64_t  *keys,  uint64_t  size,  uint64_t hash){
+  uint64_t  i;
+  for(i=hash%size;keys[i]&&keys[i]!=hash;i=(i+1)%size);  
+  return  i;
+}
+*/
+#if defined(__SIZEOF_INT128__) && defined(wyhashmap128)
+typedef	__uint128_t	wyhashmap_t;
+#elif defined(wyhashmap32)
+typedef	uint32_t	wyhashmap_t;
+#else
+typedef	uint64_t	wyhashmap_t;
+#endif
+
+static  inline  uint64_t  wyhashmap(wyhashmap_t  *keys,  uint64_t  size,  wyhashmap_t hash){
   uint64_t  i;
   for(i=hash%size;keys[i]&&keys[i]!=hash;i=(i+1)%size);  
   return  i;

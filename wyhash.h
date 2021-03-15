@@ -199,32 +199,33 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
     }while(!ok);
   }
 }
-/*	This is world's fastest hash map: 3X~5X faster than bytell_hash_map.
+/*  This is world's fastest hash map: 3X~5X faster than bytell_hash_map.
     It is a probabilistic hashmap with very low error rate, please DO NOT use it in any serious tasks.
-    It does not store the keys, but only the hash of keys. 
+    It does not store the keys, but only the hash of keys.
     If hash(key1)==hash(key2), we are almost sure that key1==key2.
-    If you store more than 1 billion objects, you should start to worry about the errors due to hash collisions.
-	Prob(Collision)=2^-64 * N * N, where N the number of objects stored. 
+    Prob(Collision)=2^-64 * N * (N-1)/2, where N the number of objects stored. 
+    For 1 million keys,   Prob(Colision)=2^-25, which is very safe
+    For 16 million keys,  Prob(Colision)=2^-17, which is safe
+    For 256 million keys, Prob(Colision)=2^-9, a bit worry
+    For 1 billion keys,   Prob(Colision)=2^-5,  worry but not die
 
-	example code:
-	const  uint64_t  size=1ull<<20;	//	we use fixed memory unlike auto increasing ones. it thus maximize memoery usage. A power-2 size will be fastest
-	uint64_t  *idx=(uint64_t*)calloc(size,8);	//	allocate the index and set it to zero.
-	vector<value_class>	value(size);	//	we only care about the index, user should maintain his own value vectors.
-	string  s="dhskfhdsj"	//	the object to be inserted into idx
-    uint64_t	pos=wyhashmap(idx,size,s.c_str(),s.size(),1);	//	insert key and get the corresponding position 
-    value[pos]++;	//	update value at pos. It is a manual operation by user.
-	uint64_t	pos1=wyhashmap(idx,size,s.c_str(),s.size(),0);	//	find the position, do not insertion.
-	if(idx[pos1]==0)	cout<<"object not found\n";	//	ind[pos1]==0 means an empty slot which means fail to find. because it is rare that hash==0
+    example code:
+    const  uint64_t  size=1ull<<20;	//	we use fixed memory unlike auto increasing ones. it thus maximize memoery usage. A power-2 size will be fastest
+    uint64_t  *idx=(uint64_t*)calloc(size,8);	//	allocate the index and set it to zero.
+    vector<value_class>	value(size);	//	we only care about the index, user should maintain his own value vectors.
+	vector<string>	keys(size);	//	also you can maintain your own real keys
+    string  key="dhskfhdsj"	//	the object to be inserted into idx
+	uint64_t hash_of_key=wyhash(s.c_str(),s.size(),0,_wyp);
+    uint64_t	pos=wyhashmap(idx,size,hash_of_key);	//	get the position to insert
+	if(idx[pos])	valie[pos]++;	//	if the key is found
+	else{	idx[pos]=hash_of_key;	keys[pos]=key;	}	//	if the key is new. you can insert the key or not if it is just a lookup
     free(idx);	//	free the index
 */
-
-static  inline  uint64_t  wyhashmap(uint64_t  *keys,  uint64_t  size,  const  void*  key,  uint64_t  len,  uint8_t  insert){
-  uint64_t  hash=wyhash(key,len,0,_wyp),  i;
+static  inline  uint64_t  wyhashmap(uint64_t  *keys,  uint64_t  size,  uint64_t hash){
+  uint64_t  i;
   for(i=hash%size;keys[i]&&keys[i]!=hash;i=(i+1)%size);  
-  if(!keys[i]&&insert)  keys[i]=hash;  
   return  i;
 }
-
 #endif
 
 /* test vectors for portability test

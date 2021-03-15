@@ -199,7 +199,7 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
     }while(!ok);
   }
 }
-/*  This is world's fastest hash map: 2X~3X faster than bytell_hash_map.
+/*  This is world's fastest hash map: 2X~4X faster than bytell_hash_map.
     It is a probabilistic hashmap with very low error rate, please DO NOT use it in any serious tasks.
     It does not store the keys, but only the hash of keys.
     If hash(key1)==hash(key2), we are almost sure that key1==key2.
@@ -223,16 +223,16 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
 */
 #if defined(__SIZEOF_INT128__) && defined(wyhashmap128)
 typedef	__uint128_t	wyhashmap_t;
-#elif defined(wyhashmap32)
-typedef	uint32_t	wyhashmap_t;
 #else
 typedef	uint64_t	wyhashmap_t;
 #endif
 
 static  inline  uint64_t  wyhashmap(wyhashmap_t  *keys,  uint64_t  size,  wyhashmap_t hash){
-  uint64_t  i;
-  for(i=hash%size;keys[i]&&keys[i]!=hash;i=(i+1)%size);  
-  return  i;
+  uint64_t  i0=wy2u0k(hash,size), i;
+  for(i=i0;i<size&&keys[i]&&keys[i]!=hash;i++);
+  if(i<size) return  i;
+  for(i=0;i<i0&&keys[i]&&keys[i]!=hash;i++);
+  return i<i0?i:size;	//	return size if out of capacity
 }
 #endif
 

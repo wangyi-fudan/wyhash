@@ -208,7 +208,7 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
     For 16 million keys,  Prob(Colision)=2^-17, which is safe
     For 256 million keys, Prob(Colision)=2^-9, a bit worry
     For 1 billion keys,   Prob(Colision)=2^-5,  worry but not die
-
+    For more keys, define wyhashmap128 and use double hash functions to construct 128 bit keys which is very safe
     example code:
     const  uint64_t  size=1ull<<20;	//	we use fixed memory unlike auto increasing ones. it thus maximize memoery usage. A power-2 size will be fastest
     wyhashmap_t  *idx=(wyhashmap_t*)calloc(size,sizeof(wyhashmap_t));	//	allocate the index and set it to zero.

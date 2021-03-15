@@ -215,10 +215,10 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
     vector<value_class>	value(size);	//	we only care about the index, user should maintain his own value vectors.
     vector<string>	keys(size);	//	also you can maintain your own real keys
     string  key="dhskfhdsj"	//	the object to be inserted into idx
-    uint64_t hash_of_key=wyhash(s.c_str(),s.size(),0,_wyp);
+    uint64_t hash_of_key=wyhash(key.c_str(),key.size(),0,_wyp);
     uint64_t	pos=wyhashmap(idx,size,hash_of_key);	//	get the position to insert
-    if(idx[pos])	valie[pos]++;	//	if the key is found
-    else{	idx[pos]=hash_of_key;	keys[pos]=key;	}	//	if the key is new. you can insert the key or not if it is just a lookup
+    if(idx[pos])	value[pos]++;	//	if the key is found
+    else{	idx[pos]=hash_of_key;	keys[pos]=key;	value[pos]=0;  }	//	if the key is new. you may insert the key or not if it is just a lookup
     free(idx);	//	free the index
 */
 static  inline  uint64_t  wyhashmap(uint64_t  *keys,  uint64_t  size,  uint64_t hash){

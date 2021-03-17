@@ -12,16 +12,16 @@
 #define wyhash_final_version_2
 
 #ifndef WYHASH_CONDOM
-//pretections that produces different results
-//0: read 8 bytes before and after boundaries, dangerous but fastest. 
+//protections that produce different results:
+//0: read 8 bytes before and after boundaries, dangerous but fastest
 //1: normal valid behavior
 //2: extra protection against entropy loss (probability=2^-63), aka. "blind multiplication"
 #define WYHASH_CONDOM 1 
 #endif
 
 #ifndef WYHASH_32BIT_MUM
-//0: normal version, slow on 32 bit system
-//1: faster on 32 bit system but produces different results, imcompatiable with wy2u0k function
+//0: normal version, slow on 32 bit systems
+//1: faster on 32 bit systems but produces different results, incompatible with wy2u0k function
 #define WYHASH_32BIT_MUM 0	
 #endif
 
@@ -89,7 +89,7 @@ static inline uint64_t _wymix(uint64_t A, uint64_t B){ _wymum(&A,&B); return A^B
   #elif defined(__BIG_ENDIAN__) || (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
     #define WYHASH_LITTLE_ENDIAN 0
   #else
-    #warning could not determine endianess! Falling back to little endian.
+    #warning could not determine endianness! Falling back to little endian.
     #define WYHASH_LITTLE_ENDIAN 1
   #endif
 #endif
@@ -118,7 +118,7 @@ static inline uint64_t _wyr3(const uint8_t *p, uint64_t k) { return (((uint64_t)
 
 //wyhash main function
 static inline uint64_t wyhash(const void *key, uint64_t len, uint64_t seed, const uint64_t *secret){
-  const uint8_t *p=(const uint8_t *)key;  uint64_t a,b; seed^=*secret;
+  const uint8_t *p=(const uint8_t *)key; uint64_t a,b; seed^=*secret;
   if(_likely_(len<=16)){
 #if(WYHASH_CONDOM>0)
     if(_likely_(len<=8)){
@@ -153,20 +153,20 @@ static inline uint64_t wyhash(const void *key, uint64_t len, uint64_t seed, cons
 //the default secret parameters
 static const uint64_t _wyp[4] = {0xa0761d6478bd642full, 0xe7037ed1a0b428dbull, 0x8ebc6af09c88c6e3ull, 0x589965cc75374cc3ull};
 
-//a useful 64bit-64bit mix function to produce determinstic psudeo random numbers that can pass BigCrush and PractRand
-static inline uint64_t wyhash64(uint64_t A, uint64_t B){  A^=_wyp[0]; B^=_wyp[1];  _wymum(&A,&B);  return _wymix(A^_wyp[0],B^_wyp[1]);}
+//a useful 64bit-64bit mix function to produce deterministic pseudo random numbers that can pass BigCrush and PractRand
+static inline uint64_t wyhash64(uint64_t A, uint64_t B){ A^=_wyp[0]; B^=_wyp[1]; _wymum(&A,&B); return _wymix(A^_wyp[0],B^_wyp[1]);}
 
 //The wyrand PRNG that pass BigCrush and PractRand
-static inline uint64_t wyrand(uint64_t *seed){  *seed+=_wyp[0]; return _wymix(*seed,*seed^_wyp[1]);}
+static inline uint64_t wyrand(uint64_t *seed){ *seed+=_wyp[0]; return _wymix(*seed,*seed^_wyp[1]);}
 
-// convert any 64 bit psudeo random numbers to uniform distribution [0,1). It can be combined with wyrand, wyhash64 or wyhash.
+//convert any 64 bit pseudo random numbers to uniform distribution [0,1). It can be combined with wyrand, wyhash64 or wyhash.
 static inline double wy2u01(uint64_t r){ const double _wynorm=1.0/(1ull<<52); return (r>>12)*_wynorm;}
 
-// convert any 64 bit psudeo random numbers to APPROXIMATE Gaussian distribution. It can be combined with wyrand, wyhash64 or wyhash.
+//convert any 64 bit pseudo random numbers to APPROXIMATE Gaussian distribution. It can be combined with wyrand, wyhash64 or wyhash.
 static inline double wy2gau(uint64_t r){ const double _wynorm=1.0/(1ull<<20); return ((r&0x1fffff)+((r>>21)&0x1fffff)+((r>>42)&0x1fffff))*_wynorm-3.0;}
 
 #if(!WYHASH_32BIT_MUM)
-// fast range integer random number generation on [0,k) credit to Daniel Lemire. May not work when WYHASH_32BIT_MUM=1. It can be combined with wyrand, wyhash64 or wyhash.
+//fast range integer random number generation on [0,k) credit to Daniel Lemire. May not work when WYHASH_32BIT_MUM=1. It can be combined with wyrand, wyhash64 or wyhash.
 static inline uint64_t wy2u0k(uint64_t r, uint64_t k){ _wymum(&r,&k); return k; }
 #endif
 
@@ -218,7 +218,7 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
     wyhashmap_t hash_of_key=wyhash(key.c_str(),key.size(),0,_wyp);	//	use double hash if wyhashmap_t is 128 bit
     uint64_t	pos=wyhashmap(idx,size,hash_of_key);	//	get the position to insert
     if(idx[pos])	value[pos]++;	//	if the key is found
-    else{	idx[pos]=hash_of_key;	keys[pos]=key;	value[pos]=0;  }	//	if the key is new. you may insert the key or not if it is just a lookup
+    else{	idx[pos]=hash_of_key;	keys[pos]=key;	value[pos]=0; }	//	if the key is new. you may insert the key or not if it is just a lookup
     free(idx);	//	free the index
 */
 #if defined(__SIZEOF_INT128__) && defined(wyhashmap128)
@@ -227,7 +227,7 @@ typedef	__uint128_t	wyhashmap_t;
 typedef	uint64_t	wyhashmap_t;
 #endif
 
-static  inline  uint64_t  wyhashmap(wyhashmap_t  *keys,  uint64_t  size,  wyhashmap_t hash){
+static  inline  uint64_t  wyhashmap(wyhashmap_t *keys,  uint64_t size, wyhashmap_t hash){
   uint64_t  i0=wy2u0k(hash,size), i;
   for(i=i0;i<size&&keys[i]&&keys[i]!=hash;i++);
   if(i<size) return  i;
@@ -246,7 +246,7 @@ wyhash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",5,_wyp)=
 wyhash("12345678901234567890123456789012345678901234567890123456789012345678901234567890",6,_wyp)=7c1ccf6bba30f5a5
 */
 
-/* The Unlisence
+/* The Unlicense
 This is free and unencumbered software released into the public domain.
 
 Anyone is free to copy, modify, publish, use, compile, sell, or

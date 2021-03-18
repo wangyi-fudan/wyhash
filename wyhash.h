@@ -4,15 +4,16 @@
 // contributors: Reini Urban, Dietrich Epp, Joshua Haberman, Tommy Ettinger, Daniel Lemire, Otmar Ertl, cocowalla, leo-yuriev, Diego Barrios Romero, paulie-g, dumblob, Yann Collet, ivte-ms, hyb, James Z.M. Gao, easyaspi314 (Devin), TheOneric
 
 /* quick example:
-   string s="fjsakfdskf";
+   string s="fjsakfdsjkf";
    uint64_t hash=wyhash(s.c_str(), s.size(), 0, _wyp);
 */
 
-#ifndef wyhash_final_version_3
-#define wyhash_final_version_3
+#ifndef wyhash_final_version_2
+#define wyhash_final_version_2
 
 #ifndef WYHASH_CONDOM
 //protections that produce different results:
+//0: read 8 bytes before and after boundaries, dangerous but fastest
 //1: normal valid behavior
 //2: extra protection against entropy loss (probability=2^-63), aka. "blind multiplication"
 #define WYHASH_CONDOM 1 
@@ -117,18 +118,8 @@ static inline uint64_t _wyr3(const uint8_t *p, size_t k) { return (((uint64_t)p[
 
 //wyhash main function
 static inline uint64_t wyhash(const void *key, size_t len, uint64_t seed, const uint64_t *secret){
-  const uint8_t *p=(const uint8_t *)key; uint64_t a,b; seed^=*secret;
-  if(_likely_(len<=16)){
-    if(_likely_(len>=4)){
-      size_t  n=(len>>3)<<2;
-      a=(_wyr4(p)<<32)|_wyr4(p+n); 
-      b=(_wyr4(p+len-4)<<32)|_wyr4(p+len-4-n); 
-    }
-    else if(_likely_(len>0)){ a=_wyr3(p,len); b=0; }
-    else a=b=0;
-  }
-  else{
-    size_t i=len;
+  const uint8_t *p=(const uint8_t *)key; uint64_t a,b; seed^=*secret; size_t i=len;
+  if(_unlikely_(len>16)){
     if(_unlikely_(i>48)){
       uint64_t see1=seed, see2=seed;
       do{
@@ -140,8 +131,14 @@ static inline uint64_t wyhash(const void *key, size_t len, uint64_t seed, const 
       seed^=see1^see2;
     }
     while(_unlikely_(i>16)){  seed=_wymix(_wyr8(p)^secret[1],_wyr8(p+8)^seed);  i-=16; p+=16;  }
-    a=_wyr8(p+i-16); b=_wyr8(p+i-8);
   }
+  if(_likely_(i>=4)){
+    size_t  n=(i>>3)<<2;
+    a=(_wyr4(p)<<32)|_wyr4(p+n); 
+    b=(_wyr4(p+i-4)<<32)|_wyr4(p+i-4-n); 
+  }
+  else if(_likely_(i>0)){ a=_wyr3(p,i); b=0; }
+  else a=b=0;
   return _wymix(secret[1]^len,_wymix(a^secret[1], b^seed));
 }
 

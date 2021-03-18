@@ -114,10 +114,10 @@ static inline uint64_t _wyr4(const uint8_t *p) {
   return (((v >> 24) & 0xff)| ((v >>  8) & 0xff00)| ((v <<  8) & 0xff0000)| ((v << 24) & 0xff000000));
 }
 #endif
-static inline uint64_t _wyr3(const uint8_t *p, uint64_t k) { return (((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];}
+static inline uint64_t _wyr3(const uint8_t *p, size_t k) { return (((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];}
 
 //wyhash main function
-static inline uint64_t wyhash(const void *key, uint64_t len, uint64_t seed, const uint64_t *secret){
+static inline uint64_t wyhash(const void *key, size_t len, uint64_t seed, const uint64_t *secret){
   const uint8_t *p=(const uint8_t *)key; uint64_t a,b; seed^=*secret;
   if(_likely_(len<=16)){
 #if(WYHASH_CONDOM>0)
@@ -128,12 +128,12 @@ static inline uint64_t wyhash(const void *key, uint64_t len, uint64_t seed, cons
     } 
     else{ a=_wyr8(p); b=_wyr8(p+len-8); }
 #else
-    uint64_t s=(len<8)*((8-len)<<3);
+    size_t s=(len<8)*((8-len)<<3);
     a=_wyr8(p)<<s;	b=_wyr8(p+len-8)>>s;
 #endif
   }
   else{
-    uint64_t i=len;
+    size_t i=len;
     if(_unlikely_(i>48)){
       uint64_t see1=seed, see2=seed;
       do{

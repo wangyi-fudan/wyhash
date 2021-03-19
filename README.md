@@ -26,17 +26,13 @@ g++-9 benchmark.cpp t1ha/src/t1ha2.c -o benchmark -Ofast -s  -Wall -march=native
 
 /usr/share/dict/words
 
-|hash function  |short hash/us  |
-|----           |----           |
-|wyhash_final3  |**393.44**         |
-|wyhash_final2  |205.45         |
-|wyhash_final1  |195.42         |
-|xxh3:avx2      |147.33         |
-|xxh3:sse2      |154.30         |
-|xxh3:scalar    |153.61         |
-|xxHash64       |83.10          |
-|t1ha2_atonce   |115.12         |
-
+|hash function  |short hash/us  |bulk_256B GB/s |bulk_64KB GB/s |
+|----           |----           |----           |----           |
+|wyhash_final3  |**393.03**     |20.21          |20.67          |
+|wyhash_final2  |204.08         |21.12          |25.10          |
+|wyhash_final1  |196.33         |15.56          |17.92          |
+|xxh3_scalar    |152.47         |8.39           |13.05          |
+|xxh3_avx2      |144.62         |9.85           |44.82          |
 
 ----------------------------------------
 

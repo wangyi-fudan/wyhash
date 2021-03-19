@@ -234,13 +234,13 @@ static  inline  uint64_t  wyhashmap(wyhashmap_t *keys,  uint64_t size, wyhashmap
 #endif
 
 /* test vectors for portability test
-wyhash("",0,_wyp)=42bc986dc5eec4d3
-wyhash("a",1,_wyp)=84508dc903c31551
-wyhash("abc",2,_wyp)=bc54887cfc9ecb1
-wyhash("message digest",3,_wyp)=adc146444841c430
-wyhash("abcdefghijklmnopqrstuvwxyz",4,_wyp)=9a64e42e897195b9
-wyhash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",5,_wyp)=9199383239c32554
-wyhash("12345678901234567890123456789012345678901234567890123456789012345678901234567890",6,_wyp)=7c1ccf6bba30f5a5
+wyhash("",0)=42bc986dc5eec4d3
+wyhash("a",1)=84508dc903c31551
+wyhash("abc",2)=bc54887cfc9ecb1
+wyhash("message digest",3)=6e2ff3298208a67c
+wyhash("abcdefghijklmnopqrstuvwxyz",4)=9a64e42e897195b9
+wyhash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",5)=9199383239c32554
+wyhash("12345678901234567890123456789012345678901234567890123456789012345678901234567890",6)=7c1ccf6bba30f5a5
 */
 
 /* The Unlicense

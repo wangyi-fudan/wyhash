@@ -28,7 +28,7 @@ g++-9 benchmark.cpp t1ha/src/t1ha2.c -o benchmark -Ofast -s  -Wall -march=native
 
 |hash function  |short hash/us  |
 |----           |----           |
-|wyhash_final3  |**419.68**         |
+|wyhash_final3  |**393.44**         |
 |wyhash_final2  |205.45         |
 |wyhash_final1  |195.42         |
 |xxh3:avx2      |147.33         |

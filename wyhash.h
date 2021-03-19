@@ -130,15 +130,15 @@ static inline uint64_t wyhash(const void *key, size_t len, uint64_t seed, const 
     seed=_wymix(a^secret[1], b^seed);
   }
   else{
-    size_t i=len;
-    if(_unlikely_(i>=48)){
+    size_t i=len; 
+    if(_unlikely_(i>48)){
       uint64_t see1=seed, see2=seed;
       do{
         seed=_wymix(_wyr8(p)^secret[1],_wyr8(p+8)^seed);
         see1=_wymix(_wyr8(p+16)^secret[2],_wyr8(p+24)^see1);
         see2=_wymix(_wyr8(p+32)^secret[3],_wyr8(p+40)^see2);
         p+=48; i-=48;
-      }while(_likely_(i>=48));
+      }while(_likely_(i>48));
       seed^=see1^see2;
     }
     while(_unlikely_(i>16)){  seed=_wymix(_wyr8(p)^secret[1],_wyr8(p+8)^seed);  i-=16; p+=16;  }

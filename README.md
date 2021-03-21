@@ -40,6 +40,7 @@ g++-9 benchmark.cpp t1ha/src/t1ha2.c -o benchmark -Ofast -s  -Wall -march=native
 |wyhash_v3      |191.32         |13.55          |15.72          |
 |wyhash_v2      |94.28          |11.91          |11.22          |
 |wyhash_v1      |91.66          |16.03          |18.95          |
+|wyhash32       |149.78         |5.45           |4.89           |
 |xxh3_scalar    |152.47         |8.39           |13.05          |
 |xxh3_avx2      |144.62         |9.85           |44.82          |
 

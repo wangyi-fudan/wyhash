@@ -117,17 +117,11 @@ static inline uint64_t _wyr3(const uint8_t *p, size_t k) { return (((uint64_t)p[
 
 //wyhash main function
 static inline uint64_t wyhash(const void *key, size_t len, uint64_t seed, const uint64_t *secret){
-  const uint8_t *p=(const uint8_t *)key; seed^=*secret; 
+  const uint8_t *p=(const uint8_t *)key; seed^=*secret;	uint64_t	a,	b;
   if(_likely_(len<=16)){
-    uint64_t a, b;
-    if(_likely_(len>=4)){
-      size_t  n=(len>>3)<<2;
-      a=(_wyr4(p)<<32)|_wyr4(p+n); 
-      b=(_wyr4(p+len-4)<<32)|_wyr4(p+len-4-n); 
-    }
-    else if(_likely_(len>0)){ a=_wyr3(p,len); b=0; }
+    if(_likely_(len>=4)){ a=(_wyr4(p)<<32)|_wyr4(p+((len>>3)<<2)); b=(_wyr4(p+len-4)<<32)|_wyr4(p+len-4-((len>>3)<<2)); }
+    else if(_likely_(len>0)){ a=_wyr3(p,len); b=0;}
     else a=b=0;
-    seed=_wymix(a^secret[1], b^seed);
   }
   else{
     size_t i=len; 
@@ -142,11 +136,10 @@ static inline uint64_t wyhash(const void *key, size_t len, uint64_t seed, const 
       seed^=see1^see2;
     }
     while(_unlikely_(i>16)){  seed=_wymix(_wyr8(p)^secret[1],_wyr8(p+8)^seed);  i-=16; p+=16;  }
-    seed=_wymix(_wyr8(p+i-16)^secret[1],_wyr8(p+i-8)^seed);
-  }   
-  return _wymix(secret[1]^len,seed);
+    a=_wyr8(p+i-16);  b=_wyr8(p+i-8);
+  }
+  return _wymix(secret[1]^len,_wymix(a^secret[1],b^seed));
 }
-
 //the default secret parameters
 static const uint64_t _wyp[4] = {0xa0761d6478bd642full, 0xe7037ed1a0b428dbull, 0x8ebc6af09c88c6e3ull, 0x589965cc75374cc3ull};
 
@@ -196,8 +189,9 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
     }while(!ok);
   }
 }
-/*  This is world's fastest hash map: 2X~3X faster than bytell_hash_map.
-    It is a probabilistic hashmap with very low error rate, please DO NOT use it in any serious tasks.
+/*  WARNING: please DO NOT use it in any serious tasks due to possible hash collision.
+    This is world's fastest hash map: 2X~3X faster than bytell_hash_map.
+    It is a probabilistic hashmap with very low error rate.
     It does not store the keys, but only the hash of keys.
     If hash(key1)==hash(key2), we are almost sure that key1==key2.
     Prob(Collision)=2^-64 * N * (N-1)/2, where N the number of objects stored. 
@@ -234,13 +228,13 @@ static  inline  uint64_t  wyhashmap(wyhashmap_t *keys,  uint64_t size, wyhashmap
 #endif
 
 /* test vectors for portability test
-wyhash("",0)=42bc986dc5eec4d3
-wyhash("a",1)=84508dc903c31551
-wyhash("abc",2)=bc54887cfc9ecb1
-wyhash("message digest",3)=6e2ff3298208a67c
-wyhash("abcdefghijklmnopqrstuvwxyz",4)=9a64e42e897195b9
-wyhash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",5)=9199383239c32554
-wyhash("12345678901234567890123456789012345678901234567890123456789012345678901234567890",6)=7c1ccf6bba30f5a5
+wyhash("",0,_wyp)=42bc986dc5eec4d3
+wyhash("a",1,_wyp)=84508dc903c31551
+wyhash("abc",2,_wyp)=bc54887cfc9ecb1
+wyhash("message digest",3,_wyp)=adc146444841c430
+wyhash("abcdefghijklmnopqrstuvwxyz",4,_wyp)=9a64e42e897195b9
+wyhash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",5,_wyp)=9199383239c32554
+wyhash("12345678901234567890123456789012345678901234567890123456789012345678901234567890",6,_wyp)=7c1ccf6bba30f5a5
 */
 
 /* The Unlicense

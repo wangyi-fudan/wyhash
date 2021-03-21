@@ -31,6 +31,15 @@ g++-9 benchmark.cpp t1ha/src/t1ha2.c -o benchmark -Ofast -s  -Wall -march=native
 |wyhash_final3  |**419.63**     |20.97          |25.10          |
 |wyhash_final2  |204.08         |21.12          |25.10          |
 |wyhash_final1  |196.33         |15.56          |17.92          |
+|wyhash_gamma   |399.92         |19.16          |25.80          |
+|wyhash_beta    |180.51         |18.20          |17.37          |
+|wyhash_alpha   |204.50         |20.54          |25.92          |
+|wyhash_v6      |164.08         |12.08          |41.35          |
+|wyhash_v5      |221.59         |15.40          |16.78          |
+|wyhash_v4      |153.03         |13.89          |16.81          |
+|wyhash_v3      |191.32         |13.55          |15.72          |
+|wyhash_v2      |94.28          |11.91          |11.22          |
+|wyhash_v1      |91.66          |16.03          |18.95          |
 |xxh3_scalar    |152.47         |8.39           |13.05          |
 |xxh3_avx2      |144.62         |9.85           |44.82          |
 

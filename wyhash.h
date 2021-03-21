@@ -189,42 +189,6 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
     }while(!ok);
   }
 }
-/*  WARNING: please DO NOT use it in any serious tasks due to possible hash collision.
-    This is world's fastest hash map: 2X~3X faster than bytell_hash_map.
-    It is a probabilistic hashmap with very low error rate.
-    It does not store the keys, but only the hash of keys.
-    If hash(key1)==hash(key2), we are almost sure that key1==key2.
-    Prob(Collision)=2^-64 * N * (N-1)/2, where N the number of objects stored. 
-    For 1 million keys,   Prob(Colision)=2^-25, which is very safe
-    For 16 million keys,  Prob(Colision)=2^-17, which is safe
-    For 256 million keys, Prob(Colision)=2^-9, a bit worry
-    For 1 billion keys,   Prob(Colision)=2^-5,  worry but not die
-    For more keys, define wyhashmap128 and use double hash functions to construct 128 bit keys which is very safe
-    example code:
-    const  uint64_t  size=1ull<<20;  //  we use fixed memory unlike auto increasing ones. it thus maximize memoery usage. A power-2 size will be fastest
-    wyhashmap_t  *idx=(wyhashmap_t*)calloc(size,sizeof(wyhashmap_t));  //  allocate the index and set it to zero.
-    vector<value_class>  value(size);  //  we only care about the index, user should maintain his own value vectors.
-    vector<string>  keys(size);  //  also you can maintain your own real keys
-    string  key="dhskfhdsj"  //  the object to be inserted into idx
-    wyhashmap_t hash_of_key=wyhash(key.c_str(),key.size(),0,_wyp);  //  use double hash if wyhashmap_t is 128 bit
-    uint64_t  pos=wyhashmap(idx,size,hash_of_key);  //  get the position to insert
-    if(idx[pos])  value[pos]++;  //  if the key is found
-    else{  idx[pos]=hash_of_key;  keys[pos]=key;  value[pos]=0; }  //  if the key is new. you may insert the key or not if it is just a lookup
-    free(idx);  //  free the index
-*/
-#if defined(__SIZEOF_INT128__) && defined(wyhashmap128)
-typedef  __uint128_t  wyhashmap_t;
-#else
-typedef  uint64_t  wyhashmap_t;
-#endif
-
-static  inline  uint64_t  wyhashmap(wyhashmap_t *keys,  uint64_t size, wyhashmap_t hash){
-  uint64_t  i0=wy2u0k(hash,size), i;
-  for(i=i0;i<size&&keys[i]&&keys[i]!=hash;i++);
-  if(i<size) return  i;
-  for(i=0;i<i0&&keys[i]&&keys[i]!=hash;i++);
-  return i<i0?i:size;  //  return size if out of capacity
-}
 #endif
 
 /* test vectors for portability test

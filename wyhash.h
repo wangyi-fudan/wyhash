@@ -189,6 +189,52 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
     }while(!ok);
   }
 }
+
+/*  This is world's fastest hash map: 2X than bytell_hash_map.
+    It does not store the keys, but only the hash/signiture of keys. 
+    First we use pos=hash1(key) to approximately locate the bucket.
+    Then we search signiture=hash2(key) from pos linearly.
+    If we find a bucket with matched signiture we report the bucket
+    Or if we meet a bucket whose signifure=0, we report a new position to insert
+    The signiture collision probability is very low as we usually searched N~10 buckets.
+    By combining hash1 and hash2, we acturally have 128 bit anti-collision strength.
+    hash1 and hash2 can be the same function, resulting lower collision resistance but faster.
+    The signiture is 64 bit, but can be modified to 32 bit if necessary for save space.
+    The above two can be activated by define WYHASHMAP_WEAK_SMALL_FAST
+    simple examples:
+	const	size_t	size=213432;
+	vector<wyhashmap_t>	idx(size);	//	allocate the index of fixed size. idx MUST be zeroed.
+    vector<value_class>	value(size);	//	we only care about the index, user should maintain his own value vectors.
+    string  key="dhskfhdsj"	//	the object to be inserted into idx
+    size_t	pos=wyhashmap(idx.data(), idx.size(), key.c_str(), key.size(), 1);	//	get the position and insert
+    if(pos<size)	value[pos]++;	//	we process the vallue
+	else	cerr<<"map is full\n";
+*/
+#ifdef	WYHASHMAP_WEAK_SMALL_FAST	// for small hashmaps whose size < 2^24 and acceptable collision
+typedef	uint32_t	wyhashmap_t;
+#else
+typedef	uint64_t	wyhashmap_t;
+#endif
+
+static	inline	size_t	wyhashmap(wyhashmap_t	*idx,	size_t	idx_size,	const	void *key, size_t	key_size,	uint8_t	insert){
+	size_t	i=1;	uint64_t	h2;	wyhashmap_t	sig;
+	do{	sig=h2=wyhash(key,key_size,i,_wyp);	i++;	}while(_unlikely_(!sig));
+#ifdef	WYHASHMAP_WEAK_SMALL_FAST
+	size_t	i0=wy2u0k(h2,idx_size);
+#else
+	size_t	i0=wy2u0k(wyhash(key,key_size,0,_wyp),idx_size);
+#endif
+	for(i=i0;	i<idx_size&&idx[i]&&idx[i]!=sig;	i++);
+	if(_unlikely_(i==idx_size)){
+		for(i=0;	i<i0&&idx[i]&&idx[i]!=sig;  i++);
+		if(i==i0)	return	idx_size;
+	}
+	if(!idx[i]){
+		if(insert)	idx[i]=sig;
+		else	return	idx_size;
+	}
+	return	i;
+}
 #endif
 
 /* test vectors for portability test

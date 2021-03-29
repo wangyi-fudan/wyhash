@@ -202,13 +202,16 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
     The signiture is 64 bit, but can be modified to 32 bit if necessary for save space.
     The above two can be activated by define WYHASHMAP_WEAK_SMALL_FAST
     simple examples:
-	const	size_t	size=213432;
-	vector<wyhashmap_t>	idx(size);	//	allocate the index of fixed size. idx MUST be zeroed.
+    const	size_t	size=213432;
+    vector<wyhashmap_t>	idx(size);	//	allocate the index of fixed size. idx MUST be zeroed.
     vector<value_class>	value(size);	//	we only care about the index, user should maintain his own value vectors.
     string  key="dhskfhdsj"	//	the object to be inserted into idx
     size_t	pos=wyhashmap(idx.data(), idx.size(), key.c_str(), key.size(), 1);	//	get the position and insert
     if(pos<size)	value[pos]++;	//	we process the vallue
-	else	cerr<<"map is full\n";
+    else	cerr<<"map is full\n";
+    pos=wyhashmap(idx.data(), idx.size(), key.c_str(), key.size(), 0);	// just lookup by setting insert=0
+    if(pos<size)	value[pos]++;	//	we process the vallue
+    else	cerr<<"the key does not exist\n";
 */
 #ifdef	WYHASHMAP_WEAK_SMALL_FAST	// for small hashmaps whose size < 2^24 and acceptable collision
 typedef	uint32_t	wyhashmap_t;

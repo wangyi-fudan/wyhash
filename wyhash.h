@@ -119,17 +119,15 @@ static inline uint64_t _wyr4(const uint8_t *p) {
 #endif
 static inline uint64_t _wyr3(const uint8_t *p, size_t k) { return (((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];}
 
-#ifdef __cplusplus
 // skip bad seeds with WYHASH_CONDOM 1
-static void wyhash_seed_init(size_t &seed) {
-  if ((seed & 0x14cc886e) || (seed & 0xd637dbf3))
-    seed++;
+static void wyhash_seed_init(size_t *seed) {
+  if ((*seed & 0x14cc886e) || (*seed & 0xd637dbf3))
+    *seed++;
 }
-static void wyhash32_seed_init(uint32_t &seed) {
-  if ((seed == 0x429dacdd) || (seed & 0xd637dbf3))
-    seed++;
+static void wyhash32_seed_init(uint32_t *seed) {
+  if ((*seed == 0x429dacdd) || (*seed & 0xd637dbf3))
+    *seed++;
 }
-#endif
 
 //wyhash main function
 static inline uint64_t wyhash(const void *key, size_t len, uint64_t seed, const uint64_t *secret){

@@ -15,8 +15,8 @@
 //protections that produce different results:
 //1: normal valid behavior
 //2: extra protection against entropy loss (probability=2^-63), aka. "blind multiplication"
-//   There are 2 known bad seeds for the 32bit and many for the 64bit variants.
-//   Recommended is just to skip or inc those known bad seeds, if you dont want to set WYHASH_CONDOM 2
+//   There are 2 known bad seeds for the 32bit and many for the 64bit version under default _wyp secret
+//   Recommended is just to skip or inc those known bad seeds when using _wyp as secret, if you dont want to set WYHASH_CONDOM 2
 //     32bit: 429dacdd, d637dbf3
 //     64bit: *14cc886e, *1bf4ed84
 #define WYHASH_CONDOM 1

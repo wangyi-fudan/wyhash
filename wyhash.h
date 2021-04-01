@@ -15,7 +15,11 @@
 //protections that produce different results:
 //1: normal valid behavior
 //2: extra protection against entropy loss (probability=2^-63), aka. "blind multiplication"
-#define WYHASH_CONDOM 1 
+//   There are 2 known bad seeds for the 32bit and many for the 64bit variants.
+//   Recommended is just to skip or inc those known bad seeds, if you dont want to set WYHASH_CONDOM 2
+//     32bit: 429dacdd, d637dbf3
+//     64bit: *14cc886e, *1bf4ed84
+#define WYHASH_CONDOM 1
 #endif
 
 #ifndef WYHASH_32BIT_MUM
@@ -115,6 +119,18 @@ static inline uint64_t _wyr4(const uint8_t *p) {
 #endif
 static inline uint64_t _wyr3(const uint8_t *p, size_t k) { return (((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];}
 
+#ifdef __cplusplus
+// skip bad seeds with WYHASH_CONDOM 1
+static void wyhash_seed_init(size_t &seed) {
+  if ((seed & 0x14cc886e) || (seed & 0xd637dbf3))
+    seed++;
+}
+static void wyhash32_seed_init(uint32_t &seed) {
+  if ((seed == 0x429dacdd) || (seed & 0xd637dbf3))
+    seed++;
+}
+#endif
+
 //wyhash main function
 static inline uint64_t wyhash(const void *key, size_t len, uint64_t seed, const uint64_t *secret){
   const uint8_t *p=(const uint8_t *)key; seed^=*secret;	uint64_t	a,	b;
@@ -190,16 +206,16 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
   }
 }
 
-/*  This is world's fastest hash map: 2X than bytell_hash_map.
-    It does not store the keys, but only the hash/signiture of keys. 
+/*  This is world's fastest hash map: 2x faster than bytell_hash_map.
+    It does not store the keys, but only the hash/signature of keys.
     First we use pos=hash1(key) to approximately locate the bucket.
-    Then we search signiture=hash2(key) from pos linearly.
-    If we find a bucket with matched signiture we report the bucket
+    Then we search signature=hash2(key) from pos linearly.
+    If we find a bucket with matched signature we report the bucket
     Or if we meet a bucket whose signifure=0, we report a new position to insert
-    The signiture collision probability is very low as we usually searched N~10 buckets.
+    The signature collision probability is very low as we usually searched N~10 buckets.
     By combining hash1 and hash2, we acturally have 128 bit anti-collision strength.
     hash1 and hash2 can be the same function, resulting lower collision resistance but faster.
-    The signiture is 64 bit, but can be modified to 32 bit if necessary for save space.
+    The signature is 64 bit, but can be modified to 32 bit if necessary for save space.
     The above two can be activated by define WYHASHMAP_WEAK_SMALL_FAST
     simple examples:
     const	size_t	size=213432;

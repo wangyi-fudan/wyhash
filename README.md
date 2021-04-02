@@ -11,13 +11,15 @@ wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively:
   
 **simplest**: In the sense of code size.
 
+**salted**: We use dynamic secret to avoid intended attack.
+
 wyhash is the default hasher for a hash table of the great Zig, V and Nim language.
 
 **Simple Example:**
 ```
 #include  "wyhash.h"
 uint64_t _wyp[4];
-make_secret(time(NULL),_wyp); // to avoid intended attacks, we use secrets
+make_secret(time(NULL),_wyp);
 string  s="fcdskhfjs";
 uint64_t h=wyhash(s.c_str(),s.size(),0,_wyp);
 ```

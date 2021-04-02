@@ -17,7 +17,7 @@ wyhash is the default hasher for a hash table of the great Zig, V and Nim langua
 ```
 #include  "wyhash.h"
 uint64_t _wyp[4];
-make_secret(time(NULL),_wyp);
+make_secret(time(NULL),_wyp); // to avoid intended attacks, we use secrets
 string  s="fcdskhfjs";
 uint64_t h=wyhash(s.c_str(),s.size(),0,_wyp);
 ```

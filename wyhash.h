@@ -217,13 +217,13 @@ typedef	uint32_t	wyhashmap_t;
 typedef	uint64_t	wyhashmap_t;
 #endif
 
-static	inline	size_t	wyhashmap(wyhashmap_t	*idx,	size_t	idx_size,	const	void *key, size_t	key_size,	uint8_t	insert){
+static	inline	size_t	wyhashmap(wyhashmap_t	*idx,	size_t	idx_size,	const	void *key, size_t	key_size,	uint8_t	insert, uint64_t *secret){
 	size_t	i=1;	uint64_t	h2;	wyhashmap_t	sig;
-	do{	sig=h2=wyhash(key,key_size,i,_wyp);	i++;	}while(_unlikely_(!sig));
+	do{	sig=h2=wyhash(key,key_size,i,secret);	i++;	}while(_unlikely_(!sig));
 #ifdef	WYHASHMAP_WEAK_SMALL_FAST
 	size_t	i0=wy2u0k(h2,idx_size);
 #else
-	size_t	i0=wy2u0k(wyhash(key,key_size,0,_wyp),idx_size);
+	size_t	i0=wy2u0k(wyhash(key,key_size,0,secret),idx_size);
 #endif
 	for(i=i0;	i<idx_size&&idx[i]&&idx[i]!=sig;	i++);
 	if(_unlikely_(i==idx_size)){
@@ -237,16 +237,6 @@ static	inline	size_t	wyhashmap(wyhashmap_t	*idx,	size_t	idx_size,	const	void *ke
 	return	i;
 }
 #endif
-
-/* test vectors for portability test
-wyhash("",0)=42bc986dc5eec4d3
-wyhash("a",1)=84508dc903c31551
-wyhash("abc",2)=bc54887cfc9ecb1
-wyhash("message digest",3)=6e2ff3298208a67c
-wyhash("abcdefghijklmnopqrstuvwxyz",4)=9a64e42e897195b9
-wyhash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",5)=9199383239c32554
-wyhash("12345678901234567890123456789012345678901234567890123456789012345678901234567890",6)=7c1ccf6bba30f5a5
-*/
 
 /* The Unlicense
 This is free and unencumbered software released into the public domain.

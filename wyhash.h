@@ -115,15 +115,7 @@ static inline uint64_t _wyr4(const uint8_t *p) {
   return (((v >> 24) & 0xff)| ((v >>  8) & 0xff00)| ((v <<  8) & 0xff0000)| ((v << 24) & 0xff000000));
 }
 #endif
-static inline uint64_t _wyr3(const uint8_t *p, size_t k) {
-       union { uint64_t u64; uint32_t u32[2]; uint8_t u8[8]; } x = { .u64 = p[0] };
-       x.u8[1] = p[k-1];
-       x.u32[0] <<= 16;
-       x.u8[0] = p[k>>1];
-       x.u8[1] = p[k>>2];
-       return x.u64;
-}
-
+static inline uint64_t _wyr3(const uint8_t *p, size_t k) { return (((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];}
 //wyhash main function
 static inline uint64_t wyhash(const void *key, size_t len, uint64_t seed, const uint64_t *secret){
   const uint8_t *p=(const uint8_t *)key; seed^=*secret;	uint64_t	a,	b;

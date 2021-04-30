@@ -4,8 +4,6 @@
 // contributors: Reini Urban, Dietrich Epp, Joshua Haberman, Tommy Ettinger, Daniel Lemire, Otmar Ertl, cocowalla, leo-yuriev, Diego Barrios Romero, paulie-g, dumblob, Yann Collet, ivte-ms, hyb, James Z.M. Gao, easyaspi314 (Devin), TheOneric
 
 /* quick example:
-   uint64_t _wyp[4];
-   make_secret(time(NULL),_wyp);
    string s="fjsakfdsjkf";
    uint64_t hash=wyhash(s.c_str(), s.size(), 0, _wyp);
 */
@@ -141,6 +139,9 @@ static inline uint64_t wyhash(const void *key, size_t len, uint64_t seed, const 
   }
   return _wymix(secret[1]^len,_wymix(a^secret[1],b^seed));
 }
+
+//the default secret parameters
+static const uint64_t _wyp[4] = {0xa0761d6478bd642full, 0xe7037ed1a0b428dbull, 0x8ebc6af09c88c6e3ull, 0x589965cc75374cc3ull};
 
 //a useful 64bit-64bit mix function to produce deterministic pseudo random numbers that can pass BigCrush and PractRand
 static inline uint64_t wyhash64(uint64_t A, uint64_t B){ A^=0xa0761d6478bd642full; B^=0xe7037ed1a0b428dbull; _wymum(&A,&B); return _wymix(A^0xa0761d6478bd642full,B^0xe7037ed1a0b428dbull);}

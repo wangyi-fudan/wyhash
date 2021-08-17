@@ -13,7 +13,7 @@ wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively:
 
 **salted**: We use dynamic secret to avoid intended attack.
 
-wyhash is the default hasher for hash table algorithm of [Go (since 1.18)](https://pkg.go.dev/hash/maphash), [Zig](https://ziglang.org), [V](https://vlang.io) and [Nim](https://nim-lang.org) language.
+wyhash is the default hasher for hash table algorithm of [Go (since 1.17)](https://pkg.go.dev/hash/maphash), [Zig](https://ziglang.org), [V](https://vlang.io) and [Nim](https://nim-lang.org) language.
 
 **Simple Example:**
 ```

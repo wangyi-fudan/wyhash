@@ -13,7 +13,7 @@ wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively:
 
 **salted**: We use dynamic secret to avoid intended attack.
 
-wyhash is the default hasher for a hash table of the great Zig, V and Nim language.
+wyhash is the default hasher for a hash table of the great Zig, V, Nim and GO language.
 
 **Simple Example:**
 ```

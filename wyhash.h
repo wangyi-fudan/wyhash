@@ -193,7 +193,7 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
     First we use pos=hash1(key) to approximately locate the bucket.
     Then we search signature=hash2(key) from pos linearly.
     If we find a bucket with matched signature we report the bucket
-    Or if we meet a bucket whose signifure=0, we report a new position to insert
+    Or if we meet a bucket whose signature=0, we report a new position to insert
     The signature collision probability is very low as we usually searched N~10 buckets.
     By combining hash1 and hash2, we acturally have 128 bit anti-collision strength.
     hash1 and hash2 can be the same function, resulting lower collision resistance but faster.

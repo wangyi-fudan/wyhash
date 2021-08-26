@@ -210,7 +210,7 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
     For 1 billion keys,   Prob(Colision)=2^-5,  worry but not die
     For more keys, define wyhashmap128 and use double hash functions to construct 128 bit keys which is very safe
     example code:
-    const  uint64_t  size=1ull<<20;	//	we use fixed memory unlike auto increasing ones. it thus maximize memoery usage. A power-2 size will be fastest
+    const  uint64_t  size=1ull<<20;	//	we use fixed memory unlike auto increasing ones. it thus maximize memory usage. A power-2 size will be fastest
     wyhashmap_t  *idx=(wyhashmap_t*)calloc(size,sizeof(wyhashmap_t));	//	allocate the index and set it to zero.
     vector<value_class>	value(size);	//	we only care about the index, user should maintain his own value vectors.
     vector<string>	keys(size);	//	also you can maintain your own real keys

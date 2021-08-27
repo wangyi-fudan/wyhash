@@ -187,7 +187,7 @@ values(1ull<<20); string	s;	size_t	pos=0; for(cin>>s;	!cin.eof();	cin>>s){
     }
     return	pos;
 }*/
-//  the minimum bloom filter. paramters calculator: https://hur.st/bloomfilter/
+//  the minimum bloom filter. parameters calculator: https://hur.st/bloomfilter/
 static inline void bfpush(uint64_t hash_of_key, std::vector<bool> &bitset,
                           size_t size, size_t round) {
     for (size_t i = 0; i < round; i++)

@@ -211,6 +211,7 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
     if(pos<size)	value[pos]++;	//	we process the vallue
     else	cerr<<"the key does not exist\n";
 */
+/*
 #ifdef	WYHASHMAP_WEAK_SMALL_FAST	// for small hashmaps whose size < 2^24 and acceptable collision
 typedef	uint32_t	wyhashmap_t;
 #else
@@ -236,6 +237,7 @@ static	inline	size_t	wyhashmap(wyhashmap_t	*idx,	size_t	idx_size,	const	void *ke
 	}
 	return	i;
 }
+*/
 #endif
 
 /* The Unlicense

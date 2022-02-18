@@ -64,7 +64,7 @@ g++-9 benchmark.cpp t1ha/src/t1ha2.c -o benchmark -Ofast -s  -Wall -march=native
 
 **GO** https://github.com/lonewolf3739/wyhash-go
 
-**GO** https://github.com/zhangyunhao116/wyhash (final version 1)
+**GO** https://github.com/zhangyunhao116/wyhash (final version 1 && 3)
 
 **Java** https://github.com/OpenHFT/Zero-Allocation-Hashing
 

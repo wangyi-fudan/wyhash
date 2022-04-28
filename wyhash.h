@@ -81,23 +81,13 @@ static inline void _wymum(uint64_t *A, uint64_t *B){
 //multiply and xor mix function, aka MUM
 static inline uint64_t _wymix(uint64_t A, uint64_t B){ _wymum(&A,&B); return A^B; }
 
-//endian macros
-#ifndef WYHASH_LITTLE_ENDIAN
-  #if defined(_WIN32) || defined(__LITTLE_ENDIAN__) || (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
-    #define WYHASH_LITTLE_ENDIAN 1
-  #elif defined(__BIG_ENDIAN__) || (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
-    #define WYHASH_LITTLE_ENDIAN 0
-  #else
-    #warning could not determine endianness! Falling back to little endian.
-    #define WYHASH_LITTLE_ENDIAN 1
-  #endif
-#endif
 //read functions
 #if defined(_WIN32) || defined(__LITTLE_ENDIAN__) || (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
 static inline uint64_t _wyr8(const uint8_t *p) { uint64_t v; memcpy(&v, p, 8); return v;}
 static inline uint64_t _wyr4(const uint8_t *p) { uint32_t v; memcpy(&v, p, 4); return v;}
 #else
-// Platform independent. Are the same as the previous when compiled on little-endian machines with optimizations on.
+// Platform independent.
+// With compiler optimisations on, it give the same assembly as the ones defined above.
 static inline uint64_t _wyr4 (const uint8_t *p) {return (uint64_t)(0xff & p[3]) << 030 | (uint64_t)(0xff & p[2]) << 020 | (uint64_t)(0xff & p[1]) << 010 | (uint64_t)(0xff & p[0]); }
 static inline uint64_t wyr8 (const uint8_t *p) { return (uint64_t)(0xff & p[7]) << 070 | (uint64_t)(0xff & p[6]) << 060 | (uint64_t)(0xff & p[5]) << 050 | (uint64_t)(0xff & p[4]) << 040 | (uint64_t)(0xff & p[3]) << 030 | (uint64_t)(0xff & p[2]) << 020 | (uint64_t)(0xff & p[1]) << 010 | (uint64_t)(0xff & p[0]) << 000 ;}
 #endif

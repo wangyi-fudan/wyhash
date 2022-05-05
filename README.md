@@ -54,6 +54,8 @@ g++-9 benchmark.cpp t1ha/src/t1ha2.c -o benchmark -Ofast -s  -Wall -march=native
 
 **C++**  https://github.com/tommyettinger/waterhash
 
+**C++** https://github.com/alainesp/wy
+
 **GO**  https://github.com/dgryski/go-wyhash
 
 **GO**  https://github.com/orisano/wyhash

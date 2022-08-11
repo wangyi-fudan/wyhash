@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <iostream>
 #include <vector>
+#define WYTRNG
 #include "wyhash.h"
 using namespace std;
 
@@ -27,10 +28,7 @@ int main(void) {
     uint64_t hash;
     for (size_t i = 0; i < msgs_v.size(); i++) {
         hash = wyhash(msgs_v[i].c_str(), msgs_v[i].size(), i, _wyp);
-        cout << "wyhash(\"" << msgs_v[i] << "\"," << i << ")=" << hex
-             << hash << hex << "\n";
-        hash == etalons_v[i] ? true : cout << "\tNOK! Expected: "
-             << hex << etalons_v[i] << "\n";
+        cout << "wyhash(\"" << msgs_v[i] << "\"," << i << ")=" << hex  << hash << hex << "\n";
     }
     return 0;
 }

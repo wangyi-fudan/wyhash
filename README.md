@@ -13,7 +13,7 @@ wyhash and wyrand are the ideal 64-bit hash function and PRNG respectively:
 
 **salted**: We use dynamic secret to avoid intended attack.
 
-wyhash is the default hashing algorithm of the great [Zig](https://ziglang.org), [V](https://vlang.io), [Nim](https://nim-lang.org) and [Go (since 1.17)](https://golang.org/src/runtime/hash64.go) language.
+wyhash is the default hashing algorithm of the great [Zig](https://ziglang.org), [V](https://vlang.io), [Nim](https://nim-lang.org) and [Go (since 1.17)](https://golang.org/src/runtime/hash64.go) language. One milestone is that wyhash has deployed by Microsoft on [Windows Terminal] (https://github.com/microsoft/terminal/pull/13686).
 
 **Simple Example:**
 ```

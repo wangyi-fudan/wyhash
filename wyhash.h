@@ -157,7 +157,7 @@ static inline double wy2gau(uint64_t r){ const double _wynorm=1.0/(1ull<<20); re
 
 #ifdef	WYTRNG
 #include <sys/time.h>
-//The wytrand TRNG, exprimental, still testing.
+//The wytrand TRNG, developing, does not pass BigCrush yet. suggestion and help needed.
 static inline uint64_t wytrand(uint64_t *seed){
 	struct	timeval	t;	gettimeofday(&t,0);
 	uint64_t	teed=(((uint64_t)t.tv_sec)<<32)|t.tv_usec;

@@ -157,13 +157,13 @@ static inline double wy2gau(uint64_t r){ const double _wynorm=1.0/(1ull<<20); re
 
 #ifdef	WYTRNG
 #include <sys/time.h>
-//The wytrand TRNG, developing, does not pass BigCrush yet. suggestion and help needed.
+//The wytrand true random number generator, passed BigCrush.
 static inline uint64_t wytrand(uint64_t *seed){
 	struct	timeval	t;	gettimeofday(&t,0);
 	uint64_t	teed=(((uint64_t)t.tv_sec)<<32)|t.tv_usec;
-	teed^=*seed^0xa0761d6478bd642full;
-	*seed=(*seed+0xa0761d6478bd642full)^_wymix(teed,teed^0xe7037ed1a0b428dbull); 
-	return _wymix(*seed,*seed^0xe7037ed1a0b428dbull);
+	teed=_wymix(teed^_wyp[0],*seed^_wyp[1]);
+	*seed=_wymix(teed^_wyp[0],_wyp[2]);
+	return _wymix(*seed,*seed^_wyp[3]);
 }
 #endif
 

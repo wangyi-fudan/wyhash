@@ -21,7 +21,7 @@
 #ifndef WYHASH_32BIT_MUM
 //0: normal version, slow on 32 bit systems
 //1: faster on 32 bit systems but produces different results, incompatible with wy2u0k function
-#define WYHASH_32BIT_MUM 0  
+#define WYHASH_32BIT_MUM 0
 #endif
 
 //includes
@@ -52,7 +52,7 @@ static inline void _wymum(uint64_t *A, uint64_t *B){
   *A=_wyrot(hl)^hh; *B=_wyrot(lh)^ll;
   #endif
 #elif defined(__SIZEOF_INT128__)
-  __uint128_t r=*A; r*=*B; 
+  __uint128_t r=*A; r*=*B;
   #if(WYHASH_CONDOM>1)
   *A^=(uint64_t)r; *B^=(uint64_t)(r>>64);
   #else
@@ -116,14 +116,16 @@ static inline uint64_t _wyr4(const uint8_t *p) {
 static inline uint64_t _wyr3(const uint8_t *p, size_t k) { return (((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];}
 //wyhash main function
 static inline uint64_t wyhash(const void *key, size_t len, uint64_t seed, const uint64_t *secret){
-  const uint8_t *p=(const uint8_t *)key; seed^=*secret;	uint64_t	a,	b;
+  const uint8_t *p=(const uint8_t *)key;
+  seed^=*secret;
+  uint64_t a, b;
   if(_likely_(len<=16)){
     if(_likely_(len>=4)){ a=(_wyr4(p)<<32)|_wyr4(p+((len>>3)<<2)); b=(_wyr4(p+len-4)<<32)|_wyr4(p+len-4-((len>>3)<<2)); }
     else if(_likely_(len>0)){ a=_wyr3(p,len); b=0;}
     else a=b=0;
   }
   else{
-    size_t i=len; 
+    size_t i=len;
     if(_unlikely_(i>48)){
       uint64_t see1=seed, see2=seed;
       do{
@@ -173,6 +175,21 @@ static inline uint64_t wy2u0k(uint64_t r, uint64_t k){ _wymum(&r,&k); return k; 
 #endif
 
 //make your own secret
+static inline uint64_t wy_popcount(uint64_t x){
+#if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
+        return __builtin_popcountll(x);
+#elif defined(_MSC_VER) && defined(_M_X64)
+        return _mm_popcnt_u64(x);
+#else
+        // bitwise-manual popcount
+        x -= (x >> 1) & 0x5555555555555555;
+        x = (x & 0x3333333333333333) + ((x >> 2) & 0x3333333333333333);
+        x = (x + (x >> 4)) & 0x0f0f0f0f0f0f0f0f;
+        x = (x * 0x0101010101010101) >> 56;
+        return x;
+#endif
+}
+
 static inline void make_secret(uint64_t seed, uint64_t *secret){
   uint8_t c[] = {15, 23, 27, 29, 30, 39, 43, 45, 46, 51, 53, 54, 57, 58, 60, 71, 75, 77, 78, 83, 85, 86, 89, 90, 92, 99, 101, 102, 105, 106, 108, 113, 114, 116, 120, 135, 139, 141, 142, 147, 149, 150, 153, 154, 156, 163, 165, 166, 169, 170, 172, 177, 178, 180, 184, 195, 197, 198, 201, 202, 204, 209, 210, 212, 216, 225, 226, 228, 232, 240 };
   for(size_t i=0;i<4;i++){
@@ -182,19 +199,9 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
       for(size_t j=0;j<64;j+=8) secret[i]|=((uint64_t)c[wyrand(&seed)%sizeof(c)])<<j;
       if(secret[i]%2==0){ ok=0; continue; }
       for(size_t j=0;j<i;j++) {
-#if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
-        if(__builtin_popcountll(secret[j]^secret[i])!=32){ ok=0; break; }
-#elif defined(_MSC_VER) && defined(_M_X64)
-        if(_mm_popcnt_u64(secret[j]^secret[i])!=32){ ok=0; break; }
-#else
-        //manual popcount
-        uint64_t x = secret[j]^secret[i];
-        x -= (x >> 1) & 0x5555555555555555;
-        x = (x & 0x3333333333333333) + ((x >> 2) & 0x3333333333333333);
-        x = (x + (x >> 4)) & 0x0f0f0f0f0f0f0f0f;
-        x = (x * 0x0101010101010101) >> 56;
-        if(x!=32){ ok=0; break; }
-#endif
+        if(wy_popcount(secret[j]^secret[i])!=32){
+          ok=0; break;
+          }
       }
     }while(!ok);
   }

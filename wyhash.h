@@ -137,7 +137,8 @@ static inline uint64_t wyhash(const void *key, size_t len, uint64_t seed, const 
     while(_unlikely_(i>16)){  seed=_wymix(_wyr8(p)^secret[1],_wyr8(p+8)^seed);  i-=16; p+=16;  }
     a=_wyr8(p+i-16);  b=_wyr8(p+i-8);
   }
-  return _wymix(secret[1]^len,_wymix(a^secret[1],b^seed));
+  a^=secret[1]; b^=seed;  _wymum(&a,&b);
+  return  _wymix(a^secret[0]^len,b^secret[1]);
 }
 
 //the default secret parameters

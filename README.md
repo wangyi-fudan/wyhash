@@ -70,7 +70,7 @@ g++-9 benchmark.cpp t1ha/src/t1ha2.c -o benchmark -Ofast -s  -Wall -march=native
 
 **Java** https://github.com/OpenHFT/Zero-Allocation-Hashing
 
-**Java** https://github.com/dynatrace-oss/hash4j (final version 3)
+**Java** https://github.com/dynatrace-oss/hash4j (final version 3 and 4)
 
 **Kotlin Multiplatform** https://github.com/appmattus/crypto/tree/main/cryptohash
 

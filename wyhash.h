@@ -56,7 +56,7 @@ static inline void _wymum(uint64_t *A, uint64_t *B){
   #if(WYHASH_CONDOM>1)
   *A^=(uint64_t)r; *B^=(uint64_t)(r>>64);
   #else
-  A=(uint64_t*)r; B=A+(uint64_t)1;
+  A=(uint64_t*)&r; B=A+1;
   #endif
 #elif defined(_MSC_VER) && defined(_M_X64)
   #if(WYHASH_CONDOM>1)

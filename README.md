@@ -92,8 +92,7 @@ g++-9 benchmark.cpp t1ha/src/t1ha2.c -o benchmark -Ofast -s  -Wall -march=native
 
 **Zig** https://github.com/ManDeJan/zig-wyhash
 
-**absl hashmap** https://github.com/abseil/abseil-cpp/blob/master/absl/hash/internal/wyhash.cc
-
+**absl hashmap** https://github.com/abseil/abseil-cpp/blob/master/absl/hash/internal/low_level_hash.h
 ----------------------------------------
 
 I thank these names:

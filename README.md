@@ -27,7 +27,7 @@ uint64_t h=wyhash(s.c_str(),s.size(),0,_wyp);
 **Limitations:**
 It is known now that wyhash/wyrand have their limitations:
 
-Both of them are not 64 bit collision resistant, but is about 62 bits (flyingmuant/Cyan4973)
+Both of them are not 64 bit collision resistant, but is about 62 bits (flyingmutant/Cyan4973)
 
 When test on longer dataset (32TB, 23 days), wyrand will fail practrand (vigna)
 

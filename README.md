@@ -81,6 +81,7 @@ User should make their own decision based the advantage and the flaws of wyhash/
 **Zig** https://github.com/ManDeJan/zig-wyhash
 
 **absl hashmap** https://github.com/abseil/abseil-cpp/blob/master/absl/hash/internal/low_level_hash.h
+
 ----------------------------------------
 
 I thank these names:
@@ -119,3 +120,6 @@ easyaspi314 (Devin)
 
 TheOneric
 
+flyingmutant
+
+vigna

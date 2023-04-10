@@ -25,6 +25,7 @@ uint64_t h=wyhash(s.c_str(),s.size(),0,_wyp);
 ```
 
 **Limitations:**
+
 It is known now that wyhash/wyrand have their limitations:
 
 Both of them are not 64 bit collision resistant, but is about 62 bits (flyingmutant/Cyan4973)

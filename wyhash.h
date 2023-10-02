@@ -8,8 +8,8 @@
    uint64_t hash=wyhash(s.c_str(), s.size(), 0, _wyp);
 */
 
-#ifndef wyhash_final_version_4.1
-#define wyhash_final_version_4.1
+#ifndef wyhash_final_version_4_2
+#define wyhash_final_version_4_2
 
 #ifndef WYHASH_CONDOM
 //protections that produce different results:
@@ -142,13 +142,13 @@ static inline uint64_t wyhash(const void *key, size_t len, uint64_t seed, const 
 }
 
 //the default secret parameters
-static const uint64_t _wyp[4] = {0xa0761d6478bd642full, 0xe7037ed1a0b428dbull, 0x8ebc6af09c88c6e3ull, 0x589965cc75374cc3ull};
+static const uint64_t _wyp[4] = {0xc3f0c6b4964e6c17ull, 0xe80f8b3a95b44d35ull, 0x956636b171d24765ull, 0x65271da69a1e9a63ull};
 
 //a useful 64bit-64bit mix function to produce deterministic pseudo random numbers that can pass BigCrush and PractRand
-static inline uint64_t wyhash64(uint64_t A, uint64_t B){ A^=0xa0761d6478bd642full; B^=0xe7037ed1a0b428dbull; _wymum(&A,&B); return _wymix(A^0xa0761d6478bd642full,B^0xe7037ed1a0b428dbull);}
+static inline uint64_t wyhash64(uint64_t A, uint64_t B){ A^=0xc3f0c6b4964e6c17ull; B^=0xe80f8b3a95b44d35ull; _wymum(&A,&B); return _wymix(A^0xc3f0c6b4964e6c17ull,B^0xe80f8b3a95b44d35ull);}
 
 //The wyrand PRNG that pass BigCrush and PractRand
-static inline uint64_t wyrand(uint64_t *seed){ *seed+=0xa0761d6478bd642full; return _wymix(*seed,*seed^0xe7037ed1a0b428dbull);}
+static inline uint64_t wyrand(uint64_t *seed){ *seed+=0xc3f0c6b4964e6c17ull; return _wymix(*seed,*seed^0xe80f8b3a95b44d35ull);}
 
 //convert any 64 bit pseudo random numbers to uniform distribution [0,1). It can be combined with wyrand, wyhash64 or wyhash.
 static inline double wy2u01(uint64_t r){ const double _wynorm=1.0/(1ull<<52); return (r>>12)*_wynorm;}

@@ -142,13 +142,13 @@ static inline uint64_t wyhash(const void *key, size_t len, uint64_t seed, const 
 }
 
 //the default secret parameters
-static const uint64_t _wyp[4] = {0xc3f0c6b4964e6c17ull, 0xe80f8b3a95b44d35ull, 0x956636b171d24765ull, 0x65271da69a1e9a63ull};
+static const uint64_t _wyp[4] = {0x2d358dccaa6c78a5ull, 0x8bb84b93962eacc9ull, 0x4b33a62ed433d4a3ull, 0x4d5a2da51de1aa47ull};
 
 //a useful 64bit-64bit mix function to produce deterministic pseudo random numbers that can pass BigCrush and PractRand
-static inline uint64_t wyhash64(uint64_t A, uint64_t B){ A^=0xc3f0c6b4964e6c17ull; B^=0xe80f8b3a95b44d35ull; _wymum(&A,&B); return _wymix(A^0xc3f0c6b4964e6c17ull,B^0xe80f8b3a95b44d35ull);}
+static inline uint64_t wyhash64(uint64_t A, uint64_t B){ A^=0x2d358dccaa6c78a5ull; B^=0x8bb84b93962eacc9ull; _wymum(&A,&B); return _wymix(A^0x2d358dccaa6c78a5ull,B^0x8bb84b93962eacc9ull);}
 
 //The wyrand PRNG that pass BigCrush and PractRand
-static inline uint64_t wyrand(uint64_t *seed){ *seed+=0xc3f0c6b4964e6c17ull; return _wymix(*seed,*seed^0xe80f8b3a95b44d35ull);}
+static inline uint64_t wyrand(uint64_t *seed){ *seed+=0x2d358dccaa6c78a5ull; return _wymix(*seed,*seed^0x8bb84b93962eacc9ull);}
 
 //convert any 64 bit pseudo random numbers to uniform distribution [0,1). It can be combined with wyrand, wyhash64 or wyhash.
 static inline double wy2u01(uint64_t r){ const double _wynorm=1.0/(1ull<<52); return (r>>12)*_wynorm;}
@@ -172,7 +172,6 @@ static inline uint64_t wytrand(uint64_t *seed){
 //fast range integer random number generation on [0,k) credit to Daniel Lemire. May not work when WYHASH_32BIT_MUM=1. It can be combined with wyrand, wyhash64 or wyhash.
 static inline uint64_t wy2u0k(uint64_t r, uint64_t k){ _wymum(&r,&k); return k; }
 #endif
-
 //make your own secret
 static inline void make_secret(uint64_t seed, uint64_t *secret){
   uint8_t c[] = {15, 23, 27, 29, 30, 39, 43, 45, 46, 51, 53, 54, 57, 58, 60, 71, 75, 77, 78, 83, 85, 86, 89, 90, 92, 99, 101, 102, 105, 106, 108, 113, 114, 116, 120, 135, 139, 141, 142, 147, 149, 150, 153, 154, 156, 163, 165, 166, 169, 170, 172, 177, 178, 180, 184, 195, 197, 198, 201, 202, 204, 209, 210, 212, 216, 225, 226, 228, 232, 240 };
@@ -181,7 +180,7 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
     do{
       ok=1; secret[i]=0;
       for(size_t j=0;j<64;j+=8) secret[i]|=((uint64_t)c[wyrand(&seed)%sizeof(c)])<<j;
-      if(secret[i]%2==0){ ok=0; continue; }
+      if(secret[i]%2==0){ ok=0; continue; }      
       for(size_t j=0;j<i;j++) {
 #if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
         if(__builtin_popcountll(secret[j]^secret[i])!=32){ ok=0; break; }
@@ -197,6 +196,8 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
         if(x!=32){ ok=0; break; }
 #endif
       }
+      if(!ok)	continue;
+      for(uint64_t	k=3;	k<0x100000000ull;	k+=2)	if((secret[i]%k)==0){	ok=0;	break;	}
     }while(!ok);
   }
 }

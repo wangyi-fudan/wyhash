@@ -1,9 +1,11 @@
 # wyhash bench makefile
 
+CC = gcc
+CFLAGS = -O2 -s -Wall
 CXX = g++
 CXXFLAGS = -std=c++11 -O2 -s -Wall -march=native
 
-TARGETS = test_vector wyhash0 wyhash1 wyhash2 xxh3scalar xxh3sse2 xxh3avx2
+TARGETS = test_vector wyhash0 wyhash1 wyhash2 xxh3scalar xxh3sse2 xxh3avx2 wyhash_secret
 
 all:	$(TARGETS)
 
@@ -27,6 +29,9 @@ xxh3sse2:	benchmark.cpp
 
 xxh3avx2:	benchmark.cpp
 	$(CXX) benchmark.cpp -o xxh3avx2 $(CXXFLAGS) -DXXH_VECTOR=2 -DXXH3
+
+wyhash_secret:	wyhash_secret.h wyhash.h
+	$(CC) -xc $(CFLAGS) -DWYHASH_SECRET_TESTX wyhash_secret.h -o wyhash_secret
 
 clean:
 	rm $(TARGETS)

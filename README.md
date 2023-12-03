@@ -1,3 +1,6 @@
+I am retired on wyhash. I welcome new prince/princess to fork it and maintain a new consensus version.
+====
+
 No hash function is perfect, but some are useful.
 ====
 
